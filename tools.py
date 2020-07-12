@@ -77,14 +77,12 @@ class Misc:
 
     @staticmethod
     def python(a):
-        response = ''
-        response = documentation.python.get(a, '')
+        response = str(documentation.python[a])
         return response
 
     @staticmethod
     def rust(a):
-        response = ''
-        response = documentation.rust.get(a, '')
+        response = str(documentation.rust[a])
         return response
 
     @staticmethod

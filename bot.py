@@ -43,12 +43,14 @@ async def on_message(message):
 # Misc.
 
 @bot.command(name='python')
-async def doc_python(ctx, **a):
-    await ctx.send(Misc.python())
+async def doc_python(ctx, *, a):
+    response = Misc.python(a)
+    await ctx.send(response)
 
 @bot.command(name='rust')
-async def doc_rust(ctx, **a):
-    await ctx.send(Misc.rust(a))
+async def doc_rust(ctx, *, a):
+    response = Misc.rust(a)
+    await ctx.send(response)
 
 @bot.command(name='d')
 async def nine_nine(ctx, a:int):
