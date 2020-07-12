@@ -2,8 +2,7 @@ import pickle, time
 from os import path
 from random import randint, choice
 
-from res import banter, documentation
-
+from res import documentation
 
 
 class Data:

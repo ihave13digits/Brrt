@@ -2,10 +2,9 @@
 
 from discord.ext import commands
 from os import path
-import json as json #//Makes thonny happy 
+import json, random
 from tools import Misc
-from res import illegal
-
+from res import illegal, compliment, banter
 TOKEN  = ''
 
 def pre_start_up():
@@ -25,13 +24,13 @@ TOKEN, PREFIX = pre_start_up()
 
 bot = commands.Bot(command_prefix=PREFIX)
 
-# Connect
 
+### Connect ###
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
-# Message
+### Message ###
 
 #@bot.event
 async def on_message(message):
@@ -51,7 +50,23 @@ async def on_message(message):
 
 
 
-# Misc.
+### Misc. ###
+
+@bot.command(name='banter')
+async def banterBrrt(ctx, *a):
+    if not a:
+        response = random.choice(banter.loose)
+    else:
+        response = random.choice(banter.focus).format(a[0])
+    await ctx.send(response)
+
+@bot.command(name='praise')
+async def praiseBrrt(ctx, *a):
+    if not a:
+        response = random.choice(compliment.shucks)
+    else:
+        response = random.choice(compliment.praise).format(a[0])
+    await ctx.send(response)
 
 @bot.command(name='python')
 async def doc_python(ctx, *a):
