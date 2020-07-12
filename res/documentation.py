@@ -1,8 +1,9 @@
 python = {
         '' : 'https://docs.python.org/3/',
+        'index' : 'https://docs.python.org/3/genindex.html',
         'module' : 'https://docs.python.org/3/py-modindex.html',
         'glossary' : 'https://docs.python.org/3/glossary.html',
-        'index' : 'https://docs.python.org/3/genindex.html',
+        
         }
 
 rust = {

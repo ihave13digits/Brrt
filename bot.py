@@ -47,20 +47,20 @@ async def on_ready():
 ### Message ###
 
 #@bot.event
-async def on_message(message):
-    # Access data
-    data = {'author':message.author, 'channel':message.channel, 'content':message.content}
-    # Check for offenses
-    for word in illegal.words:
-        if word in data['content'].lower():
-            # Get message context
-            ctx = await bot.get_context(message)
-            # Scold user
-            response = illegal.words[word]['warning'].format(data['author'])
-            await ctx.send(response)
-            # Remove offense if serious
-            if illegal.words[word]['offense'] > 0:
-                await message.delete()
+#async def on_message(message):
+#    # Access data
+#    data = {'author':message.author, 'channel':message.channel, 'content':message.content}
+#    # Check for offenses
+#    for word in illegal.words:
+#        if word in data['content'].lower():
+#            # Get message context
+#            ctx = await bot.get_context(message)
+#            # Scold user
+#            response = illegal.words[word]['warning'].format(data['author'])
+#            await ctx.send(response)
+#            # Remove offense if serious
+#            if illegal.words[word]['offense'] > 0:
+#                await message.delete()
 
 
 
@@ -103,5 +103,5 @@ async def nine_nine(ctx, a:int):
     response = Misc.roll(a)
     await ctx.send(response)
 
-#got to discord developer website make an application select bot from the left side and get the token 
+#go to discord developer website make an application select bot from the left side and get the token 
 bot.run(TOKEN)
