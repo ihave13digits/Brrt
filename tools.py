@@ -77,8 +77,8 @@ class Misc:
 
     @staticmethod
     def helper(a):
-        response = str(brrt_help.helper[a])
-        return response
+        embed_response = brrt_help.helper[a]
+        return embed_response
 
     @staticmethod
     def source(a):
