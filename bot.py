@@ -5,7 +5,7 @@ from os import path
 import json, random
 from tools import Data, Misc, Vote, Score
 from res import illegal, compliment, banter
-
+import help_com
 
 def pre_start_up():
     with open(path.join('res', 'config.json'),"r") as f:
@@ -59,11 +59,8 @@ async def on_message(message):
 bot.remove_command('help')
 @bot.command(name='help')
 async def helpBrrt(ctx, *a):
-    if not a:
-        response = Misc.helper('')
-    else:
-        response = Misc.helper(a[0])
-    await ctx.send(response)
+    response=help_com.helper(a)
+    await ctx.send(embed=response)
 
 
 

@@ -1,4 +1,4 @@
-helper = {
+helper2 = {
         ### All ###
         '' : 'banter, banter <>\npraise, praise <>\nd <>\n',
         ### Misc. ###
@@ -34,3 +34,10 @@ helper = {
         'rust foreword' : "",
         'rust standard' : "",
         }
+
+
+def helper(a):
+    embed=discord.Embed(title="Brrt Help", url="https://github.com/ihave13digits/Brrt/blob/master/README.md")
+    embed.add_field(name="undefined", value="undefined", inline=False)
+    return embed
+    
