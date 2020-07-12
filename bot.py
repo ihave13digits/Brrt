@@ -5,8 +5,6 @@ from os import path
 import json, random
 from tools import Data, Misc, Vote, Score
 from res import illegal, compliment, banter
-#seperate to bring attention to it
-import help_com
 
 
 def pre_start_up():
@@ -55,8 +53,55 @@ async def on_message(message):
                     await message.delete()
 '''
 
+### Help ###
 
-#Maybe build a custom help command for bEtTeR cUsToMiZaTiOn? @AbleTheAbove
+# Override !help
+bot.remove_command('help')
+@bot.command(name='help')
+async def helpBrrt(ctx, *a):
+    if not a:
+        response = Misc.helper('')
+    else:
+        response = Misc.helper(a[0])
+    await ctx.send(response)
+
+
+
+### Documentation ###
+
+bot.command(name='source')
+async def doc_source(ctx, *a):
+    '''
+    Fetch the git link to src
+    '''
+    if not a:
+        response = Misc.source('')
+    else:
+        response = Misc.source(a[0])
+    await ctx.send(response)
+
+@bot.command(name='python')
+async def doc_python(ctx, *a):
+    '''
+    Python Docs
+    '''
+    if not a:
+        response = Misc.python('')
+    else:
+        response = Misc.python(a[0])
+    await ctx.send(response)
+
+@bot.command(name='rust')
+async def doc_rust(ctx, *a):
+    '''
+    Rust docs
+    '''
+    if not a:
+        response = Misc.rust('')
+    else:
+        response = Misc.rust(a[0])
+    await ctx.send(response)
+
 
 
 ### Misc. ###
@@ -83,51 +128,14 @@ async def praiseBrrt(ctx, *a):
         response = random.choice(compliment.praise).format(a[0])
     await ctx.send(response)
 
-@bot.command(name='python')
-async def doc_python(ctx, *a):
-    '''
-    Python Docs
-    '''
-    if not a:
-        response = Misc.python('')
-    else:
-        response = Misc.python(a[0])
-    await ctx.send(response)
-
-@bot.command(name='rust')
-async def doc_rust(ctx, *a):
-    '''
-    Rust docs
-    '''
-    if not a:
-        response = Misc.rust('')
-    else:
-        response = Misc.rust(a[0])
-    await ctx.send(response)
-
-@bot.command(name='source')
-async def doc_source(ctx, *a):
-    '''
-    Fetch the git link to src
-    '''
-    if not a:
-        response = Misc.source('')
-    else:
-        response = Misc.source(a[0])
-    await ctx.send(response)
-
 @bot.command(name='d')
-async def nine_nine(ctx, a:int):
+async def roll_die(ctx, a:int):
     '''
     roll an X sided dice where X is a number <= 1000
     '''
     response = Misc.roll(a)
     await ctx.send(response)
 
-bot.remove_command('help')   #Overriding !help 
-@bot.command(name='help')
-async def helpBrrt(ctx, *a): #its helpBrrt to prevent keyword errors
-    response = help_com.helper(a)
-    await ctx.send(embed=response)
-    
+
+
 bot.run(TOKEN)

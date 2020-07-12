@@ -2,7 +2,7 @@ import pickle, time
 from os import path
 from random import randint, choice
 
-from res import documentation
+from res import documentation, brrt_help
 
 
 
@@ -74,6 +74,11 @@ class Vote:
 
 
 class Misc:
+
+    @staticmethod
+    def helper(a):
+        response = str(brrt_help.helper[a])
+        return response
 
     @staticmethod
     def source(a):
