@@ -1,9 +1,22 @@
 import discord
 
+all_commands = [
+        'banter, ','banter <>\n\n',
+        'praise, ', 'praise <>\n\n',
+        'd\n\n',
+        'source, ', 'source guts, ', 'source read, ', 'source tools\n\n',
+        'python, ', 'python index, ', 'python module, ', 'python glossary\n\n',
+        ]
+
 help_dict={
+
     "help":"Displays this message",
-    "rust":"rust doc"
-    }
+    "rust":"Links to rust docs, accepts (mod, error, rustc, edition, rustdoc, foreword, standard) as optional args",
+    "python":"Links to python docs, accepts **(index, module, glossary)** as optional args",
+    "source": "Links the bot source code, accepts **(guts, read, tools)** as optional args",
+    "banter":"banter_ext",
+    "praise":"praise_ext"
+}
 
 
 
