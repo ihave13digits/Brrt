@@ -75,10 +75,7 @@ class Vote:
 
 class Misc:
 
-    @staticmethod
-    def helper(a):
-        embed_response = brrt_help.helper[a]
-        return embed_response
+
 
     @staticmethod
     def source(a):
