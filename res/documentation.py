@@ -1,3 +1,10 @@
+source = {
+        '' : 'https://github.com/ihave13digits/Brrt',
+        'guts' : 'https://github.com/ihave13digits/Brrt/blob/master/bot.py',
+        'read' : 'https://github.com/ihave13digits/Brrt/blob/master/README.md',
+        'tools' : 'https://github.com/ihave13digits/Brrt/blob/master/tools.py',
+        }
+
 python = {
         '' : 'https://docs.python.org/3/',
         'index' : 'https://docs.python.org/3/genindex.html',
