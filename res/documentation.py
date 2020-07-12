@@ -13,4 +13,5 @@ rust = {
         'rustdoc' : 'https://doc.rust-lang.org/rustdoc/index.html',
         'rustc' : 'https://doc.rust-lang.org/rustc/index.html',
         'error' : 'https://doc.rust-lang.org/error-index.html',
+        'mod' : 'https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html',
         }

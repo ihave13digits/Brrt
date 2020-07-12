@@ -1,18 +1,29 @@
 #!/usr/bin/python3
 
-import discord
 from discord.ext import commands
 from os import path
-
+import json as json #//Makes thonny happy 
 from tools import Misc
 from res import illegal
 
 TOKEN  = ''
 
-with open(path.join('res', 'token.txt')) as f:
-    TOKEN = f.read().strip()
+def pre_start_up():
+    #//new, better? system?
+    x=open(path.join('res', 'config.json'),"r")
+    y=x.read()
+    x.close()
+    z=json.loads(y)
+    print(z) #//print config to log for info purposes
+    TOKEN=z["TOKEN"]
+    PREFIX=z["PREFIX"]
+    return TOKEN, PREFIX
 
-bot = commands.Bot(command_prefix='!')
+TOKEN, PREFIX = pre_start_up()
+
+
+
+bot = commands.Bot(command_prefix=PREFIX)
 
 # Connect
 
