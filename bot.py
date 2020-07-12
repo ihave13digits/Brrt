@@ -5,6 +5,8 @@ from os import path
 import json, random
 from tools import Misc
 from res import illegal, compliment, banter
+
+
 TOKEN  = ''
 
 def pre_start_up():
@@ -23,6 +25,18 @@ TOKEN, PREFIX = pre_start_up()
 
 
 bot = commands.Bot(command_prefix=PREFIX)
+
+
+TOKEN  = ''
+with open(path.join('res', 'token.txt')) as f:
+    TOKEN = f.read().strip()
+
+
+bot = commands.Bot(command_prefix='!')
+
+
+### Connect ###
+
 
 
 ### Connect ###
