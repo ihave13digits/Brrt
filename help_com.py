@@ -1,7 +1,50 @@
 import discord
 
+all_commands = [
+        'banter, ','banter <>\n\n',
+        'praise, ', 'praise <>\n\n',
+        'd\n\n',
+        'source, ', 'source guts, ', 'source read, ', 'source tools\n\n',
+        'python, ', 'python index, ', 'python module, ', 'python glossary\n\n',
+        'rust, ', 'rust mod, ', 'rust error, ', 'rust rustc,\n', 'rust edition, ', 'rust rustdoc, ', 'rust foreword, ', 'rust standard\n\n'
+        ]
+
 help_dict={
-    "help":"Displays this message"
+    #"help":"Displays this message"
+        ### All ###
+        'help' : str(all_commands),
+        ### Misc. ###
+
+        # Banter
+        'banter' : "",
+        'banter ' : "",
+        # Praise
+        'praise' : "",
+        'praise ' : "",
+        # Roll Die
+        'd' : "",
+
+        ### Docs. ###
+
+        # Source
+        'source' : "",
+        'source guts' : "",
+        'source read' : "",
+        'source tools' : "",
+        # Python
+        'python' : "",
+        'python index' : "",
+        'python module' : "",
+        'python glossary' : "",
+        # Rust
+        'rust' : "",
+        'rust mod' : "",
+        'rust error' : "",
+        'rust rustc' : "",
+        'rust edition' : "",
+        'rust rustdoc' : "",
+        'rust foreword' : "",
+        'rust standard' : "",
     }
 
 
