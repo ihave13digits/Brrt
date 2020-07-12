@@ -7,7 +7,6 @@ from tools import Data, Misc, Vote, Score
 from res import illegal, compliment, banter
 
 
-TOKEN  = ''
 
 def pre_start_up():
     with open(path.join('res', 'config.json'),"r") as f:
