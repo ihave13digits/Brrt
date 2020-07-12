@@ -5,7 +5,8 @@ from os import path
 import json, random
 from tools import Data, Misc, Vote, Score
 from res import illegal, compliment, banter
-
+#seperate to bring attention to it
+import help_com
 
 
 def pre_start_up():
@@ -55,10 +56,16 @@ async def on_message(message):
 '''
 
 
+#Maybe build a custom help command for bEtTeR cUsToMiZaTiOn? @AbleTheAbove
+
+
 ### Misc. ###
 
 @bot.command(name='banter')
 async def banterBrrt(ctx, *a):
+    '''
+    Banter command, accepts (arg)
+    '''
     if not a:
         response = random.choice(banter.loose)
     else:
@@ -67,6 +74,9 @@ async def banterBrrt(ctx, *a):
 
 @bot.command(name='praise')
 async def praiseBrrt(ctx, *a):
+    '''
+    Praise People or Brrt
+    '''
     if not a:
         response = random.choice(compliment.shucks)
     else:
@@ -75,6 +85,9 @@ async def praiseBrrt(ctx, *a):
 
 @bot.command(name='python')
 async def doc_python(ctx, *a):
+    '''
+    Python Docs
+    '''
     if not a:
         response = Misc.python('')
     else:
@@ -83,6 +96,9 @@ async def doc_python(ctx, *a):
 
 @bot.command(name='rust')
 async def doc_rust(ctx, *a):
+    '''
+    Rust docs
+    '''
     if not a:
         response = Misc.rust('')
     else:
@@ -91,6 +107,9 @@ async def doc_rust(ctx, *a):
 
 @bot.command(name='source')
 async def doc_source(ctx, *a):
+    '''
+    Fetch the git link to src
+    '''
     if not a:
         response = Misc.source('')
     else:
@@ -99,8 +118,16 @@ async def doc_source(ctx, *a):
 
 @bot.command(name='d')
 async def nine_nine(ctx, a:int):
+    '''
+    roll an X sided dice where X is a number <= 1000
+    '''
     response = Misc.roll(a)
     await ctx.send(response)
 
-#go to discord developer website make an application select bot from the left side and get the token 
+bot.remove_command('help')   #Overriding !help 
+@bot.command(name='help')
+async def helpBrrt(ctx, *a): #its helpBrrt to prevent keyword errors
+    response = help_com.helper(a)
+    await ctx.send(embed=response)
+    
 bot.run(TOKEN)
