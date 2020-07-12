@@ -25,9 +25,6 @@ TOKEN, PREFIX = pre_start_up()
 bot = commands.Bot(command_prefix=PREFIX)
 
 
-### Connect ###
-
-
 
 ### Connect ###
 @bot.event
