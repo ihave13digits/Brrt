@@ -4,6 +4,8 @@ from random import randint, choice
 
 from res import documentation
 
+
+
 class Data:
 
     def __init__(self):
@@ -74,6 +76,11 @@ class Vote:
 class Misc:
 
     @staticmethod
+    def source(a):
+        response = str(documentation.source[a])
+        return response
+
+    @staticmethod
     def python(a):
         response = str(documentation.python[a])
         return response
@@ -95,3 +102,18 @@ class Misc:
             return string
         except:
             pass
+
+
+
+class Score:
+
+    def __init__(self):
+        self.points = 0
+        self.level = 0
+        self.experience = 0
+        self.next_level = 10
+
+    def level_up(self):
+        self.points += 100
+        self.level += 1
+        self.experience -= self.next_level

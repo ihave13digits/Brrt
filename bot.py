@@ -3,36 +3,26 @@
 from discord.ext import commands
 from os import path
 import json, random
-from tools import Misc
+from tools import Data, Misc, Vote, Score
 from res import illegal, compliment, banter
 
 
 TOKEN  = ''
 
 def pre_start_up():
-    #//new, better? system?
-    x=open(path.join('res', 'config.json'),"r")
-    y=x.read()
-    x.close()
-    z=json.loads(y)
-    print(z) #//print config to log for info purposes
-    TOKEN=z["TOKEN"]
-    PREFIX=z["PREFIX"]
+    with open(path.join('res', 'config.json'),"r") as f:
+        data = json.loads(f.read())
+    
+    #print config to log for info purposes
+    for key in data:
+        print("{}: {}".format(key, data[key]))
+    
+    TOKEN = data["TOKEN"]
+    PREFIX = data["PREFIX"]
     return TOKEN, PREFIX
 
 TOKEN, PREFIX = pre_start_up()
-
-
-
 bot = commands.Bot(command_prefix=PREFIX)
-
-
-TOKEN  = ''
-with open(path.join('res', 'token.txt')) as f:
-    TOKEN = f.read().strip()
-
-
-bot = commands.Bot(command_prefix='!')
 
 
 ### Connect ###
@@ -42,26 +32,31 @@ bot = commands.Bot(command_prefix='!')
 ### Connect ###
 @bot.event
 async def on_ready():
-    print(f'{bot.user.name} has connected to Discord!')
+    print(f"I'm {bot.user.name}!")
 
 ### Message ###
 
-#@bot.event
-#async def on_message(message):
-#    # Access data
-#    data = {'author':message.author, 'channel':message.channel, 'content':message.content}
-#    # Check for offenses
-#    for word in illegal.words:
-#        if word in data['content'].lower():
-#            # Get message context
-#            ctx = await bot.get_context(message)
-#            # Scold user
-#            response = illegal.words[word]['warning'].format(data['author'])
-#            await ctx.send(response)
-#            # Remove offense if serious
-#            if illegal.words[word]['offense'] > 0:
-#                await message.delete()
+# Needs work
 
+'''
+@bot.event
+async def on_message(message):
+    # Access data
+    data = {'author':message.author, 'channel':message.channel, 'content':message.content}
+    # Check for plain message
+    if not data['content'].startswith("!"):
+        # Check for offenses
+        for word in illegal.words:
+            if word in data['content'].lower():
+                # Get message context
+                ctx = await bot.get_context(message)
+                # Scold user
+                response = illegal.words[word]['warning'].format(data['author'])
+                await ctx.send(response)
+                # Remove offense if serious
+                if illegal.words[word]['offense'] > 0:
+                    await message.delete()
+'''
 
 
 ### Misc. ###
@@ -96,6 +91,14 @@ async def doc_rust(ctx, *a):
         response = Misc.rust('')
     else:
         response = Misc.rust(a[0])
+    await ctx.send(response)
+
+@bot.command(name='source')
+async def doc_source(ctx, *a):
+    if not a:
+        response = Misc.source('')
+    else:
+        response = Misc.source(a[0])
     await ctx.send(response)
 
 @bot.command(name='d')
