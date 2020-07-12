@@ -43,19 +43,19 @@ async def on_message(message):
 # Misc.
 
 @bot.command(name='python')
-async def doc_python(ctx, **a):
+async def doc_python(ctx, *a):
     if not a:
         response = Misc.python('')
     else:
-        response = Misc.python(a)
+        response = Misc.python(a[0])
     await ctx.send(response)
 
 @bot.command(name='rust')
-async def doc_rust(ctx, **a):
+async def doc_rust(ctx, *a):
     if not a:
         response = Misc.rust('')
     else:
-        response = Misc.rust(a)
+        response = Misc.rust(a[0])
     await ctx.send(response)
 
 @bot.command(name='d')
