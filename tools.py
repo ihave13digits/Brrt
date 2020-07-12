@@ -4,8 +4,6 @@ from random import randint, choice
 
 from res import documentation
 
-
-
 class Data:
 
     def __init__(self):

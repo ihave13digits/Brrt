@@ -1,11 +1,31 @@
 #!/usr/bin/python3
 
-import discord, random
 from discord.ext import commands
 from os import path
-
+import json, random
 from tools import Misc
 from res import illegal, compliment, banter
+
+
+TOKEN  = ''
+
+def pre_start_up():
+    #//new, better? system?
+    x=open(path.join('res', 'config.json'),"r")
+    y=x.read()
+    x.close()
+    z=json.loads(y)
+    print(z) #//print config to log for info purposes
+    TOKEN=z["TOKEN"]
+    PREFIX=z["PREFIX"]
+    return TOKEN, PREFIX
+
+TOKEN, PREFIX = pre_start_up()
+
+
+
+bot = commands.Bot(command_prefix=PREFIX)
+
 
 TOKEN  = ''
 with open(path.join('res', 'token.txt')) as f:
@@ -17,11 +37,12 @@ bot = commands.Bot(command_prefix='!')
 
 ### Connect ###
 
+
+
+### Connect ###
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
-
-
 
 ### Message ###
 
