@@ -1,31 +1,22 @@
 import discord
 
-all_commands = [
-        'banter, ','banter <>\n\n',
-        'praise, ', 'praise <>\n\n',
-        'd\n\n',
-        'source, ', 'source guts, ', 'source read, ', 'source tools\n\n',
-        'python, ', 'python index, ', 'python module, ', 'python glossary\n\n',
-        ]
+char = '-'
 
-help_dict={
-
-    "help":"Displays this message",
-    "rust":"Links to rust docs, accepts (mod, error, rustc, edition, rustdoc, foreword, standard) as optional args",
-    "python":"Links to python docs, accepts **(index, module, glossary)** as optional args",
-    "source": "Links the bot source code, accepts **(guts, read, tools)** as optional args",
-    "banter":"banter_ext",
-    "praise":"praise_ext"
-}
+help_dict = {
+        "help":"\n{}\n**Let Brrt help you talk to Brrt:**\n{}\n{}\n{}".format(char, char, char, char),
+        "rust":"Rust docs\n{}\nOptional arguments:\n**(mod, error, rustc, edition, rustdoc, foreword, standard)**\n{}\n{}\n{}".format(char, char, char, char),
+        "python":"Python docs\n{}\nOptional arguments:\n**(index, module, glossary)**\n{}\n{}\n{}".format(char, char, char, char),
+        "source": "Brrt source code\n{}\nOptional arguments:\n**(guts, read, tools)**\n{}\n{}\n{}".format(char, char, char, char),
+        "banter":"Brrt will slander you or your entry!\n{}\n{}\n{}".format(char, char, char),
+        "praise":"Brrt will praise you or your entry!\n{}\n{}\n{}".format(char, char, char)
+        }
 
 
 
 def helper(a):
     embed=discord.Embed(title="Brrt Help", url="https://github.com/ihave13digits/Brrt/blob/master/README.md", color=0xd421c8)
     try:
-        arg1= a[0]
-        print(arg1)
-        embed.add_field(name=arg1, value=help_dict[arg1], inline=False)
+        embed.add_field(name=a[0], value=help_dict[a[0]], inline=False)
     except:
         for x in help_dict:
             embed.add_field(name=x, value=help_dict[x], inline=False)
