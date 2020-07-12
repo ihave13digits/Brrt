@@ -2,7 +2,7 @@ import pickle, time
 from os import path
 from random import randint, choice
 
-from res import banter, documentation
+from res import documentation
 
 
 
@@ -84,14 +84,6 @@ class Misc:
     def rust(a):
         response = str(documentation.rust[a])
         return response
-
-    @staticmethod
-    def banter(tone='nice'):
-        if tone == 'nice':
-            b = choice(banter.nice)
-        if tone == 'mean':
-            b = choice(banter.mean)
-        return b
 
     @staticmethod
     def roll(sides):
