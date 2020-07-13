@@ -74,7 +74,8 @@ async def doc_source(ctx, *a):
     if not a:
         response = Misc.source('')
     else:
-        response = Misc.source(a[0])
+        target = str(a[0])
+        response = Misc.source(target)
     await ctx.send(response)
 
 @bot.command(name='python')
@@ -85,7 +86,8 @@ async def doc_python(ctx, *a):
     if not a:
         response = Misc.python('')
     else:
-        response = Misc.python(a[0])
+        target = str(a[0])
+        response = Misc.python(target)
     await ctx.send(response)
 
 @bot.command(name='rust')
@@ -96,7 +98,8 @@ async def doc_rust(ctx, *a):
     if not a:
         response = Misc.rust('')
     else:
-        response = Misc.rust(a[0])
+        target = str(a[0])
+        response = Misc.rust(target)
     await ctx.send(response)
 
 
