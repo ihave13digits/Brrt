@@ -148,29 +148,32 @@ async def roll_die(ctx, *a):
     roll an X sided dice where X is a number <= 1000
     '''
     response = ""
-    value = 6
     lmt = 1
     if not a:
         value = 6
         lmt = 1
-    else:
-        value = a[0]
-        if type(value) != int:
+    if len(a) > 0:
+        # get value
+        try:
+            value = int(a[0])
+        except:
             value = 6
+        # check if workable
         if value <= 1:
             value = 2
-
+        # get limit
         if len(a) > 1:
-            lmt = a[1]
-        if type(lmt) != int:
-            lmt = 1
-        if lmt > 20:
+            try:
+                lmt = abs(a[1])
+            except:
+                lmt = 1
+        # check if workable
+        if lmt > 20 or lmt < 1:
             die_choice = ['dies', 'dices']
             word = random.choice(die_choice)
-            response = "Brrt only roll 20 {} at a time.\n\n".format(word)
+            response = "Brrt only roll 1 to 20 {} at a time.\n\n".format(word)
+        if lmt > 20:
             lmt = 20
-        elif lmt < 1:
-            lmt = 1
     for rolls in range(lmt):
         response += str(Misc.roll(value))+"\n"
     await ctx.send(response)
