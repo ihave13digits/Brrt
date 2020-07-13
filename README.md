@@ -1,5 +1,7 @@
 # Brrt
-Brrt is a Discord bot written in Python
+Brrt is a Discord bot written in Python 3
+
+
 
 ## Features
 
@@ -8,7 +10,21 @@ Brrt is a Discord bot written in Python
 - [X] Commands
 - [ ] Moderation
 
+
+
 ## Commands
+
+###### Broadcast
+
+    broadcast (channel) (message)
+
+###### Embed
+
+    embed (subject) (message)
+
+###### Echo
+
+    echo
 
 ###### Banter
 
@@ -24,12 +40,48 @@ Brrt is a Discord bot written in Python
 
     d (integer <= 1000)
 
+
+
+## Documentation
+
+###### C
+
+    c
+
+###### C#
+
+    c#
+
+###### C++
+
+    c++
+
+###### Java
+
+    java
+
+###### Javascript
+
+    javascript
+
+###### Lua
+
+    lua
+
+###### Perl
+
+    perl
+
 ###### Python
 
     python
     python index
     python module
     python glossary
+
+###### Ruby
+
+    ruby
 
 ###### Rust
 
