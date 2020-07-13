@@ -203,8 +203,10 @@ async def doc_rust(ctx, *a):
 ### Misc. ###
 
 @bot.command(name='broadcast')
-async def broadcast(ctx, msg, channel):
-    response = msg
+async def broadcast(ctx, channel, *a):
+    response = ""
+    for word in a:
+        response += word+' '
     c = channel
     chnl = bot.get_channel(c)
     await chnl.send(response)
