@@ -66,7 +66,7 @@ async def helpBrrt(ctx, *a):
 
 ### Documentation ###
 
-bot.command(name='source')
+@bot.command(name='source')
 async def doc_source(ctx, *a):
     '''
     Fetch the git link to src
