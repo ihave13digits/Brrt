@@ -3,8 +3,9 @@ import discord
 char = '-'
 
 help_dict = {
+        # Help
         'help' : "\n**Let Brrt help you talk to Brrt:**\n{}\n".format(char),
-        #
+        # Documentation
         'source' : "Brrt source code\nOptional arguments:\n**(guts, read, tools)**\n{}\n".format(char),
         'c' : "C docs\nOptional arguments:\n**()**\n{}\n".format(char),
         'c#' : "C# docs\nOptional arguments:\n**()**\n{}\n".format(char),
@@ -16,10 +17,13 @@ help_dict = {
         'python' : "Python docs\nOptional arguments:\n**(index, module, glossary)**\n{}\n".format(char),
         'ruby' : "Ruby docs\nOptional arguments:\n**()**\n{}\n".format(char),
         'rust': "Rust docs\nOptional arguments:\n**(mod, error, rustc, edition, rustdoc, foreword, standard)**\n{}\n".format(char),
-        # Fun
+        # Social
+        'broadcast' : "Brrt will broadcast a message!\nRequired arguments:\n**(message, channel)**\n{}\n".format(char),
+        'embed' : "Brrt will embed a message for you, and even include a target!\nRequired arguments:\n**(target)**\n{}\n".format(char),
         'banter' : "Brrt will slander you or your entry!\n{}\n".format(char),
         'praise' : "Brrt will praise you or your entry!\n{}\n".format(char),
-        #
+        'echo' : "Brrt will copy you!\n{}\n".format(char),
+        # Random
         'd' : "Brrt will roll dice for you!\nOptional arguments:\n**(arg1=die sides, arg2=roll count)**\n{}\n".format(char),
         }
 

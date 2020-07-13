@@ -216,6 +216,23 @@ async def speak(ctx, *a):
         response += word + " "
     await ctx.send(response)
 
+@bot.command(name='embed')
+async def embeded(ctx, des, *a):
+    '''
+    Rick Roll member
+    '''
+    import discord
+    response = ""
+    for word in a:
+        response += word+' '
+    embed = discord.Embed(title="Brrt Have Message!",description=des,color=0xFFFFFF)
+    embed.set_footer(text="Brrt ||")
+    embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
+    embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
+    embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
+    embed.add_field(name="message:", value="**{}**".format(response), inline=False)
+    await ctx.send(embed=embed)
+
 @bot.command(name='banter')
 async def banterBrrt(ctx, *a):
     '''
