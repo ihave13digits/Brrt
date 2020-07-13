@@ -3,12 +3,24 @@ import discord
 char = '-'
 
 help_dict = {
-        "help":"\n{}\n**Let Brrt help you talk to Brrt:**\n{}\n{}\n{}".format(char, char, char, char),
-        "rust":"Rust docs\n{}\nOptional arguments:\n**(mod, error, rustc, edition, rustdoc, foreword, standard)**\n{}\n{}\n{}".format(char, char, char, char),
-        "python":"Python docs\n{}\nOptional arguments:\n**(index, module, glossary)**\n{}\n{}\n{}".format(char, char, char, char),
-        "source": "Brrt source code\n{}\nOptional arguments:\n**(guts, read, tools)**\n{}\n{}\n{}".format(char, char, char, char),
-        "banter":"Brrt will slander you or your entry!\n{}\n{}\n{}".format(char, char, char),
-        "praise":"Brrt will praise you or your entry!\n{}\n{}\n{}".format(char, char, char)
+        'help' : "\n**Let Brrt help you talk to Brrt:**\n{}\n".format(char),
+        #
+        'source' : "Brrt source code\nOptional arguments:\n**(guts, read, tools)**\n{}\n".format(char),
+        'c' : "C docs\nOption arguments:\n**()**\n{}\n".format(char),
+        'c#' : "C# docs\nOption arguments:\n**()**\n{}\n".format(char),
+        'c++' : "C++ docs\nOption arguments:\n**()**\n{}\n".format(char),
+        'java' : "Java docs\nOption arguments:\n**()**\n{}\n".format(char),
+        'javascript' : "Javascript docs\nOption arguments:\n**()**\n{}\n".format(char),
+        'lua' : "Lua docs\nOption arguments:\n**()**\n{}\n".format(char),
+        'perl' : "Perl docs\nOption arguments:\n**()**\n{}\n".format(char),
+        'python' : "Python docs\nOptional arguments:\n**(index, module, glossary)**\n{}\n".format(char),
+        'ruby' : "Ruby docs\nOption arguments:\n**()**\n{}\n".format(char),
+        'rust': "Rust docs\nOptional arguments:\n**(mod, error, rustc, edition, rustdoc, foreword, standard)**\n{}\n".format(char),
+        # Fun
+        'banter' : "Brrt will slander you or your entry!\n{}\n".format(char),
+        'praise' : "Brrt will praise you or your entry!\n{}\n".format(char),
+        #
+        'd' : "Brrt will roll dice for you!\nOptional arguments:\n**(arg1=die sides, arg2=roll count)**\n{}\n".format(char),
         }
 
 
