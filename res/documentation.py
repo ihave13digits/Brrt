@@ -5,6 +5,34 @@ source = {
         'tools' : 'https://github.com/ihave13digits/Brrt/blob/master/tools.py',
         }
 
+c = {
+        '' : 'https://www.cprogramming.com/',
+        }
+
+c_sharp = {
+        '' : 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/',
+        }
+
+c_pp = {
+        '' : 'http://www.cplusplus.com/doc/',
+        }
+
+java = {
+         '' : 'https://docs.oracle.com/javase/7/docs/api/',
+         }
+
+javascript = {
+         '' : 'https://devdocs.io/javascript/',
+         }
+
+lua = {
+         '' : 'https://www.lua.org/docs.html',
+         }
+
+perl = {
+         '' : 'https://www.perl.org/docs.html',
+         }
+
 python = {
         '' : 'https://docs.python.org/3/',
         'index' : 'https://docs.python.org/3/genindex.html',
@@ -12,6 +40,10 @@ python = {
         'glossary' : 'https://docs.python.org/3/glossary.html',
         
         }
+
+ruby = {
+         '' : 'https://ruby-doc.org/',
+         }
 
 rust = {
         '' : 'https://www.rust-lang.org/learn',
