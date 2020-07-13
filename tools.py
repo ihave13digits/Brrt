@@ -83,8 +83,48 @@ class Misc:
         return response
 
     @staticmethod
+    def c(a):
+        response = str(documentation.c.get(a, documentation.c['']))
+        return response
+
+    @staticmethod
+    def c_sharp(a):
+        response = str(documentation.c_sharp.get(a, documentation.c_sharp['']))
+        return response
+
+    @staticmethod
+    def c_pp(a):
+        response = str(documentation.c_pp.get(a, documentation.c_pp['']))
+        return response
+
+    @staticmethod
+    def java(a):
+        response = str(documentation.java.get(a, documentation.java['']))
+        return response
+
+    @staticmethod
+    def javascript(a):
+        response = str(documentation.javascript.get(a, documentation.javascript['']))
+        return response
+
+    @staticmethod
+    def lua(a):
+        response = str(documentation.lua.get(a, documentation.lua['']))
+        return response
+
+    @staticmethod
+    def perl(a):
+        response = str(documentation.perl.get(a, documentation.perl['']))
+        return response
+
+    @staticmethod
     def python(a):
         response = str(documentation.python.get(a, documentation.python['']))
+        return response
+
+    @staticmethod
+    def ruby(a):
+        response = str(documentation.ruby.get(a, documentation.ruby['']))
         return response
 
     @staticmethod

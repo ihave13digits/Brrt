@@ -78,6 +78,90 @@ async def doc_source(ctx, *a):
         response = Misc.source(target)
     await ctx.send(response)
 
+@bot.command(name='c')
+async def doc_c(ctx, *a):
+    '''
+     docs
+    '''
+    if not a:
+        response = Misc.c('')
+    else:
+        target = str(a[0])
+        response = Misc.c(target)
+    await ctx.send(response)
+
+@bot.command(name='c#')
+async def doc_c_sharp(ctx, *a):
+    '''
+     docs
+    '''
+    if not a:
+        response = Misc.c_sharp('')
+    else:
+        target = str(a[0])
+        response = Misc.c_sharp(target)
+    await ctx.send(response)
+
+@bot.command(name='c++')
+async def doc_c_pp(ctx, *a):
+    '''
+     docs
+    '''
+    if not a:
+        response = Misc.c_pp('')
+    else:
+        target = str(a[0])
+        response = Misc.c_pp(target)
+    await ctx.send(response)
+
+@bot.command(name='java')
+async def doc_java(ctx, *a):
+    '''
+     docs
+    '''
+    if not a:
+        response = Misc.java('')
+    else:
+        target = str(a[0])
+        response = Misc.java(target)
+    await ctx.send(response)
+
+@bot.command(name='javascript')
+async def doc_javascript(ctx, *a):
+    '''
+     docs
+    '''
+    if not a:
+        response = Misc.javascript('')
+    else:
+        target = str(a[0])
+        response = Misc.javascript(target)
+    await ctx.send(response)
+
+@bot.command(name='lua')
+async def doc_lua(ctx, *a):
+    '''
+     docs
+    '''
+    if not a:
+        response = Misc.lua('')
+    else:
+        target = str(a[0])
+        response = Misc.lua(target)
+    await ctx.send(response)
+
+@bot.command(name='perl')
+async def doc_perl(ctx, *a):
+    '''
+     docs
+    '''
+    if not a:
+        response = Misc.perl('')
+    else:
+        target = str(a[0])
+        response = Misc.perl(target)
+    await ctx.send(response)
+
 @bot.command(name='python')
 async def doc_python(ctx, *a):
     '''
@@ -88,6 +172,18 @@ async def doc_python(ctx, *a):
     else:
         target = str(a[0])
         response = Misc.python(target)
+    await ctx.send(response)
+
+@bot.command(name='ruby')
+async def doc_ruby(ctx, *a):
+    '''
+     docs
+    '''
+    if not a:
+        response = Misc.ruby('')
+    else:
+        target = str(a[0])
+        response = Misc.ruby(target)
     await ctx.send(response)
 
 @bot.command(name='rust')
