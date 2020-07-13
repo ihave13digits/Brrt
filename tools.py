@@ -134,7 +134,7 @@ class Misc:
 
     @staticmethod
     def flip():
-        coin = ['Heads', 'Tails']
+        coin = ['Heads', 'Tails', 'Heads', 'Tails', 'Heads', 'Heads', 'Tails', 'Tails']
         return choice(coin)
 
     @staticmethod

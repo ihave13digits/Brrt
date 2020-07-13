@@ -257,17 +257,19 @@ async def praiseBrrt(ctx, *a):
         response = random.choice(compliment.praise).format(a[0])
     await ctx.send(response)
 
-@cot.command(name='flip'):
+@bot.command(name='flip')
+async def flip(ctx):
+    import discord
     response = Misc.flip()
-    embed = discord.Embed(title="Brrt Flip Coin!",description=des,color=0xFFFFFF)
+    embed = discord.Embed(title="Brrt Flip Coin!",description="*flips his lucky coin*",color=0xFFFFFF)
     embed.set_footer(text="Brrt ||")
     if response == "Tails":
         embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtCoinTails.png')
-    if resoinse == "Heads":
+    if response == "Heads":
         embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtCoinHeads.png')
     embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
     embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniCoin.png')
-    embed.add_field(name="message:", value="**{}**".format(response), inline=False)
+    embed.add_field(name="Landed on:", value="**{}**".format(response), inline=False)
     await ctx.send(embed=embed)
 
 @bot.command(name='d')
