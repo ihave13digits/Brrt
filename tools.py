@@ -141,12 +141,8 @@ class Misc:
     def roll(sides):
         try:
             string = ''
-            if sides > 1000:
-                sides = 1000
-                string += "Brrt only roll up to 1,000.\n"
-            value = randint(1, int(sides))
-            string += str(value)
-            return string
+            value = randint(1, sides)
+            return str(value)
         except:
             pass
 
