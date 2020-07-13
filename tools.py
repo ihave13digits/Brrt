@@ -133,6 +133,11 @@ class Misc:
         return response
 
     @staticmethod
+    def flip():
+        coin = ['Heads', 'Tails']
+        return choice(coin)
+
+    @staticmethod
     def roll(sides):
         try:
             string = ''

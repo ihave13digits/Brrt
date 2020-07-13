@@ -221,7 +221,7 @@ async def speak(ctx, *a):
 @bot.command(name='embed')
 async def embeded(ctx, des, *a):
     '''
-    Rick Roll member
+    Embed message
     '''
     import discord
     response = ""
@@ -256,6 +256,19 @@ async def praiseBrrt(ctx, *a):
     else:
         response = random.choice(compliment.praise).format(a[0])
     await ctx.send(response)
+
+@cot.command(name='flip'):
+    response = Misc.flip()
+    embed = discord.Embed(title="Brrt Flip Coin!",description=des,color=0xFFFFFF)
+    embed.set_footer(text="Brrt ||")
+    if response == "Tails":
+        embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtCoinTails.png')
+    if resoinse == "Heads":
+        embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtCoinHeads.png')
+    embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
+    embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniCoin.png')
+    embed.add_field(name="message:", value="**{}**".format(response), inline=False)
+    await ctx.send(embed=embed)
 
 @bot.command(name='d')
 async def roll_die(ctx, *a):
