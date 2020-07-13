@@ -103,6 +103,20 @@ async def doc_rust(ctx, *a):
 
 ### Misc. ###
 
+@bot.command(name='broadcast')
+async def broadcast(ctx, msg, channel):
+    response = msg
+    c = channel
+    chnl = bot.get_channel(c)
+    await chnl.send(response)
+
+@bot.command(name='echo')
+async def speak(ctx, *a):
+    response = ""
+    for word in a:
+        response += word + " "
+    await ctx.send(response)
+
 @bot.command(name='banter')
 async def banterBrrt(ctx, *a):
     '''
