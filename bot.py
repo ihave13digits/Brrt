@@ -140,11 +140,36 @@ async def praiseBrrt(ctx, *a):
     await ctx.send(response)
 
 @bot.command(name='d')
-async def roll_die(ctx, a:int):
+async def roll_die(ctx, *a):
     '''
     roll an X sided dice where X is a number <= 1000
     '''
-    response = Misc.roll(a)
+    response = ""
+    value = 6
+    lmt = 1
+    if not a:
+        value = 6
+        lmt = 1
+    else:
+        value = a[0]
+        if type(value) != int:
+            value = 6
+        if value <= 1:
+            value = 2
+
+        if len(a) > 1:
+            lmt = a[1]
+        if type(lmt) != int:
+            lmt = 1
+        if lmt > 20:
+            die_choice = ['dies', 'dices']
+            word = random.choice(die_choice)
+            response = "Brrt only roll 20 {} at a time.\n\n".format(word)
+            lmt = 20
+        elif lmt < 1:
+            lmt = 1
+    for rolls in range(lmt):
+        response += str(Misc.roll(value))+"\n"
     await ctx.send(response)
 
 
