@@ -229,9 +229,9 @@ async def embeded(ctx, des, *a):
         response += word+' '
     embed = discord.Embed(title="Brrt Have Message!",description=des,color=0xFFFFFF)
     embed.set_footer(text="Brrt ||")
-    embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
+    embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMail.png')
     embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
-    embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
+    embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
     embed.add_field(name="message:", value="**{}**".format(response), inline=False)
     await ctx.send(embed=embed)
 
