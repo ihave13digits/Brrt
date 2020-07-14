@@ -71,6 +71,7 @@ async def on_message(message):
                 # Remove offense if serious
                 if illegal.words[word]['offense'] > 0:
                     await message.delete()
+    # allows this to work
     await bot.process_commands(message)
 
 
