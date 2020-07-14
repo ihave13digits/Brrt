@@ -2,7 +2,7 @@ import pickle, time
 from os import path
 from random import randint, choice
 
-from res import documentation, brrt_help
+from res import documentation
 
 
 
@@ -76,6 +76,10 @@ class Vote:
 class Misc:
 
 
+    @staticmethod
+    def api(a):
+        response = str(documentation.api.get(a, documentation.api['']))
+        return response
 
     @staticmethod
     def source(a):
@@ -131,6 +135,13 @@ class Misc:
     def rust(a):
         response = str(documentation.rust.get(a, documentation.rust['']))
         return response
+
+
+
+    @staticmethod
+    def rand_hex():
+        value = randint(0, 16777215)
+        return value
 
     @staticmethod
     def flip():

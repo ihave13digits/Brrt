@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-from discord.ext import commands
-from os import path
 import json, random
+from discord.ext import commands
+from discord import Embed
+from os import path
 from tools import Data, Misc, Vote, Score
-from res import illegal, compliment, banter
-import help_com
+from res import illegal, compliment, banter, help_com
 
 def pre_start_up():
     with open(path.join('res', 'config.json'),"r") as f:
@@ -24,14 +24,32 @@ bot = commands.Bot(command_prefix=PREFIX)
 
 
 
+def helper(a, mode):
+    color_choice = Misc.rand_hex()
+    embed=Embed(title="Brrt {}".format(mode).upper(), url="https://github.com/ihave13digits/Brrt/blob/master/README.md", color=color_choice)
+    if mode == "api":
+        target = help_com.api_dict
+    if mode == "docs":
+        target = help_com.docs_dict
+    if mode == "help":
+        target = help_com.help_dict
+    try:
+        embed.add_field(name=a[0], value=target[a[0]], inline=False)
+    except:
+        for x in target:
+            embed.add_field(name=x, value=target[x], inline=False)
+    
+    embed.set_footer(text="Brrt ||")
+    return embed
+
+
+
 ### Connect ###
 @bot.event
 async def on_ready():
     print(f"I'm {bot.user.name}!")
 
-### Message ###
-
-# Needs work
+### Moderation ###
 
 '''
 @bot.event
@@ -59,17 +77,30 @@ async def on_message(message):
 bot.remove_command('help')
 @bot.command(name='help')
 async def helpBrrt(ctx, *a):
-    response=help_com.helper(a, 'help')
+    response=helper(a, 'help')
     await ctx.send(embed=response)
 
 @bot.command(name='docs')
 async def helpBrrt(ctx, *a):
-    response=help_com.helper(a, 'docs')
+    response=helper(a, 'docs')
     await ctx.send(embed=response)
 
 
 
 ### Documentation ###
+
+@bot.command(name='api')
+async def doc_api(ctx, *a):
+    '''
+    Fetch APIs
+    '''
+    if not a:
+        response = helper(a, 'api')
+        await ctx.send(embed=response)
+    else:
+        target = str(a[0])
+        response = Misc.api(target)
+        await ctx.send(response)
 
 @bot.command(name='source')
 async def doc_source(ctx, *a):
@@ -86,7 +117,7 @@ async def doc_source(ctx, *a):
 @bot.command(name='c')
 async def doc_c(ctx, *a):
     '''
-     docs
+    C docs
     '''
     if not a:
         response = Misc.c('')
@@ -98,7 +129,7 @@ async def doc_c(ctx, *a):
 @bot.command(name='c#')
 async def doc_c_sharp(ctx, *a):
     '''
-     docs
+    C# docs
     '''
     if not a:
         response = Misc.c_sharp('')
@@ -110,7 +141,7 @@ async def doc_c_sharp(ctx, *a):
 @bot.command(name='c++')
 async def doc_c_pp(ctx, *a):
     '''
-     docs
+    C++ docs
     '''
     if not a:
         response = Misc.c_pp('')
@@ -122,7 +153,7 @@ async def doc_c_pp(ctx, *a):
 @bot.command(name='java')
 async def doc_java(ctx, *a):
     '''
-     docs
+    Java docs
     '''
     if not a:
         response = Misc.java('')
@@ -134,7 +165,7 @@ async def doc_java(ctx, *a):
 @bot.command(name='javascript')
 async def doc_javascript(ctx, *a):
     '''
-     docs
+    Javascript docs
     '''
     if not a:
         response = Misc.javascript('')
@@ -146,7 +177,7 @@ async def doc_javascript(ctx, *a):
 @bot.command(name='lua')
 async def doc_lua(ctx, *a):
     '''
-     docs
+    Lua docs
     '''
     if not a:
         response = Misc.lua('')
@@ -158,7 +189,7 @@ async def doc_lua(ctx, *a):
 @bot.command(name='perl')
 async def doc_perl(ctx, *a):
     '''
-     docs
+    Perl docs
     '''
     if not a:
         response = Misc.perl('')
@@ -182,7 +213,7 @@ async def doc_python(ctx, *a):
 @bot.command(name='ruby')
 async def doc_ruby(ctx, *a):
     '''
-     docs
+    Ruby docs
     '''
     if not a:
         response = Misc.ruby('')
@@ -220,7 +251,7 @@ async def broadcast(ctx, channel, *a):
     await chnl.send(response)
 
 @bot.command(name='echo')
-async def speak(ctx, *a):
+async def echo(ctx, *a):
     '''
     Echo a message
     '''
@@ -234,11 +265,10 @@ async def embeded(ctx, des, *a):
     '''
     Embed message
     '''
-    import discord
     response = ""
     for word in a:
         response += word+' '
-    embed = discord.Embed(title="Brrt Have Message!",description=des,color=0xFFFFFF)
+    embed = Embed(title="Brrt Have Message!",description=des,color=0xFFFFFF)
     embed.set_footer(text="Brrt ||")
     embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMail.png')
     embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
@@ -273,9 +303,8 @@ async def flip(ctx):
     '''
     Flip a coin
     '''
-    import discord
     response = Misc.flip()
-    embed = discord.Embed(title="Brrt Flip Coin!",description="*flips his lucky coin*",color=0xFFFFFF)
+    embed = Embed(title="Brrt Flip Coin!",description="*flips his lucky coin*",color=0xFFFFFF)
     embed.set_footer(text="Brrt ||")
     if response == "Tails":
         embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtCoinTails.png')
