@@ -47,10 +47,18 @@ Brrt is a Discord bot written in Python 3
 ###### C
 
     c
+    c function
+    c syntax
 
 ###### C#
 
     c#
+    c# keyword
+    c# operator
+    c# token
+    c# preprocessor
+    c# options
+    c# errors
 
 ###### C++
 
@@ -59,6 +67,9 @@ Brrt is a Discord bot written in Python 3
 ###### Java
 
     java
+    java classes
+    java packages
+    java properties
 
 ###### Javascript
 
@@ -67,10 +78,21 @@ Brrt is a Discord bot written in Python 3
 ###### Lua
 
     lua
+    lua intro
+    lua basic
+    lua language
+    lua api
+    lua auxiliary
+    lua standard
+    lua standalone
+    lua version-issues
+    lua syntax
 
 ###### Perl
 
     perl
+    perl manual
+    perl module
 
 ###### Python
 
@@ -82,6 +104,8 @@ Brrt is a Discord bot written in Python 3
 ###### Ruby
 
     ruby
+    ruby api
+    ruby standard
 
 ###### Rust
 
