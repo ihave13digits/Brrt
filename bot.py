@@ -2,7 +2,7 @@
 
 import json, random
 from discord.ext import commands
-from discord import Embed, utils
+from discord import Member, Embed, utils
 from os import path
 from tools import Data, Misc, Vote, Score
 from res import illegal, compliment, banter, help_com
@@ -17,15 +17,17 @@ def pre_start_up():
     
     TOKEN = data["TOKEN"]
     PREFIX = data["PREFIX"]
-    return TOKEN, PREFIX
+    OWNERS = data['OWNERS']
+    return TOKEN, PREFIX, OWNERS
 
-TOKEN, PREFIX = pre_start_up()
-bot = commands.Bot(command_prefix=PREFIX)
 bot_data = {
-        'dir' : 'test.data',
-        'owners' : ['ihave13digits', 'AbleTheAbove'],
-        'member_points' : {}
-        }
+        'dir' : 'save.data',
+        'owners' : [],
+        'member_points' : {},
+        'points' : 0}
+
+TOKEN, PREFIX, bot_data['owners'] = pre_start_up()
+bot = commands.Bot(command_prefix=PREFIX)
 
 
 
@@ -46,6 +48,16 @@ def helper(a, mode):
     
     embed.set_footer(text="Brrt ||")
     return embed
+
+
+
+def handle_users():
+    #for user in bot.get_all_members():
+    #    if str(user.id) not in bot_data['member_points'] and not user.bot:
+    #        bot_data['member_points'][str(user.id)] = 0
+    for mmbr in bot_data['member_points']:
+        print("{}: {}".format(mmbr, bot_data['member_points'][mmbr]))
+    print(bot_data['points'])
 
 
 
@@ -104,13 +116,21 @@ async def on_member_join(member):
 
 @bot.command(name='shutdown')
 async def shutdown(ctx):
+    can_do = False
+    response = "You're not my owner!  Only an owner can use that command!"
     for owner in bot_data['owners']:
         if ctx.author.name == owner:
-            D = Data()
-            print("Saving data...")
-            D.save(bot_data)
-            print("Shutting down...")
-            exit()
+            response = "Okay, {}!  See you soon!".format(owner)
+            can_do = True
+    await ctx.send(response)
+    if can_do:
+        D = Data()
+        print("Saving data...")
+        handle_users()
+        D.save(bot_data)
+        print("Shutting down...")
+        await bot.close()
+        #exit(1)
 
 ### Help ###
 
@@ -330,13 +350,19 @@ async def banterBrrt(ctx, *a):
 
 @bot.command(name='praise')
 async def praiseBrrt(ctx, *a):
+    global bot_data
     '''
     Praise People or Brrt
     '''
     if not a:
         response = random.choice(compliment.shucks)
+        bot_data['points'] += 1
     else:
-        print(ctx.author)
+        try:
+            bot_data['member_points'][str(ctx.author.id)] += 1
+        except:
+            bot_data['member_points'][str(ctx.author.id)] = 1
+        print(ctx.author.id)
         response = random.choice(compliment.praise).format(a[0])
     await ctx.send(response)
 

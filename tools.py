@@ -18,6 +18,7 @@ class Data:
             f.close()
 
     def load(self, data):
+        to_return = data
         try:
             with open(path.join(self.dir_data, data['dir']), 'rb') as f:
                 to_return = pickle.load(f)
