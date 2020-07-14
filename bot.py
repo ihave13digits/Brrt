@@ -21,6 +21,11 @@ def pre_start_up():
 
 TOKEN, PREFIX = pre_start_up()
 bot = commands.Bot(command_prefix=PREFIX)
+bot_data = {
+        'dir' : 'test.data',
+        'owners' : ['ihave13digits', 'AbleTheAbove'],
+        'member_points' : {}
+        }
 
 
 
@@ -47,7 +52,12 @@ def helper(a, mode):
 ### Connect ###
 @bot.event
 async def on_ready():
-    print(f"I'm {bot.user.name}!")
+    global bot_data
+    print("Brrt needs to get ready!")
+    D = Data()
+    p = bot_data
+    bot_data = D.load(p)
+    print("Brrt ready now!")
 
 ### Moderation ###
 
@@ -66,12 +76,11 @@ async def on_message(message):
                 # Get message context
                 ctx = await bot.get_context(message)
                 # Scold user
-                response = illegal.words[word]['warning'].format(data['author'])
+                response = illegal.words[word]['warning'].format(data['author'].mention)
                 await ctx.send(response)
                 # Remove offense if serious
                 if illegal.words[word]['offense'] > 0:
                     await message.delete()
-    # allows this to work
     await bot.process_commands(message)
 
 
@@ -90,6 +99,18 @@ async def on_member_join(member):
         channel = bot.get_channel(c.id)
         response = "{} just got a new member!  Come and introduce yourself, {}".format(server.name, member.mention)
         await channel.send(response)
+
+### Shutdown ###
+
+@bot.command(name='shutdown')
+async def shutdown(ctx):
+    for owner in bot_data['owners']:
+        if ctx.author.name == owner:
+            D = Data()
+            print("Saving data...")
+            D.save(bot_data)
+            print("Shutting down...")
+            exit()
 
 ### Help ###
 
