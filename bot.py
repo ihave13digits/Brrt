@@ -2,7 +2,7 @@
 
 import json, random
 from discord.ext import commands
-from discord import Embed
+from discord import Embed, utils
 from os import path
 from tools import Data, Misc, Vote, Score
 from res import illegal, compliment, banter, help_com
@@ -51,9 +51,11 @@ async def on_ready():
 
 ### Moderation ###
 
-'''
 @bot.event
 async def on_message(message):
+    # Check if not self
+    if message.author == bot.user:
+        return
     # Access data
     data = {'author':message.author, 'channel':message.channel, 'content':message.content}
     # Check for plain message
@@ -69,7 +71,24 @@ async def on_message(message):
                 # Remove offense if serious
                 if illegal.words[word]['offense'] > 0:
                     await message.delete()
-'''
+    await bot.process_commands(message)
+
+
+@bot.event
+async def on_member_join(member):
+    server = None
+    c = None
+    for srvr in bot.guilds:
+        if srvr.name == "the_lab":
+            server = srvr
+    if server != None:
+        for chnl in server.channels:
+            if chnl.name == "introductions":
+                c = chnl
+    if c != None:
+        channel = bot.get_channel(c.id)
+        response = "{} just got a new member!  Come and introduce yourself, {}".format(server.name, member.mention)
+        await channel.send(response)
 
 ### Help ###
 
@@ -295,6 +314,7 @@ async def praiseBrrt(ctx, *a):
     if not a:
         response = random.choice(compliment.shucks)
     else:
+        print(ctx.author)
         response = random.choice(compliment.praise).format(a[0])
     await ctx.send(response)
 
