@@ -7,10 +7,18 @@ source = {
 
 c = {
         '' : 'https://www.cprogramming.com/',
+        'function' : 'https://www.cprogramming.com/function.html?inl=nv',
+        'syntax' : 'https://www.cprogramming.com/reference/?inl=nv',
         }
 
 c_sharp = {
         '' : 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/',
+        'keyword' : 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/',
+        'operator' : 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/',
+        'token' : 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/',
+        'preprocessor' : 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/preprocessor-directives/',
+        'options' : 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/',
+        'errors' : 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-messages/',
         }
 
 c_pp = {
@@ -18,7 +26,10 @@ c_pp = {
         }
 
 java = {
-         '' : 'https://docs.oracle.com/javase/7/docs/api/',
+         '' : 'https://docs.oracle.com/en/java/javase/14/docs/api/index.html',
+         'classes' : 'https://docs.oracle.com/en/java/javase/14/docs/api/allclasses-index.html',
+         'packages' : 'https://docs.oracle.com/en/java/javase/14/docs/api/allpackages-index.html',
+         'properties' : 'https://docs.oracle.com/en/java/javase/14/docs/api/system-properties.html',
          }
 
 javascript = {
@@ -27,10 +38,21 @@ javascript = {
 
 lua = {
          '' : 'https://www.lua.org/docs.html',
+         'intro' : 'https://www.lua.org/manual/5.4/manual.html',
+         'basic' : 'https://www.lua.org/manual/5.4/manual.html#2',
+         'language' : 'https://www.lua.org/manual/5.4/manual.html#3',
+         'api' : 'https://www.lua.org/manual/5.4/manual.html#4',
+         'auxiliary' : 'https://www.lua.org/manual/5.4/manual.html#5',
+         'standard' : 'https://www.lua.org/manual/5.4/manual.html#6',
+         'standalone' : 'https://www.lua.org/manual/5.4/manual.html#7',
+         'version-issues' : 'https://www.lua.org/manual/5.4/manual.html#8',
+         'syntax' : 'https://www.lua.org/manual/5.4/manual.html#9',
          }
 
 perl = {
          '' : 'https://www.perl.org/docs.html',
+         'manual' : 'https://perldoc.perl.org/perl.html',
+         'module' : 'https://perldoc.perl.org/index-modules-A.html',
          }
 
 python = {
@@ -43,6 +65,8 @@ python = {
 
 ruby = {
          '' : 'https://ruby-doc.org/',
+         'api' : 'https://ruby-doc.org/core-2.7.1/',
+         'standard' : 'https://ruby-doc.org/stdlib-2.7.1/',
          }
 
 rust = {

@@ -12,7 +12,7 @@ words = {
         'closed-source' : {
             'offense' : 1,
             'trigger' : 'closed-source',
-            'warning' : "@{}, we do not tolerate hate speech here.",
+            'warning' : "{}, we do not tolerate hate speech here.",
             },
 
         }

@@ -13,15 +13,15 @@ docs_dict = {
         #'' : "\n{}\n".format(char),
         # Documentation
         'source' : "Brrt source code\nOptional arguments:\n**(guts, read, tools)**\n{}\n".format(char),
-        'c' : "C docs\nOptional arguments:\n**()**\n{}\n".format(char),
-        'c#' : "C# docs\nOptional arguments:\n**()**\n{}\n".format(char),
+        'c' : "C docs\nOptional arguments:\n**(function, syntax)**\n{}\n".format(char),
+        'c#' : "C# docs\nOptional arguments:\n**(keyword, operator, token, preprocessor, options, errors)**\n{}\n".format(char),
         'c++' : "C++ docs\nOptional arguments:\n**()**\n{}\n".format(char),
-        'java' : "Java docs\nOptional arguments:\n**()**\n{}\n".format(char),
+        'java' : "Java docs\nOptional arguments:\n**(classes, packages, properties)**\n{}\n".format(char),
         'javascript' : "Javascript docs\nOptional arguments:\n**()**\n{}\n".format(char),
-        'lua' : "Lua docs\nOptional arguments:\n**()**\n{}\n".format(char),
-        'perl' : "Perl docs\nOptional arguments:\n**()**\n{}\n".format(char),
+        'lua' : "Lua docs\nOptional arguments:\n**(intro, basic, language, api, auxiliary, standard, standalone, version-issues, syntax)**\n{}\n".format(char),
+        'perl' : "Perl docs\nOptional arguments:\n**(manual, module)**\n{}\n".format(char),
         'python' : "Python docs\nOptional arguments:\n**(index, module, glossary)**\n{}\n".format(char),
-        'ruby' : "Ruby docs\nOptional arguments:\n**()**\n{}\n".format(char),
+        'ruby' : "Ruby docs\nOptional arguments:\n**(api, standard)**\n{}\n".format(char),
         'rust': "Rust docs\nOptional arguments:\n**(mod, error, rustc, edition, rustdoc, foreword, standard)**\n{}\n".format(char),
         }
 
