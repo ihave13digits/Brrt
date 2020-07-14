@@ -57,6 +57,7 @@ rust = {
         }
 
 api = {
+        '' : "Brrt doesn't take that argument, knucklehead!  Try using the command `!api`.",
         'discord' : 'https://discordpy.readthedocs.io/en/latest/',
         'godot' : 'https://docs.godotengine.org/en/stable/',
         'unity' : 'https://docs.unity3d.com/Manual/',
