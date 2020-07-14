@@ -55,3 +55,10 @@ rust = {
         'error' : 'https://doc.rust-lang.org/error-index.html',
         'mod' : 'https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html',
         }
+
+api = {
+        'discord' : 'https://discordpy.readthedocs.io/en/latest/',
+        'godot' : 'https://docs.godotengine.org/en/stable/',
+        'unity' : 'https://docs.unity3d.com/Manual/',
+        'unreal' : 'https://docs.unrealengine.com/en-US/index.html',
+        }
