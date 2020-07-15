@@ -31,12 +31,15 @@ help_dict = {
         'help' : "\nLet Brrt help you talk to Brrt.\n{}\n".format(char),
         'docs' : "\nLet Brrt help you find documentation.\n{}\n".format(char),
         'api' : "\nLet Brrt help you find APIs.\n{}\n".format(char),
+        # Privacy
+        'keep-data' : "Allow or disallow Brrt saving data.\nRequired arguments:\n**(yes, no, status)**\n{}\n".format(char),
         # Social
         'broadcast' : "Brrt will broadcast a message!\nRequired arguments:\n**(channel, message)**\n{}\n".format(char),
         'embed' : "Brrt will embed a message for you, and even include a target!\nRequired arguments:\n**(target, message)**\n{}\n".format(char),
         'echo' : "Brrt will copy you!\nRequired arguments:\n**(message)**\n{}\n".format(char),
         'banter' : "Brrt will slander you or your entry!\nOptional arguments:\n**(target)**\n{}\n".format(char),
         'praise' : "Brrt will praise you or your entry!\nOptional arguments:\n**(target)**\n{}\n".format(char),
+        'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points)**\n{}\n".format(char),
         # Voting
         'vote' : "Brrt will take your vote!\n{}\n".format(char),
         # Random
