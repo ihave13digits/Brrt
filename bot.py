@@ -7,29 +7,23 @@ from os import path
 from tools import Data, Misc, Vote, Score
 from res import illegal, compliment, banter, help_com
 
-def pre_start_up():
-    with open(path.join('res', 'config.json'),"r") as f:
-        data = json.loads(f.read())
-    
-    #print config to log for info purposes
-    for key in data:
-        print("{}: {}".format(key, data[key]))
-    
-    TOKEN = data["TOKEN"]
-    PREFIX = data["PREFIX"]
-    OWNERS = data['OWNERS']
-    return TOKEN, PREFIX, OWNERS
+### Globals ###
 
 bot_data = {
         'dir' : 'save.data',
         'owners' : [],
+        'introductions' : [],
         'member_points' : {},
-        'points' : 0}
+        'playing' : {},
+        'points' : 0
+        }
 
-TOKEN, PREFIX, bot_data['owners'] = pre_start_up()
+TOKEN, PREFIX, bot_data['owners'] = Data.pre_start_up()
 bot = commands.Bot(command_prefix=PREFIX)
 
 
+
+### Helper Functions ###
 
 def helper(a, mode):
     color_choice = Misc.rand_hex()
@@ -52,12 +46,14 @@ def helper(a, mode):
 
 
 def handle_users():
-    #for user in bot.get_all_members():
-    #    if str(user.id) not in bot_data['member_points'] and not user.bot:
-    #        bot_data['member_points'][str(user.id)] = 0
     for mmbr in bot_data['member_points']:
         print("{}: {}".format(mmbr, bot_data['member_points'][mmbr]))
-    print(bot_data['points'])
+    print("Brrt Points:        {}".format(bot_data['points']))
+
+
+
+def excluded(i):
+    return bot_data['playing'].get(i, True)
 
 
 
@@ -70,6 +66,8 @@ async def on_ready():
     p = bot_data
     bot_data = D.load(p)
     print("Brrt ready now!")
+
+
 
 ### Moderation ###
 
@@ -98,19 +96,21 @@ async def on_message(message):
 
 @bot.event
 async def on_member_join(member):
-    server = None
-    c = None
     for srvr in bot.guilds:
-        if srvr.name == "the_lab":
+        if srvr == member.guild:
             server = srvr
-    if server != None:
-        for chnl in server.channels:
-            if chnl.name == "introductions":
+    
+    for chnl in server.channels:
+        for valid in bot_data['introductions']:
+            if chnl.name == valid:
                 c = chnl
+    
     if c != None:
         channel = bot.get_channel(c.id)
         response = "{} just got a new member!  Come and introduce yourself, {}".format(server.name, member.mention)
         await channel.send(response)
+
+
 
 ### Shutdown ###
 
@@ -130,20 +130,36 @@ async def shutdown(ctx):
         D.save(bot_data)
         print("Shutting down...")
         await bot.close()
-        #exit(1)
+
+
+
+### Data Collection Verification ###
+
+@ bot.command(name="keep-data")
+async def data_collection(ctx, a):
+    global bot_data
+    if a == "yes":
+        bot_data['playing'][str(ctx.author.id)] = False
+        response = "Brrt will start giving you points!"
+    if a == "no":
+        if not excluded(str(ctx.author.id)):
+            bot_data['member_points'].pop(str(ctx.author.id))
+            bot_data['playing'].pop(str(ctx.author.id))
+        response = "More points for Brrt!"
+    await ctx.send(response)
+    print(bot_data)
+
+
 
 ### Help ###
 
-# Override !help
 bot.remove_command('help')
 @bot.command(name='help')
 async def helpBrrt(ctx, *a):
+    '''
+    Override !help
+    '''
     response=helper(a, 'help')
-    await ctx.send(embed=response)
-
-@bot.command(name='docs')
-async def helpBrrt(ctx, *a):
-    response=helper(a, 'docs')
     await ctx.send(embed=response)
 
 
@@ -162,6 +178,11 @@ async def doc_api(ctx, *a):
         target = str(a[0])
         response = Misc.api(target)
         await ctx.send(response)
+
+@bot.command(name='docs')
+async def helpBrrt(ctx, *a):
+    response=helper(a, 'docs')
+    await ctx.send(embed=response)
 
 @bot.command(name='source')
 async def doc_source(ctx, *a):
@@ -358,10 +379,18 @@ async def praiseBrrt(ctx, *a):
         response = random.choice(compliment.shucks)
         bot_data['points'] += 1
     else:
-        try:
-            bot_data['member_points'][str(ctx.author.id)] += 1
-        except:
-            bot_data['member_points'][str(ctx.author.id)] = 1
+        if a[0] != ctx.author.mention:
+            for mem in bot.get_all_members():
+                if mem.mentioned_in(ctx.message) and not excluded(str(mem.id)):
+                    try:
+                        bot_data['member_points'][str(mem.id)] += 1
+                    except:
+                        bot_data['member_points'][str(mem.id)] = 1
+            if not excluded(str(ctx.author.id)):
+                try:
+                    bot_data['member_points'][str(ctx.author.id)] += 1
+                except:
+                    bot_data['member_points'][str(ctx.author.id)] = 1
         print(ctx.author.id)
         response = random.choice(compliment.praise).format(a[0])
     await ctx.send(response)

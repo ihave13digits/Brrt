@@ -1,4 +1,4 @@
-import pickle, time
+import pickle, json, time
 from os import path
 from random import randint, choice
 
@@ -26,6 +26,21 @@ class Data:
         except FileNotFoundError:
             pass
         return to_return
+
+    @staticmethod
+    def pre_start_up():
+        with open(path.join('res', 'config.json'),"r") as f:
+            data = json.loads(f.read())
+
+        #print config to log for info purposes
+        for key in data:
+            print("{}: {}".format(key, data[key]))
+
+        TOKEN = data["TOKEN"]
+        PREFIX = data["PREFIX"]
+        OWNERS = data['OWNERS']
+        INTROS = data['INTROS']
+        return TOKEN, PREFIX, OWNERS
 
 
 
