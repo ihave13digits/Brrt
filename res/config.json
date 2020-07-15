@@ -1,1 +1,6 @@
-{"TOKEN":"1","PREFIX":"!","OWNERS":["ihave13digits","AbleTheAbove"]}
+{
+    "TOKEN":"1",
+    "PREFIX":"!",
+    "OWNERS":["ihave13digits","AbleTheAbove"],
+    "INTROS":["introductions","welcome"]
+}
