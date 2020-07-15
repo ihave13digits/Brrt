@@ -175,17 +175,3 @@ class Misc:
 
 
 
-class Score:
-
-    def __init__(self):
-        self.points = 0
-        self.level = 0
-        self.experience = 0
-        self.next_level = 10
-        self.level_rate = 1.25
-
-    def level_up(self):
-        self.points += self.next_level
-        self.level += 1
-        self.experience -= self.next_level
-        self.next_level = int(self.next_level * self.level_rate)

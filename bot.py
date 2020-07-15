@@ -13,7 +13,13 @@ bot_data = {
         'dir' : 'save.data',
         'owners' : [],
         'introductions' : [],
-        'member_points' : {},
+        'member_data' : {
+            'rewards' : {},
+            'points' : {},
+            'level' : {},
+            'lup' : {},
+            'exp' : {}
+            },
         'playing' : {},
         'points' : 0
         }
@@ -46,8 +52,8 @@ def helper(a, mode):
 
 
 def handle_users():
-    for mmbr in bot_data['member_points']:
-        print("{}: {}".format(mmbr, bot_data['member_points'][mmbr]))
+    for mmbr in bot_data['member_data']['points']:
+        print("{}: {}".format(mmbr, bot_data['member_data']['points'][mmbr]))
     print("Brrt Points:        {}".format(bot_data['points']))
 
 
@@ -57,14 +63,43 @@ def excluded(i):
 
 
 
+def user_point(i, val):
+    global bot_data
+    try:
+        if bot_data['member_data']['points'][i] + val >= 0:
+            bot_data['member_data']['points'][i] += val
+    except:
+        if val >= 0:
+            bot_data['member_data']['points'][i] = val
+
+
+
+def user_xp(i, val):
+    global bot_data
+    try:
+        bot_data['member_data']['exp'][i] += val
+        if bot_data['member_data']['exp'][i] >= bot_data['member_data']['lup'][i]:
+            bot_data['member_data']['exp'][i] -= bot_data['member_data']['lup'][i]
+            bot_data['member_data']['level'][i] += 1
+            bot_data['member_data']['lup'][i] = int(bot_data['member_data']['lup'][i] * 1.25)
+    except:
+        bot_data['member_data']['exp'][i] = val
+
+
+
 ### Connect ###
+
 @bot.event
 async def on_ready():
     global bot_data
     print("Brrt needs to get ready!")
     D = Data()
     p = bot_data
-    bot_data = D.load(p)
+    temp_data = D.load(p)
+    for t in temp_data:
+        for key in bot_data:
+            if key == t:
+                bot_data[key] = temp_data[t]
     print("Brrt ready now!")
 
 
@@ -88,8 +123,16 @@ async def on_message(message):
                 # Scold user
                 response = illegal.words[word]['warning'].format(data['author'].mention)
                 await ctx.send(response)
-                # Remove offense if serious
-                if illegal.words[word]['offense'] > 0:
+                # Check severity of offense
+                if illegal.words[word]['offense'] < 0:
+                    if not excluded(str(data['author'].id)):
+                        user_point(str(data['author'].id), abs(illegal_words[word]['offense']))
+                elif illegal.words[word]['offense'] == 0:
+                    pass
+                elif illegal.words[word]['offense'] == 1:
+                    user_point(str(data['author'].id), -1)
+                elif illegal.words[word]['offense'] > 1:
+                    user_point(str(data['author'].id), -10)
                     await message.delete()
     await bot.process_commands(message)
 
@@ -135,19 +178,30 @@ async def shutdown(ctx):
 
 ### Data Collection Verification ###
 
-@ bot.command(name="keep-data")
+@bot.command(name="keep-data")
 async def data_collection(ctx, a):
+    '''
+    Allow/Disallow data collection
+    '''
     global bot_data
     if a == "yes":
+        bot_data['member_data']['points'][str(ctx.author.id)] = 0
+        bot_data['member_data']['level'][str(ctx.author.id)] = 0
+        bot_data['member_data']['lup'][str(ctx.author.id)] = 10
+        bot_data['member_data']['exp'][str(ctx.author.id)] = 0
         bot_data['playing'][str(ctx.author.id)] = False
         response = "Brrt will start giving you points!"
     if a == "no":
         if not excluded(str(ctx.author.id)):
-            bot_data['member_points'].pop(str(ctx.author.id))
+            bot_data['member_data']['points'].pop(str(ctx.author.id))
             bot_data['playing'].pop(str(ctx.author.id))
         response = "More points for Brrt!"
+    if a == 'status':
+        if not excluded(str(ctx.author.id)):
+            response = "Brrt has permission to give you points and save data!"
+        else:
+            response = "Brrt can't save your data."
     await ctx.send(response)
-    print(bot_data)
 
 
 
@@ -178,11 +232,15 @@ async def doc_api(ctx, *a):
         target = str(a[0])
         response = Misc.api(target)
         await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='docs')
 async def helpBrrt(ctx, *a):
     response=helper(a, 'docs')
     await ctx.send(embed=response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='source')
 async def doc_source(ctx, *a):
@@ -195,6 +253,8 @@ async def doc_source(ctx, *a):
         target = str(a[0])
         response = Misc.source(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='c')
 async def doc_c(ctx, *a):
@@ -207,6 +267,8 @@ async def doc_c(ctx, *a):
         target = str(a[0])
         response = Misc.c(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='c#')
 async def doc_c_sharp(ctx, *a):
@@ -219,6 +281,8 @@ async def doc_c_sharp(ctx, *a):
         target = str(a[0])
         response = Misc.c_sharp(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='c++')
 async def doc_c_pp(ctx, *a):
@@ -231,6 +295,8 @@ async def doc_c_pp(ctx, *a):
         target = str(a[0])
         response = Misc.c_pp(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='java')
 async def doc_java(ctx, *a):
@@ -243,6 +309,8 @@ async def doc_java(ctx, *a):
         target = str(a[0])
         response = Misc.java(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='javascript')
 async def doc_javascript(ctx, *a):
@@ -255,6 +323,8 @@ async def doc_javascript(ctx, *a):
         target = str(a[0])
         response = Misc.javascript(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='lua')
 async def doc_lua(ctx, *a):
@@ -267,6 +337,8 @@ async def doc_lua(ctx, *a):
         target = str(a[0])
         response = Misc.lua(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='perl')
 async def doc_perl(ctx, *a):
@@ -279,6 +351,8 @@ async def doc_perl(ctx, *a):
         target = str(a[0])
         response = Misc.perl(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='python')
 async def doc_python(ctx, *a):
@@ -291,6 +365,8 @@ async def doc_python(ctx, *a):
         target = str(a[0])
         response = Misc.python(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='ruby')
 async def doc_ruby(ctx, *a):
@@ -303,6 +379,8 @@ async def doc_ruby(ctx, *a):
         target = str(a[0])
         response = Misc.ruby(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='rust')
 async def doc_rust(ctx, *a):
@@ -315,6 +393,8 @@ async def doc_rust(ctx, *a):
         target = str(a[0])
         response = Misc.rust(target)
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 
 
@@ -331,6 +411,8 @@ async def broadcast(ctx, channel, *a):
     c = channel
     chnl = bot.get_channel(c)
     await chnl.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='echo')
 async def echo(ctx, *a):
@@ -341,6 +423,8 @@ async def echo(ctx, *a):
     for word in a:
         response += word + " "
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='embed')
 async def embeded(ctx, des, *a):
@@ -357,6 +441,8 @@ async def embeded(ctx, des, *a):
     embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
     embed.add_field(name="message:", value="**{}**".format(response), inline=False)
     await ctx.send(embed=embed)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='banter')
 async def banterBrrt(ctx, *a):
@@ -368,10 +454,11 @@ async def banterBrrt(ctx, *a):
     else:
         response = random.choice(banter.focus).format(a[0])
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='praise')
 async def praiseBrrt(ctx, *a):
-    global bot_data
     '''
     Praise People or Brrt
     '''
@@ -382,18 +469,51 @@ async def praiseBrrt(ctx, *a):
         if a[0] != ctx.author.mention:
             for mem in bot.get_all_members():
                 if mem.mentioned_in(ctx.message) and not excluded(str(mem.id)):
-                    try:
-                        bot_data['member_points'][str(mem.id)] += 1
-                    except:
-                        bot_data['member_points'][str(mem.id)] = 1
+                    user_point(str(mem.id), 1)
             if not excluded(str(ctx.author.id)):
-                try:
-                    bot_data['member_points'][str(ctx.author.id)] += 1
-                except:
-                    bot_data['member_points'][str(ctx.author.id)] = 1
+                user_point(str(ctx.author.id), 1)
+        if a[0] == bot.user.mention:
+            bot_data['points'] += 1
         print(ctx.author.id)
         response = random.choice(compliment.praise).format(a[0])
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
+
+@bot.command(name='stats')
+async def stats(ctx, *a):
+    '''
+    Get User Stats
+    '''
+    try:
+        if not a:
+            _points = '{}'.format(bot_data['member_data']['points'][str(ctx.author.id)])
+            _level = '{}'.format(bot_data['member_data']['level'][str(ctx.author.id)])
+            _lup = '{}'.format(bot_data['member_data']['lup'][str(ctx.author.id)])
+            _exp = '{}'.format(bot_data['member_data']['exp'][str(ctx.author.id)])
+
+            embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
+            embed.set_footer(text="Brrt ||")
+            embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
+            embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
+            embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
+            embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
+            embed.add_field(name="Next Level:", value="**{}**".format(_lup), inline=False)
+            embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
+            await ctx.send(embed=embed)
+        else:
+            if a[0] == 'points':
+                response = 'You have {} Brrt points!'.format(bot_data['member_data']['points'][str(ctx.author.id)])
+            await ctx.send(response)
+    except:
+        response = "Brrt isn't storing your data!"
+        await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
+
+
+
+### Random ###
 
 @bot.command(name='flip')
 async def flip(ctx):
@@ -411,6 +531,8 @@ async def flip(ctx):
     embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniCoin.png')
     embed.add_field(name="Landed on:", value="**{}**".format(response), inline=False)
     await ctx.send(embed=embed)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 @bot.command(name='d')
 async def roll_die(ctx, *a):
@@ -453,6 +575,8 @@ async def roll_die(ctx, *a):
     for rolls in range(lmt):
         response += str(Misc.roll(value))+"\n"
     await ctx.send(response)
+    if not excluded(str(ctx.author.id)):
+        user_xp(str(ctx.author.id), 1)
 
 
 
