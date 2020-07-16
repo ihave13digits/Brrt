@@ -168,7 +168,7 @@ async def on_message(message):
                 # Get message context
                 ctx = await bot.get_context(message)
                 # Scold user
-                response = illegal.words[word]['warning'].format(data['author'].mention)
+                response = random.choice(illegal.words[word]['warning']).format(data['author'].mention)
                 await ctx.send(response)
                 # Check severity of offense
                 if illegal.words[word]['offense'] < 0:
