@@ -6,7 +6,7 @@ Brrt is a Discord bot written in Python 3
 ## Features
 
 - [ ] Voting
-- [ ] Rewards
+- [X] Rewards
 - [X] Commands
 - [ ] Moderation
 
@@ -14,35 +14,79 @@ Brrt is a Discord bot written in Python 3
 
 ## Commands
 
+###### Help
+
+    help
+
+###### Documentation
+
+    docs
+
+###### API Reference
+
+    api
+    api discord
+    api godot
+    api unity
+    api unreal
+
+###### Data Collection
+
+    keep-data yes
+    keep-data no
+    keep-data status
+
 ###### Broadcast
 
-    broadcast (channel) (message)
+    broadcast (channel, message)
 
 ###### Embed
 
-    embed (subject) (message)
+    embed (subject, message (can contain image link, will be removed from text))
 
 ###### Echo
 
-    echo
+    echo (message)
 
 ###### Banter
 
     banter
-    banter (argument)
+    banter (mention)
 
 ###### Praise
 
     praise
-    praise (argument)
+    praise (mention)
+
+###### Stats
+
+    stats
+    stats points
+    stats level
+    stats next
+    stats exp
 
 ###### Roll Die
 
-    d (integer <= 1000)
+    d
+    d (sides (<= 1000))
+    d (sides (<= 1000), rolls (<= 20))
+
+###### Flip Coin
+
+    flip
+    flip (guess)
 
 
 
 ## Documentation
+
+###### Source code
+
+    source
+    source guts
+    source read
+    source tools
 
 ###### C
 
