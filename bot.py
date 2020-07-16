@@ -580,8 +580,9 @@ async def stats(ctx, *a):
     '''
     Get User Stats
     '''
-    try:
-        if not a:
+    user_mentn = False
+    if not a:
+        if not excluded(str(ctx.author.id)):
             _points = '{}'.format(bot_data['member_data']['points'][str(ctx.author.id)])
             _level = '{}'.format(bot_data['member_data']['level'][str(ctx.author.id)])
             _lup = '{}'.format(bot_data['member_data']['lup'][str(ctx.author.id)])
@@ -596,19 +597,47 @@ async def stats(ctx, *a):
             embed.add_field(name="Next Level:", value="**{}**".format(_lup), inline=False)
             embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
             await ctx.send(embed=embed)
+        if excluded(str(ctx.author.id)):
+            response = "Brrt isn't storing your data!"
+    else:
+        if a[0] == 'points':
+            response = "You have {} Brrt points!".format(bot_data['member_data']['points'][str(ctx.author.id)])
+        elif a[0] == 'level':
+            response = "You're level {}!".format(bot_data['member_data']['level'][str(ctx.author.id)])
+        elif a[0] == 'next':
+            response = "You have {} experience to earn until your next level!".format(bot_data['member_data']['lup'][str(ctx.author.id)])
+        elif a[0] == 'exp':
+            response = "You have {} experience!".format(bot_data['member_data']['exp'][str(ctx.author.id)])
         else:
-            if a[0] == 'points':
-                response = 'You have {} Brrt points!'.format(bot_data['member_data']['points'][str(ctx.author.id)])
-            if a[0] == 'level':
-                response = 'You have {} Brrt points!'.format(bot_data['member_data']['level'][str(ctx.author.id)])
-            if a[0] == 'next':
-                response = 'You have {} Brrt points!'.format(bot_data['member_data']['lup'][str(ctx.author.id)])
-            if a[0] == 'exp':
-                response = 'You have {} Brrt points!'.format(bot_data['member_data']['exp'][str(ctx.author.id)])
-            await ctx.send(response)
-    except:
-        response = "Brrt isn't storing your data!"
+            mem = None
+            backup = None
+            for m in bot.get_all_members():
+                if m.mentioned_in(ctx.message):
+                    if not excluded(str(m.id)):
+                        mem = m
+                    else:
+                        backup = m
+            try:
+                _points = '{}'.format(bot_data['member_data']['points'][str(mem.id)])
+                _level = '{}'.format(bot_data['member_data']['level'][str(mem.id)])
+                _lup = '{}'.format(bot_data['member_data']['lup'][str(mem.id)])
+                _exp = '{}'.format(bot_data['member_data']['exp'][str(mem.id)])
+
+                embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
+                embed.set_footer(text="Brrt ||")
+                embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
+                embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
+                embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
+                embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
+                embed.add_field(name="Next Level:", value="**{}**".format(_lup), inline=False)
+                embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
+                await ctx.send(embed=embed)
+            except:
+                response = "Brrt isn't storing {}'s data!".format(backup.name)
+    try:
         await ctx.send(response)
+    except:
+        pass
     if not excluded(str(ctx.author.id)):
         user_xp(str(ctx.author.id), 1)
 
