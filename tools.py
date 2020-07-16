@@ -161,8 +161,12 @@ class Misc:
 
     @staticmethod
     def flip():
-        coin = ['Heads', 'Tails', 'Heads', 'Tails', 'Heads', 'Heads', 'Tails', 'Tails']
-        return choice(coin)
+        coin = randint(1, 100)
+        if coin % 2 == 0:
+            value = 'Heads'
+        else:
+            value = 'Tails'
+        return value
 
     @staticmethod
     def roll(sides):
