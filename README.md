@@ -65,6 +65,7 @@ Brrt is a Discord bot written in Python 3
     stats level
     stats next
     stats exp
+    stats mention
 
 ###### Roll Die
 
