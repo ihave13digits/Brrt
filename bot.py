@@ -2,7 +2,6 @@
 
 import json, random
 from discord.ext import commands
-from discord.utils import escape_mentions
 from discord import Member, Embed, utils
 from os import path
 from tools import Data, Misc, Vote
@@ -498,7 +497,7 @@ async def broadcast(ctx, channel, *a):
         response += word+' '
     c = channel
     chnl = bot.get_channel(c)
-    await chnl.send(escape_mentions(response))
+    await chnl.send(utils.escape_mentions(response))
     if not excluded(str(ctx.author.id)):
         user_xp(str(ctx.author.id), 10)
 
@@ -512,7 +511,7 @@ async def echo(ctx, *a):
         response += word + " "
     if not response:
         response = "Don't try to trick Brrt!"
-    await ctx.send(escape_mentions(response))
+    await ctx.send(utils.escape_mentions(response))
     if not excluded(str(ctx.author.id)):
         user_xp(str(ctx.author.id), 1)
 
@@ -540,7 +539,7 @@ async def embeded(ctx, des, *a):
     #    embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMail.png')
     embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
     embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
-    embed.add_field(name="{} says:".format(ctx.author.name), value="**{}**".format(escape_mentions(response)), inline=False)
+    embed.add_field(name="{} says:".format(ctx.author.name), value="**{}**".format(utils.escape_mentions(response)), inline=False)
     await ctx.message.delete()
     await ctx.send(embed=embed)
     if not excluded(str(ctx.author.id)):
@@ -564,7 +563,7 @@ async def banterBrrt(ctx, *a):
         user_point(str(ctx.author.id), -1)
     else:
         response = "Sorry, Brrt only do banter if you have points!"
-    await ctx.send(escape_mentions(response))
+    await ctx.send(utils.escape_mentions(response))
 
 @bot.command(name='praise')
 async def praiseBrrt(ctx, *a):
@@ -584,7 +583,7 @@ async def praiseBrrt(ctx, *a):
         if a[0] == bot.user.mention and a[0] != "@everyone" and a[0] != "@here":
             bot_data['points'] += 1
         response = random.choice(compliment.praise).format(a[0])
-    await ctx.send(escape_mentions(response))
+    await ctx.send(utils.escape_mentions(response))
     if not excluded(str(ctx.author.id)):
         user_xp(str(ctx.author.id), 10)
 
@@ -619,7 +618,7 @@ async def give_points(ctx, mmbr, val):
             response = "Are you trying to trick Brrt?"
     else:
         response = "You don't have enough points!"
-    await ctx.send(escape_mentions(response))
+    await ctx.send(utils.escape_mentions(response))
 
 @bot.command(name='balance-karma')
 async def stats(ctx, *a):
