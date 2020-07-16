@@ -39,7 +39,7 @@ help_dict = {
         'echo' : "Brrt will copy you!\nRequired arguments:\n**(message)**\n{}\n".format(char),
         'banter' : "Brrt will slander you or your entry (if you have points)!\nOptional arguments:\n**(target)**\n{}\n".format(char),
         'praise' : "Brrt will praise you or your entry!\nOptional arguments:\n**(target)**\n{}\n".format(char),
-        'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points, level, next, exp)**\n{}\n".format(char),
+        'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points, level, next, exp, mention)**\n{}\n".format(char),
         # Voting
         'vote' : "Brrt will take your vote!\n{}\n".format(char),
         # Random
