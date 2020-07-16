@@ -35,10 +35,11 @@ help_dict = {
         'keep-data' : "Allow or disallow Brrt saving data.\nRequired arguments:\n**(yes, no, status)**\n{}\n".format(char),
         # Social
         'broadcast' : "Brrt will broadcast a message!\nRequired arguments:\n**(channel, message)**\n{}\n".format(char),
-        'embed' : "Brrt will embed a message for you, and even include a target!\nRequired arguments:\n**(target, message)**\n{}\n".format(char),
+        'embed' : "Brrt will embed a message for you, and even include a target!\nRequired arguments:\n**(mention, message)**\n{}\n".format(char),
         'echo' : "Brrt will copy you!\nRequired arguments:\n**(message)**\n{}\n".format(char),
-        'banter' : "Brrt will slander you or your entry (if you have points)!\nOptional arguments:\n**(target)**\n{}\n".format(char),
-        'praise' : "Brrt will praise you or your entry!\nOptional arguments:\n**(target)**\n{}\n".format(char),
+        'banter' : "Brrt will slander you or your entry (if you have points)!\nOptional arguments:\n**(mention)**\n{}\n".format(char),
+        'praise' : "Brrt will praise you or your entry!\nOptional arguments:\n**(mention)**\n{}\n".format(char),
+        'give' : "Required arguments:\n**(mention, points)**\n{}\n".format(char),
         'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points, level, next, exp, mention)**\n{}\n".format(char),
         # Voting
         'vote' : "Brrt will take your vote!\n{}\n".format(char),
