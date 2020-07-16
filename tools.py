@@ -40,7 +40,7 @@ class Data:
         PREFIX = data["PREFIX"]
         OWNERS = data['OWNERS']
         INTROS = data['INTROS']
-        return TOKEN, PREFIX, OWNERS
+        return TOKEN, PREFIX, OWNERS, INTROS
 
 
 

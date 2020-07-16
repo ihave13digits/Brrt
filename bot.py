@@ -5,7 +5,7 @@ from discord.ext import commands
 from discord import Member, Embed, utils
 from os import path
 from tools import Data, Misc, Vote
-from res import illegal, compliment, banter, help_com
+from res import illegal, compliment, banter, help_com, welcome
 
 ### Globals ###
 
@@ -26,7 +26,7 @@ bot_data = {
         'points' : 0,
         }
 
-TOKEN, PREFIX, bot_data['owners'] = Data.pre_start_up()
+TOKEN, PREFIX, bot_data['owners'], bot_data['introductions'] = Data.pre_start_up()
 bot = commands.Bot(command_prefix=PREFIX)
 print("Brrt needs to get ready!\n")
 
@@ -43,6 +43,8 @@ def helper(a, mode):
         target = help_com.docs_dict
     if mode == "help":
         target = help_com.help_dict
+    if mode == "role":
+        target = help_com.role_dict
     try:
         embed.add_field(name=a[0], value=target[a[0]], inline=False)
     except:
@@ -136,10 +138,12 @@ async def on_ready():
     D = Data()
     p = bot_data
     temp_data = D.load(p)
-    for t in temp_data:
-        for key in bot_data:
-            if key == t:
-                bot_data[key] = temp_data[t]
+    bot_data['dir'] = temp_data['dir']
+    bot_data['owners'] = temp_data['owners']
+    bot_data['introductions'] = temp_data['introductions']
+    bot_data['member_data'] = temp_data['member_data']
+    bot_data['playing'] = temp_data['playing']
+    bot_data['points'] = temp_data['points']
     
     print('Member--------------neg--pos--points-----|---lvl--level up---------experience')
     print('                                         |')
@@ -218,22 +222,29 @@ async def on_message(message):
     print("{}: {}".format(message.author.id, text))
 
 
+
+### Member Join ###
+
 @bot.event
 async def on_member_join(member):
-    c = None
+    response = ""
     for srvr in bot.guilds:
         if srvr == member.guild:
-            server = srvr
-    
-    for chnl in server.channels:
-        for valid in bot_data['introductions']:
-            if chnl.name == valid:
-                c = chnl
-    
-    if c != None:
-        channel = bot.get_channel(c.id)
-        response = "{} just got a new member!  Come and introduce yourself, {}".format(server.name, member.mention)
-        await channel.send(response)
+            for chnl in srvr.channels:
+                for valid in bot_data['introductions']:
+                    if chnl.name == valid:
+                        channel = bot.get_channel(chnl.id)
+                        wt = random.choice(welcome.welcome_types)
+                        if wt == "ms":
+                            response = random.choice(welcome.messages[wt]).format(member.mention, srvr.name)
+                        if wt == "sm":
+                            response = random.choice(welcome.messages[wt]).format(srvr.name, member.mention)
+                        if wt == "m":
+                            response = random.choice(welcome.messages[wt]).format(member.mention)
+                        #response = "{} just got a new member!  Come and introduce yourself, {}".format(srvr.name, member.mention)
+                        await channel.send(response)
+    text = "\x1b[{};2;{};{};{}m".format(38, 255, 0, 255) + response + '\x1b[0m'
+    print("{}: {}".format(member.id, text))
 
 
 
@@ -243,10 +254,9 @@ async def on_member_join(member):
 async def shutdown(ctx):
     can_do = False
     response = "You're not my owner!  Only an owner can use that command!"
-    for owner in bot_data['owners']:
-        if ctx.author.name == owner:
-            response = "Okay, {}!  See you soon!".format(owner)
-            can_do = True
+    if ctx.author.name in bot_data['owners']:
+        response = "Okay, {}!  See you soon!".format(ctx.author.name)
+        can_do = True
     await ctx.send(response)
     if can_do:
         D = Data()
@@ -494,9 +504,12 @@ async def broadcast(ctx, channel, *a):
     '''
     response = ""
     for word in a:
-        response += word+' '
+        if word != '@everyone' and word != '@here':
+            response += word+' '
     c = channel
     chnl = bot.get_channel(c)
+    if not respnose:
+        response = ""
     await chnl.send(utils.escape_mentions(response))
     if not excluded(str(ctx.author.id)):
         user_xp(str(ctx.author.id), 10)
@@ -508,10 +521,11 @@ async def echo(ctx, *a):
     '''
     response = ""
     for word in a:
-        response += word + " "
+        if word != '@everyone' and word != '@here':
+            response += word + " "
     if not response:
         response = "Don't try to trick Brrt!"
-    await ctx.send(utils.escape_mentions(response))
+    await ctx.send(response)
     if not excluded(str(ctx.author.id)):
         user_xp(str(ctx.author.id), 1)
 
@@ -520,7 +534,7 @@ async def embeded(ctx, des, *a):
     '''
     Embed message
     '''
-    acceptable = ['.gif', '.png', '.jpg', '.jpeg']
+    acceptable = ['.gif', '.jpg', '.jpeg', '.png']
     has_img = False
     index = -1
     response = ""
@@ -533,13 +547,14 @@ async def embeded(ctx, des, *a):
                 index = i
     for i, word in enumerate(a):
         if i != index:
-            response += word+' '
+            if word != '@everyone' and word != '@here':
+                response += word+' '
     embed.set_footer(text="Brrt ||")
-    #if not has_img:
-    #    embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMail.png')
+    if not response:
+        response = "Brrt got swindled!"
     embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
     embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
-    embed.add_field(name="{} says:".format(ctx.author.name), value="**{}**".format(utils.escape_mentions(response)), inline=False)
+    embed.add_field(name="{} says:".format(ctx.author.name), value="**{}**".format(response), inline=False)
     await ctx.message.delete()
     await ctx.send(embed=embed)
     if not excluded(str(ctx.author.id)):
@@ -555,7 +570,8 @@ async def banterBrrt(ctx, *a):
         if not a:
             response = random.choice(banter.loose)
         else:
-            response = random.choice(banter.focus).format(a[0])
+            if a[0] != '@everyone' and a[0] != '@here':
+                response = random.choice(banter.focus).format(a[0])
                 
         if not response:
             response = "Don't try to trick Brrt!"
@@ -563,7 +579,7 @@ async def banterBrrt(ctx, *a):
         user_point(str(ctx.author.id), -1)
     else:
         response = "Sorry, Brrt only do banter if you have points!"
-    await ctx.send(utils.escape_mentions(response))
+    await ctx.send(response)
 
 @bot.command(name='praise')
 async def praiseBrrt(ctx, *a):
@@ -583,7 +599,7 @@ async def praiseBrrt(ctx, *a):
         if a[0] == bot.user.mention and a[0] != "@everyone" and a[0] != "@here":
             bot_data['points'] += 1
         response = random.choice(compliment.praise).format(a[0])
-    await ctx.send(utils.escape_mentions(response))
+    await ctx.send(response)
     if not excluded(str(ctx.author.id)):
         user_xp(str(ctx.author.id), 10)
 
@@ -598,7 +614,8 @@ async def give_points(ctx, mmbr, val):
             if mem.mentioned_in(ctx.message) and mmbr != ctx.author.mention:
                 if not excluded(str(mem.id)):
                     if not excluded(str(ctx.author.id)):
-                        target = mem
+                        if mmbr != '@everyone' and mmbr != '@here':
+                            target = mem
                     else:
                         response = "You haven't given Brrt permission to give you points!"
                 else:
@@ -618,23 +635,24 @@ async def give_points(ctx, mmbr, val):
             response = "Are you trying to trick Brrt?"
     else:
         response = "You don't have enough points!"
-    await ctx.send(utils.escape_mentions(response))
+    await ctx.send(response)
 
 @bot.command(name='balance-karma')
 async def stats(ctx, *a):
     global bot_data
-    target = None
-    if not a:
-        target = ctx.author
-    else:
-        for mem in bot.get_all_members():
-            if mem.mentioned_in(ctx.message):
-                if not excluded(str(mem.id)):
-                    target = mem
+    if ctx.author.name in bot_data['owners']:
+        target = None
+        if not a:
+            target = ctx.author
+        else:
+            for mem in bot.get_all_members():
+                if mem.mentioned_in(ctx.message):
+                    if not excluded(str(mem.id)):
+                        target = mem
     
-    while bot_data['member_data']['negative'][str(target.id)] > 0 and bot_data['member_data']['positive'][str(target.id)] > 0:
-        bot_data['member_data']['negative'][str(target.id)] -= 1
-        bot_data['member_data']['positive'][str(target.id)] -= 1
+        while bot_data['member_data']['negative'][str(target.id)] > 0 and bot_data['member_data']['positive'][str(target.id)] > 0:
+            bot_data['member_data']['negative'][str(target.id)] -= 1
+            bot_data['member_data']['positive'][str(target.id)] -= 1
 
 @bot.command(name='stats')
 async def stats(ctx, *a):
@@ -705,6 +723,22 @@ async def stats(ctx, *a):
         pass
     if not excluded(str(ctx.author.id)):
         user_xp(str(ctx.author.id), 1)
+
+
+
+@bot.command(name='role')
+async def helpBrrt(ctx, *a):
+    '''
+    Override !help
+    '''
+    if not a:
+        embed=helper(a, 'help')
+        await ctx.send(embed=embed)
+    else:
+        new_role = utils.get(ctx.author.guild.roles, name=a[0])
+        bot.add_roles(ctx.author, new_role)
+        response = "{}".format(a[0])
+        await ctx.send(embed=response)
 
 
 
