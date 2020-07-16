@@ -37,12 +37,12 @@ help_dict = {
         'broadcast' : "Brrt will broadcast a message!\nRequired arguments:\n**(channel, message)**\n{}\n".format(char),
         'embed' : "Brrt will embed a message for you, and even include a target!\nRequired arguments:\n**(target, message)**\n{}\n".format(char),
         'echo' : "Brrt will copy you!\nRequired arguments:\n**(message)**\n{}\n".format(char),
-        'banter' : "Brrt will slander you or your entry!\nOptional arguments:\n**(target)**\n{}\n".format(char),
+        'banter' : "Brrt will slander you or your entry (if you have points)!\nOptional arguments:\n**(target)**\n{}\n".format(char),
         'praise' : "Brrt will praise you or your entry!\nOptional arguments:\n**(target)**\n{}\n".format(char),
-        'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points)**\n{}\n".format(char),
+        'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points, level, next, exp)**\n{}\n".format(char),
         # Voting
         'vote' : "Brrt will take your vote!\n{}\n".format(char),
         # Random
-        'flip' : "Brrt will flip his lucky coin for you!\n{}\n".format(char),
-        'd' : "Brrt will roll dice for you!\nOptional arguments:\n**(arg1=die sides, arg2=roll count)**\n{}\n".format(char),
+        'flip' : "Brrt will flip his lucky coin for you and you can even try to guess which side it'll land on!\nOptional arguments:\n(guess)\n{}\n".format(char),
+        'd' : "Brrt will roll dice for you!\nOptional arguments:\n(die sides required for roll count):\n**(die sides, roll count)**\n{}\n".format(char),
         }
