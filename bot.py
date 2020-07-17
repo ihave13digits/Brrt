@@ -5,7 +5,7 @@ from discord.ext import commands
 from discord import Member, Embed, Color, utils, errors
 from os import path
 from tools import Data, Misc, Vote
-from res import illegal, compliment, banter, help_com, welcome, brrt_roles
+from res import illegal, compliment, banter, help_com, welcome, brrt_roles, brrt_image
 
 ### Globals ###
 
@@ -306,7 +306,6 @@ async def on_member_join(member):
                                 response = random.choice(welcome.messages[wt]).format(srvr.name, member.mention)
                             if wt == "m":
                                 response = random.choice(welcome.messages[wt]).format(member.mention)
-                            #response = "{} just got a new member!  Come and introduce yourself, {}".format(srvr.name, member.mention)
                             await channel.send(response)
         text = "\x1b[{};2;{};{};{}m".format(38, 255, 0, 255) + response + '\x1b[0m'
         print("{}: {}".format(member.id, text))
@@ -736,8 +735,8 @@ async def embeded(ctx, des, *a):
         embed.set_footer(text="Brrt ||")
         if not response:
             response = "Brrt got swindled!"
-        embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
-        embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
+        embed.set_thumbnail(url=brrt_image.image['brrt'])
+        embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
         embed.add_field(name="{} says:".format(ctx.author.name), value="**{}**".format(response), inline=False)
         await ctx.message.delete()
         await ctx.send(embed=embed)
@@ -872,8 +871,8 @@ async def stats(ctx, *a):
 
                 embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
                 embed.set_footer(text="Brrt ||")
-                embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
-                embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
+                embed.set_thumbnail(url=brrt_image.image['brrt'])
+                embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
                 embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
                 embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
                 embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
@@ -916,8 +915,8 @@ async def stats(ctx, *a):
 
                     embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
                     embed.set_footer(text="Brrt ||")
-                    embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
-                    embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
+                    embed.set_thumbnail(url=brrt_image.image['brrt'])
+                    embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
                     embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
                     embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
                     embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
@@ -978,11 +977,11 @@ async def flip(ctx, *a):
         embed = Embed(title="Brrt Flip Coin!",description="*flips his lucky coin*",color=0xFFFFFF)
         embed.set_footer(text="Brrt ||")
         if response == "Tails":
-            embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtCoinTails.png')
+            embed.set_image(url=brrt_image.image['brrt_coin_tails'])
         if response == "Heads":
-            embed.set_image(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtCoinHeads.png')
-        embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
-        embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniCoin.png')
+            embed.set_image(url=brrt_image.image['brrt_coin_heads'])
+        embed.set_thumbnail(url=brrt_image.image['brrt'])
+        embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_coin_mini'])
         if not a:
             text = "Landed on:"
         else:
