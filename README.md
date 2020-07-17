@@ -30,6 +30,12 @@ Brrt is a Discord bot written in Python 3
     api unity
     api unreal
 
+###### Settings
+
+    settings (documentation, moderation, scoring, welcome, random, social, voting)
+    disable (documentation, moderation, scoring, welcome, random, social, voting)
+    enable (documentation, moderation, scoring, welcome, random, social, voting)
+
 ###### Data Collection
 
     keep-data yes
@@ -58,14 +64,23 @@ Brrt is a Discord bot written in Python 3
     praise
     praise (mention)
 
+###### Give
+
+    give (mention)
+
 ###### Stats
 
     stats
     stats points
+    stats karma
     stats level
     stats next
     stats exp
     stats mention
+
+###### Balance Karma
+
+    balance-karma
 
 ###### Roll Die
 
