@@ -2,7 +2,7 @@
 
 import json, random
 from discord.ext import commands
-from discord import Member, Embed, utils, errors
+from discord import Member, Embed, Color, utils, errors
 from os import path
 from tools import Data, Misc, Vote
 from res import illegal, compliment, banter, help_com, welcome, brrt_roles
@@ -12,6 +12,7 @@ from res import illegal, compliment, banter, help_com, welcome, brrt_roles
 bot_data = {
         'dir' : 'save.data',
         'owners' : [],
+        'secret' : [],
         'introductions' : [],
         'member_data' : {
             'negative' : {},
@@ -26,7 +27,7 @@ bot_data = {
         'points' : 0,
         }
 
-TOKEN, PREFIX, bot_data['owners'], bot_data['introductions'] = Data.pre_start_up()
+TOKEN, PREFIX, bot_data['owners'], bot_data['introductions'], bot_data['secret'] = Data.pre_start_up()
 bot = commands.Bot(command_prefix=PREFIX)
 print("Brrt needs to get ready!\n")
 
@@ -143,13 +144,17 @@ async def on_ready():
     temp_data = D.load(p)
     bot_data['dir'] = temp_data['dir']
     bot_data['owners'] = temp_data['owners']
+    bot_data['secret'] = temp_data['secret']
     bot_data['introductions'] = temp_data['introductions']
     bot_data['member_data'] = temp_data['member_data']
     bot_data['playing'] = temp_data['playing']
     bot_data['points'] = temp_data['points']
+
+    print("\nBrrt ready!\n")
     
     print('Member--------------neg--pos--points-----|---lvl--level up---------experience')
     print('                                         |')
+    print("Brrt Points:        {}".format(bot_data['points']))
     for mmbr in bot_data['member_data']['points']:
         print("{}: {:04} {:04} {:08}   |   {:04} {:016} {:016}".format(
             mmbr,
@@ -160,9 +165,6 @@ async def on_ready():
             bot_data['member_data']['lup'][mmbr],
             bot_data['member_data']['exp'][mmbr]
             ))
-    print("Brrt Points:        {}".format(bot_data['points']))
-
-    print("\n\nBrrt ready now!")
 
 
 
@@ -214,8 +216,9 @@ async def on_message(message):
             await ctx.send(level_text)
     await bot.process_commands(message)
 
+    stats = ""
     if not excluded(str(message.author.id)):
-        print("{}: {:04} {:04} {:08}   |   {:04} {:016} {:016}".format(
+        stats = "{}: {:04} {:04} {:08}   |   {:04} {:016} {:016}".format(
             str(message.author.id),
             bot_data['member_data']['negative'][str(message.author.id)],
             bot_data['member_data']['positive'][str(message.author.id)],
@@ -223,10 +226,24 @@ async def on_message(message):
             bot_data['member_data']['level'][str(message.author.id)],
             bot_data['member_data']['lup'][str(message.author.id)],
             bot_data['member_data']['exp'][str(message.author.id)]
-            ))
-            
+            )
+        print(stats)
     text = "\x1b[{};2;{};{};{}m".format(38, r, g, b) + message.content + '\x1b[0m'
     print("{}: {}".format(message.author.id, text))
+
+    try:
+        color_tag = Color.from_rgb(r, g, b)
+        private_message = Embed(title=message.author.name, color=color_tag)
+        private_message.add_field(name=message.channel.name, value=message.content, inline=False)
+        for srvr in bot.guilds:
+            if srvr == message.author.guild:
+                for chnl in srvr.channels:
+                    for valid in bot_data['secret']:
+                        if chnl.name == valid:
+                            private_channel = bot.get_channel(chnl.id)
+                            await private_channel.send(embed=private_message)
+    except:
+        pass
 
 
 
