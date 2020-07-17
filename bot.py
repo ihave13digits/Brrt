@@ -2,10 +2,10 @@
 
 import json, random
 from discord.ext import commands
-from discord import Member, Embed, utils
+from discord import Member, Embed, utils, errors
 from os import path
 from tools import Data, Misc, Vote
-from res import illegal, compliment, banter, help_com, welcome
+from res import illegal, compliment, banter, help_com, welcome, brrt_roles
 
 ### Globals ###
 
@@ -112,6 +112,7 @@ def user_word(i, val):
 
 def user_xp(i, val):
     global bot_data
+    leveled_up = False
     try:
         bot_data['member_data']['exp'][i] += val
         if bot_data['member_data']['exp'][i] >= bot_data['member_data']['lup'][i]:
@@ -119,8 +120,10 @@ def user_xp(i, val):
             bot_data['member_data']['level'][i] += 1
             bot_data['member_data']['points'][i] += int(bot_data['member_data']['lup'][i] * 0.1)
             bot_data['member_data']['lup'][i] = int(bot_data['member_data']['lup'][i] * 1.25)
+            leveled_up = True
     except:
         bot_data['member_data']['exp'][i] = val
+    return leveled_up
 
 
 
@@ -202,9 +205,13 @@ async def on_message(message):
     else:
         r, g, b = 255, 255, 255
     if not excluded(str(message.author.id)):
-        user_xp(str(message.author.id), 1)
+        level_up = user_xp(str(message.author.id), 1)
         user_word(str(data['author'].id), offense)
         user_point(str(data['author'].id), offense)
+        if level_up:
+            ctx = await bot.get_context(message)
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(data['author'].id)])
+            await ctx.send(level_text)
     await bot.process_commands(message)
 
     if not excluded(str(message.author.id)):
@@ -665,8 +672,8 @@ async def stats(ctx, *a):
             _points = '{}'.format(bot_data['member_data']['points'][str(ctx.author.id)])
             _karma = '{}'.format(bot_data['member_data']['positive'][str(ctx.author.id)] - bot_data['member_data']['negative'][str(ctx.author.id)])
             _level = '{}'.format(bot_data['member_data']['level'][str(ctx.author.id)])
-            _lup = '{}'.format(bot_data['member_data']['lup'][str(ctx.author.id)])
-            _exp = '{}'.format(bot_data['member_data']['exp'][str(ctx.author.id)])
+            _lup = bot_data['member_data']['lup'][str(ctx.author.id)]
+            _exp = bot_data['member_data']['exp'][str(ctx.author.id)]
 
             embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
             embed.set_footer(text="Brrt ||")
@@ -675,22 +682,27 @@ async def stats(ctx, *a):
             embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
             embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
             embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
-            embed.add_field(name="Next Level:", value="**{}**".format(_lup), inline=False)
+            embed.add_field(name="Next Level:", value="**{}**".format(_lup - _exp), inline=False)
             embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
             await ctx.send(embed=embed)
         if excluded(str(ctx.author.id)):
             response = "Brrt isn't storing your data!"
     else:
         if a[0] == 'points':
-            response = "You have {} Brrt points!".format(bot_data['member_data']['points'][str(ctx.author.id)])
+            response = "You have {} Brrt points!".format(
+                    bot_data['member_data']['points'][str(ctx.author.id)])
+        elif a[0] == 'karma':
+            response = "Your karma is {}!".format(
+                    bot_data['member_data']['positive'][str(ctx.author.id)] - bot_data['member_data']['negative'][str(ctx.author.id)])
         elif a[0] == 'level':
-            response = "Your karma is {}!".format(bot_data['member_data']['positive'][str(ctx.author.id)] - bot_data['member_data']['negative'][str(ctx.author.id)])
-        elif a[0] == 'level':
-            response = "You're level {}!".format(bot_data['member_data']['level'][str(ctx.author.id)])
+            response = "You're level {}!".format(
+                    bot_data['member_data']['level'][str(ctx.author.id)])
         elif a[0] == 'next':
-            response = "You have {} experience to earn until your next level!".format(bot_data['member_data']['lup'][str(ctx.author.id)])
+            response = "You have {} experience to earn until your next level!".format(
+                    bot_data['member_data']['lup'][str(ctx.author.id)]-bot_data['member_data']['exp'][str(ctx.author.id)])
         elif a[0] == 'exp':
-            response = "You have {} experience!".format(bot_data['member_data']['exp'][str(ctx.author.id)])
+            response = "You have {} experience!".format(
+                    bot_data['member_data']['exp'][str(ctx.author.id)])
         else:
             mem = None
             backup = None
@@ -702,17 +714,19 @@ async def stats(ctx, *a):
                         backup = m
             try:
                 _points = '{}'.format(bot_data['member_data']['points'][str(mem.id)])
+                _karma = '{}'.format(bot_data['member_data']['positive'][str(mem.id)] - bot_data['member_data']['negative'][str(mem.id)])
                 _level = '{}'.format(bot_data['member_data']['level'][str(mem.id)])
-                _lup = '{}'.format(bot_data['member_data']['lup'][str(mem.id)])
-                _exp = '{}'.format(bot_data['member_data']['exp'][str(mem.id)])
+                _lup = bot_data['member_data']['lup'][str(mem.id)]
+                _exp = bot_data['member_data']['exp'][str(mem.id)]
 
                 embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
                 embed.set_footer(text="Brrt ||")
                 embed.set_thumbnail(url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/Brrt.png')
                 embed.set_author(name="Brrt", icon_url='https://raw.githubusercontent.com/ihave13digits/Brrt/master/img/BrrtMiniMail.png')
                 embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
+                embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
                 embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
-                embed.add_field(name="Next Level:", value="**{}**".format(_lup), inline=False)
+                embed.add_field(name="Next Level:", value="**{}**".format(_lup - _exp), inline=False)
                 embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
                 await ctx.send(embed=embed)
             except:
@@ -727,18 +741,34 @@ async def stats(ctx, *a):
 
 
 @bot.command(name='role')
-async def helpBrrt(ctx, *a):
+async def role(ctx, *a):
     '''
-    Override !help
+    Set Role
     '''
-    if not a:
-        embed=helper(a, 'help')
-        await ctx.send(embed=embed)
-    else:
-        new_role = utils.get(ctx.author.guild.roles, name=a[0])
-        bot.add_roles(ctx.author, new_role)
-        response = "{}".format(a[0])
-        await ctx.send(embed=response)
+    text = "Brrt doesn't know about that role! Try `!role` and Brrt will help."
+    if not excluded(str(ctx.author.id)):
+        sel = None
+        if not a:
+            embed=helper(a, 'role')
+            await ctx.send(embed=embed)
+        else:
+            try:
+                for i, role in enumerate(ctx.guild.roles):
+                    if ctx.guild.roles[i].name == a[0]:
+                        if bot_data['member_data']['level'][str(ctx.author.id)] >= brrt_roles.valid[a[0]]['level']:
+                            sel = role
+                            text = "You've added the role {}!".format(role.name)
+                            break
+                        else:
+                            text = "You need to be a higher level to get that role!"
+
+                if sel != None:
+                    await ctx.author.add_roles(sel)
+                response = "{}".format(text)
+                await ctx.send(response)
+            except errors.Forbidden:
+                warning = "Brrt doesn't have permission to give that role!"
+                await ctx.send(warning)
 
 
 
