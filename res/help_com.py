@@ -31,6 +31,10 @@ help_dict = {
         'help' : "\nLet Brrt help you talk to Brrt.\n{}\n".format(char),
         'docs' : "\nLet Brrt help you find documentation.\n{}\n".format(char),
         'api' : "\nLet Brrt help you find APIs.\n{}\n".format(char),
+        # Settings
+        'settings' : "Let Brrt help you look at some of Brrt's features!\n{}\n".format(char),
+        'disable' : "Disable a feature!\nList arguments:\n**(documentation, moderation, scoring, welcome, random, social, voting)**\n{}\n".format(char),
+        'enable' : "Enable a feature!\nList arguments:\n**(documentation, moderation, scoring, welcome, random, social, voting)**\n{}\n".format(char),
         # Privacy
         'keep-data' : "Allow or disallow Brrt saving data.\nRequired arguments:\n**(yes, no, status)**\n{}\n".format(char),
         # Social
@@ -42,6 +46,7 @@ help_dict = {
         'give' : "Required arguments:\n**(mention, points)**\n{}\n".format(char),
         'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points, level, next, exp, mention)**\n{}\n".format(char),
         'role' : "Brrt will show and give roles!\nOptional arguments:\n**(role)**\n{}\n".format(char),
+        'balance-karma' : "Brrt will balance your karma for you!\n{}\n".format(char),
         # Voting
         'vote' : "Brrt will take your vote!\n{}\n".format(char),
         # Random
@@ -69,4 +74,15 @@ role_dict = {
         'veteran_lord' : "Required level: 192\n{}\n".format(char),
         'enlightened_one' : "Required level: 256\n{}\n".format(char),
         'game_buddha' : "Required level: 512\n{}\n".format(char),
+        }
+
+sets_dict = {
+        'settings' : "Let Brrt help you look at some of Brrt's features!\n{}\n".format(char),
+        'documentation' : "\nCommands:\n**(api, docs, source (including their respective commands))**\n{}\n".format(char),
+        'moderation' : "This looks for certain words or phrases in all messages.\n{}\n".format(char),
+        'scoring' : "This keeps track of scores to promote interaction with Brrt.\nCommands:\n**(give, stats, role, balance-karma)**\n{}\n".format(char),
+        'welcome' : "This will greet members that join in a set channel.\n{}\n".format(char),
+        'random' : "This is pretty random.\nCommands:\n**(flip, d)**\n{}\n".format(char),
+        'social' : "This is for fun among members.\nCommands:\n**(broadcast, embed, echo, banter, praise)**\n{}\n".format(char),
+        'voting' : "This is for member voting.\nCommands:\n**()**\n{}\n".format(char),
         }
