@@ -1,6 +1,7 @@
 {
-    "TOKEN":"1",
+    "TOKEN":"YourTokenHere",
     "PREFIX":"!",
-    "OWNERS":["ihave13digits","AbleTheAbove"],
-    "INTROS":["introductions","welcome"]
+    "OWNERS":["YourUserName"],
+    "INTROS":["DesiredIntroductionsChannelName"],
+    "SECRET":["ModerationChannel(Private)"]
 }

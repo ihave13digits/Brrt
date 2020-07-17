@@ -41,6 +41,7 @@ help_dict = {
         'praise' : "Brrt will praise you or your entry!\nOptional arguments:\n**(mention)**\n{}\n".format(char),
         'give' : "Required arguments:\n**(mention, points)**\n{}\n".format(char),
         'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points, level, next, exp, mention)**\n{}\n".format(char),
+        'role' : "Brrt will show and give roles!\nOptional arguments:\n**(role)**\n{}\n".format(char),
         # Voting
         'vote' : "Brrt will take your vote!\n{}\n".format(char),
         # Random
