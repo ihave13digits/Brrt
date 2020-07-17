@@ -47,3 +47,25 @@ help_dict = {
         'flip' : "Brrt will flip his lucky coin for you and you can even try to guess which side it'll land on!\nOptional arguments:\n(guess)\n{}\n".format(char),
         'd' : "Brrt will roll dice for you!\nOptional arguments:\n(die sides required for roll count):\n**(die sides, roll count)**\n{}\n".format(char),
         }
+
+role_dict = {
+        'role' : "Let Brrt help you find a role!".format(char),
+        'fresh_meat' : "Required level: 0\n{}\n".format(char),
+        'newb' : "Required level: 1\n{}\n".format(char),
+        'underling' : "Required level: 2\n{}\n".format(char),
+        'novice' : "Required level: 4\n{}\n".format(char),
+        'regular' : "Required level: 8\n{}\n".format(char),
+        'gamer' : "Required level: 12\n{}\n".format(char),
+        'game_lord' : "Required level: 16\n{}\n".format(char),
+        'game_addict' : "Required level: 24\n{}\n".format(char),
+        'advanced_user' : "Required level: 32\n{}\n".format(char),
+        'power_user' : "Required level: 48\n{}\n".format(char),
+        'advanced_power_user' : "Required level: 64\n{}\n".format(char),
+        'junior_veteran' : "Required level: 80\n{}\n".format(char),
+        'veteran' : "Required level: 96\n{}\n".format(char),
+        'veteran_senior' : "Required level: 128\n{}\n".format(char),
+        'veteran_commander' : "Required level: 160\n{}\n".format(char),
+        'veteran_lord' : "Required level: 192\n{}\n".format(char),
+        'enlightened_one' : "Required level: 256\n{}\n".format(char),
+        'game_buddha' : "Required level: 512\n{}\n".format(char),
+        }
