@@ -57,7 +57,28 @@ def helper(a, mode):
 
 
 
-def handle_users():
+def prune_users(mems):
+    to_go = ""
+    for mmbr in bot_data['playing']:
+        if mmbr not in mems:
+            to_go = mmbr
+    if to_go != "":
+        print("{}: has left the server.".format(to_go))
+        bot_data['playing'].pop(mmbr)
+        bot_data['member_data']['negative'].pop(to_go)
+        bot_data['member_data']['positive'].pop(to_go)
+        bot_data['member_data']['points'].pop(to_go)
+        bot_data['member_data']['level'].pop(to_go)
+        bot_data['member_data']['lup'].pop(to_go)
+        bot_data['member_data']['exp'].pop(to_go)
+        return True
+    else:
+        return False
+
+def handle_users(mems):
+    pruning = True
+    while pruning:
+        pruning = prune_users(mems)
     print('Member--------------neg--pos--points-----|---lvl--level up---------experience')
     print('                                         |')
     for mmbr in bot_data['member_data']['points']:
@@ -283,9 +304,12 @@ async def shutdown(ctx):
         can_do = True
     await ctx.send(response)
     if can_do:
+        mems = []
+        for mem in bot.get_all_members():
+            mems.append(str(mem.id))
         D = Data()
         print("Saving data...")
-        handle_users()
+        handle_users(mems)
         D.save(bot_data)
         print("Shutting down...")
         await bot.close()
@@ -354,14 +378,22 @@ async def doc_api(ctx, *a):
         response = Misc.api(target)
         await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        user_word(str(data['author'].id), offense)
+        user_point(str(data['author'].id), offense)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='docs')
 async def helpBrrt(ctx, *a):
     response=helper(a, 'docs')
     await ctx.send(embed=response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='source')
 async def doc_source(ctx, *a):
@@ -375,7 +407,10 @@ async def doc_source(ctx, *a):
         response = Misc.source(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='c')
 async def doc_c(ctx, *a):
@@ -389,7 +424,10 @@ async def doc_c(ctx, *a):
         response = Misc.c(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='c#')
 async def doc_c_sharp(ctx, *a):
@@ -403,7 +441,10 @@ async def doc_c_sharp(ctx, *a):
         response = Misc.c_sharp(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='c++')
 async def doc_c_pp(ctx, *a):
@@ -417,7 +458,10 @@ async def doc_c_pp(ctx, *a):
         response = Misc.c_pp(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='java')
 async def doc_java(ctx, *a):
@@ -431,7 +475,10 @@ async def doc_java(ctx, *a):
         response = Misc.java(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='javascript')
 async def doc_javascript(ctx, *a):
@@ -445,7 +492,10 @@ async def doc_javascript(ctx, *a):
         response = Misc.javascript(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='lua')
 async def doc_lua(ctx, *a):
@@ -459,7 +509,10 @@ async def doc_lua(ctx, *a):
         response = Misc.lua(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='perl')
 async def doc_perl(ctx, *a):
@@ -473,7 +526,10 @@ async def doc_perl(ctx, *a):
         response = Misc.perl(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='python')
 async def doc_python(ctx, *a):
@@ -487,7 +543,10 @@ async def doc_python(ctx, *a):
         response = Misc.python(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='ruby')
 async def doc_ruby(ctx, *a):
@@ -501,7 +560,10 @@ async def doc_ruby(ctx, *a):
         response = Misc.ruby(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='rust')
 async def doc_rust(ctx, *a):
@@ -515,7 +577,10 @@ async def doc_rust(ctx, *a):
         response = Misc.rust(target)
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 
 
@@ -536,7 +601,10 @@ async def broadcast(ctx, channel, *a):
         response = ""
     await chnl.send(utils.escape_mentions(response))
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 10)
+        level_up = user_xp(str(ctx.author.id), 10)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='echo')
 async def echo(ctx, *a):
@@ -551,7 +619,10 @@ async def echo(ctx, *a):
         response = "Don't try to trick Brrt!"
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 1)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='embed')
 async def embeded(ctx, des, *a):
@@ -582,7 +653,10 @@ async def embeded(ctx, des, *a):
     await ctx.message.delete()
     await ctx.send(embed=embed)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 10)
+        level_up = user_xp(str(ctx.author.id), 10)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='banter')
 async def banterBrrt(ctx, *a):
@@ -599,7 +673,11 @@ async def banterBrrt(ctx, *a):
                 
         if not response:
             response = "Don't try to trick Brrt!"
-        user_xp(str(ctx.author.id), 1)
+        if not excluded(str(ctx.author.id)):
+            level_up = user_xp(str(ctx.author.id), 1)
+            if level_up:
+                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+                await ctx.send(level_text)
         user_point(str(ctx.author.id), -1)
     else:
         response = "Sorry, Brrt only do banter if you have points!"
@@ -625,7 +703,10 @@ async def praiseBrrt(ctx, *a):
         response = random.choice(compliment.praise).format(a[0])
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 10)
+        level_up = user_xp(str(ctx.author.id), 10)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='give')
 async def give_points(ctx, mmbr, val):
@@ -647,11 +728,14 @@ async def give_points(ctx, mmbr, val):
             elif mem == bot.user.mention and not excluded(str(ctx.author.id)):
                 bot_data['points'] += int(val)
                 user_point(str(ctx.author.id), -int(val))
+                level_up = user_xp(str(ctx.author.id), int(val))
+                if level_up:
+                    level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+                    await ctx.send(level_text)
                 response = "{} gave {} {} points!".format(ctx.author.name, mem.name, val)
             else:
                 response = "Are you trying to trick Brrt?"
         if target != None:
-            user_xp(str(ctx.author.id), int(val))
             user_point(str(target.id), int(val))
             user_point(str(ctx.author.id), -int(val))
             response = "{} gave {} {} points!".format(ctx.author.name, target.name, val)
@@ -752,8 +836,6 @@ async def stats(ctx, *a):
         await ctx.send(response)
     except:
         pass
-    if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 1)
 
 
 
@@ -817,7 +899,10 @@ async def flip(ctx, *a):
     embed.add_field(name="{}".format(text), value="**{}**".format(response), inline=False)
     await ctx.send(embed=embed)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 @bot.command(name='d')
 async def roll_die(ctx, *a):
@@ -861,7 +946,10 @@ async def roll_die(ctx, *a):
         response += str(Misc.roll(value))+"\n"
     await ctx.send(response)
     if not excluded(str(ctx.author.id)):
-        user_xp(str(ctx.author.id), 5)
+        level_up = user_xp(str(ctx.author.id), 5)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            await ctx.send(level_text)
 
 
 
