@@ -177,8 +177,7 @@ def user_xp(i, val):
 async def on_ready():
     global bot_data
     D = Data()
-    p = bot_data
-    temp_data = D.load(p)
+    temp_data = D.load(bot_data['dir'])
     bot_data['dir'] = temp_data['dir']
     bot_data['owners'] = temp_data['owners']
     bot_data['secret'] = temp_data['secret']
@@ -187,12 +186,9 @@ async def on_ready():
     bot_data['playing'] = temp_data['playing']
     bot_data['enabled'] = temp_data['enabled']
     bot_data['points'] = temp_data['points']
-
-    print("\nBrrt ready!\n")
-    
     print('Member--------------neg--pos--points-----|---lvl--level up---------experience')
     print('                                         |')
-    print("Brrt Points:        {}".format(bot_data['points']))
+    print("Brrt Points: {}".format(bot_data['points']))
     for mmbr in bot_data['member_data']['points']:
         print("{}: {:04} {:04} {:08}   |   {:04} {:016} {:016}".format(
             mmbr,
@@ -334,7 +330,7 @@ async def shutdown(ctx):
         D = Data()
         print("Saving data...")
         handle_users(mems)
-        D.save(bot_data)
+        D.save(bot_data, bot_data['dir'])
         print("Shutting down...")
         await bot.close()
 
@@ -986,6 +982,7 @@ async def flip(ctx, *a):
     '''
     if bot_data['enabled']['random']:
         response = Misc.flip()
+        gets_point = False
         embed = Embed(title="Brrt Flip Coin!",description="*flips his lucky coin*",color=0xFFFFFF)
         embed.set_footer(text="Brrt ||")
         if response == "Tails":
@@ -997,23 +994,21 @@ async def flip(ctx, *a):
         if not a:
             text = "Landed on:"
         else:
-            if response.lower()[0] == a[0].lower()[0]:
+            if ((response.lower()[0] == a[0].lower()[0] and len(a[0]) == 1) or
+                    (response == "Heads" and a[0].lower()[0] == "1") or
+                    (response == "Heads" and a[0].lower() == "true") or
+                    (response == "Heads" and a[0].lower() == "heads") or
+                    (response == "Tails" and a[0].lower()[0] == "0") or
+                    (response == "Tails" and a[0].lower() == "false") or
+                    (response == "Tails" and a[0].lower() == "tails")):
                 text = "Woo!  You got:"
-                if not excluded(str(ctx.author.id)):
-                    user_point(str(ctx.author.id), 1)
-            elif response == "Heads" and a[0].lower()[0] == "t":
-                text = "Woo!  You got:"
-                if not excluded(str(ctx.author.id)):
-                    user_point(str(ctx.author.id), 1)
-            elif response == "Tails" and a[0].lower()[0] == "f":
-                text = "Woo!  You got:"
-                if not excluded(str(ctx.author.id)):
-                    user_point(str(ctx.author.id), 1)
             else:
                 text = "That's a shame, it landed on:"
         embed.add_field(name="{}".format(text), value="**{}**".format(response), inline=False)
         await ctx.send(embed=embed)
         if not excluded(str(ctx.author.id)):
+            if gets_point:
+                user_point(str(ctx.author.id), 1)
             level_up = user_xp(str(ctx.author.id), 5)
             if level_up:
                 level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])

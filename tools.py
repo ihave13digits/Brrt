@@ -12,20 +12,79 @@ class Data:
         self.dir_root = path.dirname(__file__)
         self.dir_data = path.join(self.dir_root, 'data')
 
-    def save(self, data):
-        with open(path.join(self.dir_data, data['dir']), 'wb') as f:
-            pickle.dump(data, f)
+    def save(self, data, data_dir):
+        with open(path.join(self.dir_data, data_dir), 'wb') as f:
+            #pickle.dump(data, f)
+            pickle.dump(self.parse_data(data, mode='e'), f)
             f.close()
 
-    def load(self, data):
-        to_return = data
+    def load(self, data_dir):
+        to_return = {}
         try:
-            with open(path.join(self.dir_data, data['dir']), 'rb') as f:
+            with open(path.join(self.dir_data, data_dir), 'rb') as f:
                 to_return = pickle.load(f)
                 f.close()
         except FileNotFoundError:
             pass
-        return to_return
+        #return to_return
+        return self.parse_data(to_return, mode='d')
+
+    def parse_data(self, data, mode):
+        parsed = {
+            'dir' : '',
+            'owners' : [],
+            'secret' : [],
+            'introductions' : [],
+            'member_data' : {
+                'negative' : {},
+                'positive' : {},
+                'rewards' : {},
+                'points' : {},
+                'level' : {},
+                'lup' : {},
+                'exp' : {}
+                },
+            'playing' : {},
+            'enabled' : {
+                'documentation' : True,
+                'moderation' : True,
+                'scoring' : True,
+                'welcome' : True,
+                'random' : True,
+                'social' : True,
+                'voting' : True,
+                'roles' : True
+                },
+            'points' :0
+            }
+
+        parsed['dir'] = data['dir']
+        parsed['owners'] = data['owners']
+        parsed['secret'] = data['secret']
+        parsed['introductions'] = data['introductions']
+        for key in data['playing']:
+            parsed['playing'][self.crypt(key, mode=mode)] = data['playing'][key]
+        for dct in data['member_data']:
+            for key in data['member_data'][dct]:
+                parsed['member_data'][dct][self.crypt(key, mode=mode)] = data['member_data'][dct][key]
+        parsed['enabled'] = data['enabled']
+        parsed['points'] = data['points']
+
+        return parsed
+
+    def crypt(self, txt, key=47, mode='e'):
+        chars = "0aZbYcXdW1eVf`U~g,T2.h?S!i@R#3j$Q%k^P&l4*O-m=N_n+5M(o)L{p}K6[q]J<r>I;7s:H/t'G\"8u|F vEwDx9CyBzA"
+        cypher = ""
+        for c in txt:
+            if c in chars:
+                if mode == "e":
+                    character = (chars.find(c) + key) % 94
+                if mode == "d":
+                    character = (chars.find(c) - key) % 94
+                cypher += chars[character]
+            else:
+                cypher += c
+        return cypher
 
     @staticmethod
     def pre_start_up():
@@ -164,9 +223,9 @@ class Misc:
     def flip():
         coin = randint(1, 100)
         if coin % 2 == 0:
-            value = 'Heads'
-        else:
             value = 'Tails'
+        else:
+            value = 'Heads'
         return value
 
     @staticmethod
