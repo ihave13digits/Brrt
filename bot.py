@@ -678,14 +678,21 @@ async def broadcast(ctx, channel, *a):
     '''
     if bot_data['enabled']['social']:
         response = ""
+        target = None
         for word in a:
             if word != '@everyone' and word != '@here':
                 response += word+' '
-        c = channel
-        chnl = bot.get_channel(c)
-        if not respnose:
+        
+        for srvr in bot.guilds:
+            if srvr == ctx.author.guild:
+                for chnl in srvr.channels:
+                    if chnl.mention == channel:
+                        target = bot.get_channel(chnl.id)
+                        #await private_channel.send(embed=private_message)
+                
+        if not response:
             response = ""
-        await chnl.send(utils.escape_mentions(response))
+        await target.send(utils.escape_mentions(response))
         if not excluded(str(ctx.author.id)):
             level_up = user_xp(str(ctx.author.id), 10)
             if level_up:
