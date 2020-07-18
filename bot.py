@@ -31,7 +31,8 @@ bot_data = {
             'welcome' : True,
             'random' : True,
             'social' : True,
-            'voting' : True
+            'voting' : True,
+            'roles' : True
             },
         'points' : 0,
         }
@@ -58,10 +59,10 @@ def helper(a, mode):
     if mode == 'settings':
         target = help_com.sets_dict
     try:
-        embed.add_field(name=a[0], value=target[a[0]], inline=False)
+        embed.add_field(name=a[0], value=target[a[0]]['detail'], inline=False)
     except:
         for x in target:
-            embed.add_field(name=x, value=target[x], inline=False)
+            embed.add_field(name=x, value=target[x]['concise'], inline=False)
     
     embed.set_footer(text="Brrt ||")
     return embed
@@ -230,17 +231,13 @@ async def on_message(message):
                     await ctx.send(response)
                     # Check severity of offense
                     if illegal.words[word]['offense'] < 0:
-                        #if not excluded(str(data['author'].id)):
-                            #user_point(str(data['author'].id), abs(illegal.words[word]['offense']))
                         r, g, b = 0, 255, 255
                     elif illegal.words[word]['offense'] == 0:
                         pass
                     elif illegal.words[word]['offense'] == 1:
-                        #user_point(str(data['author'].id), -1)
                         r, g, b = 255, 255, 0
-                    elif illegal.words[word]['offense'] > 1:
+                    elif illegal.words[word]['offense'] == 10:
                         r, g, b, = 255, 0, 0
-                        #user_point(str(data['author'].id), -10)
                         await message.delete()
         else:
             r, g, b = 255, 255, 255
@@ -283,6 +280,14 @@ async def on_message(message):
         except:
             pass
     else:
+        if not excluded(str(message.author.id)):
+            level_up = user_xp(str(message.author.id), 1)
+            user_word(str(data['author'].id), offense)
+            user_point(str(data['author'].id), offense)
+            if level_up:
+                ctx = await bot.get_context(message)
+                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(data['author'].id)])
+                await ctx.send(level_text)
         await bot.process_commands(message)
 
 
@@ -452,8 +457,6 @@ async def doc_api(ctx, *a):
             await ctx.send(response)
         if not excluded(str(ctx.author.id)):
             level_up = user_xp(str(ctx.author.id), 5)
-            user_word(str(data['author'].id), offense)
-            user_point(str(data['author'].id), offense)
             if level_up:
                 level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
                 await ctx.send(level_text)
@@ -677,7 +680,7 @@ async def broadcast(ctx, channel, *a):
     Broadcast a message
     '''
     if bot_data['enabled']['social']:
-        response = ""
+        response = "{} says: ".format(ctx.author.name)
         target = None
         for word in a:
             if word != '@everyone' and word != '@here':
@@ -688,11 +691,10 @@ async def broadcast(ctx, channel, *a):
                 for chnl in srvr.channels:
                     if chnl.mention == channel:
                         target = bot.get_channel(chnl.id)
-                        #await private_channel.send(embed=private_message)
                 
         if not response:
             response = ""
-        await target.send(utils.escape_mentions(response))
+        await target.send(response)
         if not excluded(str(ctx.author.id)):
             level_up = user_xp(str(ctx.author.id), 10)
             if level_up:
@@ -913,25 +915,28 @@ async def stats(ctx, *a):
                             mem = m
                         else:
                             backup = m
-                try:
-                    _points = '{}'.format(bot_data['member_data']['points'][str(mem.id)])
-                    _karma = '{}'.format(bot_data['member_data']['positive'][str(mem.id)] - bot_data['member_data']['negative'][str(mem.id)])
-                    _level = '{}'.format(bot_data['member_data']['level'][str(mem.id)])
-                    _lup = bot_data['member_data']['lup'][str(mem.id)]
-                    _exp = bot_data['member_data']['exp'][str(mem.id)]
+                if mem != None:
+                    try:
+                        _points = '{}'.format(bot_data['member_data']['points'][str(mem.id)])
+                        _karma = '{}'.format(bot_data['member_data']['positive'][str(mem.id)] - bot_data['member_data']['negative'][str(mem.id)])
+                        _level = '{}'.format(bot_data['member_data']['level'][str(mem.id)])
+                        _lup = bot_data['member_data']['lup'][str(mem.id)]
+                        _exp = bot_data['member_data']['exp'][str(mem.id)]
 
-                    embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
-                    embed.set_footer(text="Brrt ||")
-                    embed.set_thumbnail(url=brrt_image.image['brrt'])
-                    embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
-                    embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
-                    embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
-                    embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
-                    embed.add_field(name="Next Level:", value="**{}**".format(_lup - _exp), inline=False)
-                    embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
-                    await ctx.send(embed=embed)
-                except:
-                    response = "Brrt isn't storing {}'s data!".format(backup.name)
+                        embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
+                        embed.set_footer(text="Brrt ||")
+                        embed.set_thumbnail(url=brrt_image.image['brrt'])
+                        embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
+                        embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
+                        embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
+                        embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
+                        embed.add_field(name="Next Level:", value="**{}**".format(_lup - _exp), inline=False)
+                        embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
+                        await ctx.send(embed=embed)
+                    except:
+                        response = "Brrt isn't storing {}'s data!".format(backup.name)
+                else:
+                    response = "Brrt needs a user mention for this command!"
         try:
             await ctx.send(response)
         except:
@@ -993,6 +998,14 @@ async def flip(ctx, *a):
             text = "Landed on:"
         else:
             if response.lower()[0] == a[0].lower()[0]:
+                text = "Woo!  You got:"
+                if not excluded(str(ctx.author.id)):
+                    user_point(str(ctx.author.id), 1)
+            elif response == "Heads" and a[0].lower()[0] == "t":
+                text = "Woo!  You got:"
+                if not excluded(str(ctx.author.id)):
+                    user_point(str(ctx.author.id), 1)
+            elif response == "Tails" and a[0].lower()[0] == "f":
                 text = "Woo!  You got:"
                 if not excluded(str(ctx.author.id)):
                     user_point(str(ctx.author.id), 1)
