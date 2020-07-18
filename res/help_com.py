@@ -38,7 +38,7 @@ help_dict = {
         # Privacy
         'keep-data' : "Allow or disallow Brrt saving data.\nRequired arguments:\n**(yes, no, status)**\n{}\n".format(char),
         # Social
-        'broadcast' : "Brrt will broadcast a message!\nRequired arguments:\n**(channel, message)**\n{}\n".format(char),
+        'broadcast' : "Brrt will broadcast a message!\nRequired arguments:\n**(channel mention, message)**\n{}\n".format(char),
         'embed' : "Brrt will embed a message for you, and even include a target!\nRequired arguments:\n**(mention, message)**\n{}\n".format(char),
         'echo' : "Brrt will copy you!\nRequired arguments:\n**(message)**\n{}\n".format(char),
         'banter' : "Brrt will slander you or your entry (if you have points)!\nOptional arguments:\n**(mention)**\n{}\n".format(char),
