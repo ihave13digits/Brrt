@@ -8,7 +8,7 @@ Brrt is a Discord bot written in Python 3
 - [ ] Voting
 - [X] Rewards
 - [X] Commands
-- [ ] Moderation
+- [X] Moderation
 
 
 
