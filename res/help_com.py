@@ -1,88 +1,269 @@
 char = '-'
 
 api_dict = {
-        #'' : "\n{}\n".format(char),
         # API references
-        'discord' : "Discord API\n{}\n".format(char),
-        'godot' : "Godot API\n{}\n".format(char),
-        'unity' : "Unity API\n{}\n".format(char),
-        'unreal' : "Unreal API\n{}\n".format(char),
+        'discord' : {
+            'concise' : "Discord API\n{}\n".format(char),
+            'detail' : "Discord API\n{}\n".format(char),
+            },
+        'godot' : {
+            'concise' : "Godot API\n{}\n".format(char),
+            'detail' : "Godot API\n{}\n".format(char),
+            },
+        'unity' : {
+            'concise' : "Unity API\n{}\n".format(char),
+            'detail' : "Unity API\n{}\n".format(char),
+            },
+        'unreal' : {
+            'concise' : "Unreal API\n{}\n".format(char),
+            'detail' : "Unreal API\n{}\n".format(char),
+            },
         }
 
 docs_dict = {
-        #'' : "\n{}\n".format(char),
         # Documentation
-        'source' : "Brrt source code\nOptional arguments:\n**(guts, read, tools)**\n{}\n".format(char),
-        'c' : "C docs\nOptional arguments:\n**(function, syntax)**\n{}\n".format(char),
-        'c#' : "C# docs\nOptional arguments:\n**(keyword, operator, token, preprocessor, options, errors)**\n{}\n".format(char),
-        'c++' : "C++ docs\nOptional arguments:\n**()**\n{}\n".format(char),
-        'java' : "Java docs\nOptional arguments:\n**(classes, packages, properties)**\n{}\n".format(char),
-        'javascript' : "Javascript docs\nOptional arguments:\n**()**\n{}\n".format(char),
-        'lua' : "Lua docs\nOptional arguments:\n**(intro, basic, language, api, auxiliary, standard, standalone, version-issues, syntax)**\n{}\n".format(char),
-        'perl' : "Perl docs\nOptional arguments:\n**(manual, module)**\n{}\n".format(char),
-        'python' : "Python docs\nOptional arguments:\n**(index, module, glossary)**\n{}\n".format(char),
-        'ruby' : "Ruby docs\nOptional arguments:\n**(api, standard)**\n{}\n".format(char),
-        'rust': "Rust docs\nOptional arguments:\n**(mod, error, rustc, edition, rustdoc, foreword, standard)**\n{}\n".format(char),
+        'source' : {
+            'concise' : "**(guts, read, tools)**\n{}\n".format(char),
+            'detail' : "Brrt source code\nOptional arguments:\n**(guts, read, tools)**\n{}\n".format(char),
+            },
+        'c' : {
+            'concise' : "**(function, syntax)**\n{}\n".format(char),
+            'detail' : "C docs\nOptional arguments:\n**(function, syntax)**\n{}\n".format(char),
+            },
+        'c#' : {
+            'concise' : "**(keyword, operator, token, preprocessor, options, errors)**\n{}\n".format(char),
+            'detail' : "C# docs\nOptional arguments:\n**(keyword, operator, token, preprocessor, options, errors)**\n{}\n".format(char),
+            },
+        'c++' : {
+            'concise' : "**()**\n{}\n".format(char),
+            'detail' : "C++ docs\nOptional arguments:\n**()**\n{}\n".format(char),
+            },
+        'java' : {
+            'concise' : "**(classes, packages, properties)**\n{}\n".format(char),
+            'detail' : "Java docs\nOptional arguments:\n**(classes, packages, properties)**\n{}\n".format(char),
+            },
+        'javascript' : {
+            'concise' : "**()**\n{}\n".format(char),
+            'detail' : "Javascript docs\nOptional arguments:\n**()**\n{}\n".format(char),
+            },
+        'lua' : {
+            'concise' : "**(intro, basic, language, api, auxiliary, standard, standalone, version-issues, syntax)**\n{}\n".format(char),
+            'detail' : "Lua docs\nOptional arguments:\n**(intro, basic, language, api, auxiliary, standard, standalone, version-issues, syntax)**\n{}\n".format(char),
+            },
+        'perl' : {
+            'concise' : "**(manual, module)**\n{}\n".format(char),
+            'detail' : "Perl docs\nOptional arguments:\n**(manual, module)**\n{}\n".format(char),
+            },
+        'python' : {
+            'concise' : "**(index, module, glossary)**\n{}\n".format(char),
+            'detail' : "Python docs\nOptional arguments:\n**(index, module, glossary)**\n{}\n".format(char),
+            },
+        'ruby' : {
+            'concise' : "**(api, standard)**\n{}\n".format(char),
+            'detail' : "Ruby docs\nOptional arguments:\n**(api, standard)**\n{}\n".format(char),
+            },
+        'rust': {
+            'concise' : "**(mod, error, rustc, edition, rustdoc, foreword, standard)**\n{}\n".format(char),
+            'detail' : "Rust docs\nOptional arguments:\n**(mod, error, rustc, edition, rustdoc, foreword, standard)**\n{}\n".format(char),
+            },
         }
 
 help_dict = {
-        #'' : "\n{}\n".format(char),
         # Help
-        'help' : "\nLet Brrt help you talk to Brrt.\n{}\n".format(char),
-        'docs' : "\nLet Brrt help you find documentation.\n{}\n".format(char),
-        'api' : "\nLet Brrt help you find APIs.\n{}\n".format(char),
+        'help' : {
+            'concise' : "Let Brrt help you talk to Brrt.\n{}\n".format(char),
+            'detail' : "Let Brrt help you talk to Brrt.\n{}\n".format(char),
+            },
+        'docs' : {
+            'concise' : "Let Brrt help you find documentation.\n{}\n".format(char),
+            'detail' : "Let Brrt help you find documentation.\n{}\n".format(char),
+            },
+        'api' : {
+            'concise' : "Let Brrt help you find APIs.\n{}\n".format(char),
+            'detail' : "Let Brrt help you find APIs.\n".format(char),
+            },
         # Settings
-        'settings' : "Let Brrt help you look at some of Brrt's features!\n{}\n".format(char),
-        'disable' : "Disable a feature!\nList arguments:\n**(documentation, moderation, scoring, welcome, random, social, voting)**\n{}\n".format(char),
-        'enable' : "Enable a feature!\nList arguments:\n**(documentation, moderation, scoring, welcome, random, social, voting)**\n{}\n".format(char),
+        'settings' : {
+            'concise' : "Let Brrt help you look at some of Brrt's features!\n{}\n".format(char),
+            'detail' : "Let Brrt help you look at some of Brrt's features!\n".format(char),
+            },
+        'disable' : {
+            'concise' : "**(documentation, moderation, scoring, welcome, random, social, voting)**\n{}\n".format(char),
+            'detail' : "Disable a feature!\n{}\nList arguments:\n**(documentation, moderation, scoring, welcome, random, social, voting)**\n".format(char),
+            },
+        'enable' : {
+            'concise' : "**(documentation, moderation, scoring, welcome, random, social, voting)**\n{}\n".format(char),
+            'detail' : "Enable a feature!\n{}\nList arguments:\n**(documentation, moderation, scoring, welcome, random, social, voting)**\n".format(char),
+            },
         # Privacy
-        'keep-data' : "Allow or disallow Brrt saving data.\nRequired arguments:\n**(yes, no, status)**\n{}\n".format(char),
+        'keep-data' : {
+            'concise' : "**(yes, no, status)**\n{}\n".format(char),
+            'detail' : "Allow or disallow Brrt saving data.\n{}\nRequired arguments:\n**(yes, no, status)**\n".format(char),
+            },
         # Social
-        'broadcast' : "Brrt will broadcast a message!\nRequired arguments:\n**(channel mention, message)**\n{}\n".format(char),
-        'embed' : "Brrt will embed a message for you, and even include a target!\nRequired arguments:\n**(mention, message)**\n{}\n".format(char),
-        'echo' : "Brrt will copy you!\nRequired arguments:\n**(message)**\n{}\n".format(char),
-        'banter' : "Brrt will slander you or your entry (if you have points)!\nOptional arguments:\n**(mention)**\n{}\n".format(char),
-        'praise' : "Brrt will praise you or your entry!\nOptional arguments:\n**(mention)**\n{}\n".format(char),
-        'give' : "Required arguments:\n**(mention, points)**\n{}\n".format(char),
-        'stats' : "Brrt will show your stats!\nOptional arguments:\n**(points, level, next, exp, mention)**\n{}\n".format(char),
-        'role' : "Brrt will show and give roles!\nOptional arguments:\n**(role)**\n{}\n".format(char),
-        'balance-karma' : "Brrt will balance your karma for you!\n{}\n".format(char),
+        'broadcast' : {
+            'concise' : "**(channel mention, message)**\n{}\n".format(char),
+            'detail' : "Brrt will broadcast a message!\n{}\nRequired arguments:\n**(channel mention, message)**\n".format(char),
+            },
+        'embed' : {
+            'concise' : "**(mention, message)**\n{}\n".format(char),
+            'detail' : "Brrt will embed a message for you, and even include a target!\n{}\nRequired arguments:\n**(mention, message)**\n".format(char),
+            },
+        'echo' : {
+            'concise' : "**(message)**\n{}\n".format(char),
+            'detail' : "Brrt will copy you!\n{}\nRequired arguments:\n**(message)**\n".format(char),
+            },
+        'banter' : {
+            'concise' : "**(mention)**\n{}\n".format(char),
+            'detail' : "Brrt will slander you or your entry (if you have points)!\n{}\nOptional arguments:\n**(mention)**\n".format(char),
+            },
+        'praise' : {
+            'concise' : "**(mention)**\n{}\n".format(char),
+            'detail' : "Brrt will praise you or your entry!\n{}\nOptional arguments:\n**(mention)**\n".format(char),
+            },
+        # Points
+        'give' : {
+            'concise' : "**(mention, points)**\n{}\n".format(char),
+            'detail' : "Brrt Will give someone points if you have them!\n{}\nRequired arguments:\n**(mention, points)**\n".format(char),
+            },
+        'stats' : {
+            'concise' : "**(points, level, next, exp, mention)**\n{}\n".format(char),
+            'detail' : "Brrt will show your stats!\n{}\nOptional arguments:\n**(points, level, next, exp, mention)**\n".format(char),
+            },
+        'role' : {
+            'concise' : "**(role)**\n{}\n".format(char),
+            'detail' : "Brrt will show and give roles!\n{}\nOptional arguments:\n**(role)**\n".format(char),
+            },
+        'balance-karma' : {
+            'concise' : "Brrt will balance your karma for you!\n{}\n".format(char),
+            'detail' : "Brrt will balance your karma for you!\n{}\n".format(char),
+            },
         # Voting
-        'vote' : "Brrt will take your vote!\n{}\n".format(char),
+        'vote' : {
+            'concise' : "**(vote)**\n{}\n".format(char),
+            'detail' : "Brrt will take your vote!\nRequired arguments:\n**(vote)**\n{}\n".format(char),
+            },
         # Random
-        'flip' : "Brrt will flip his lucky coin for you and you can even try to guess which side it'll land on!\nOptional arguments:\n(guess)\n{}\n".format(char),
-        'd' : "Brrt will roll dice for you!\nOptional arguments:\n(die sides required for roll count):\n**(die sides, roll count)**\n{}\n".format(char),
+        'flip' : {
+            'concise' : "**(guess)**\n{}\n".format(char),
+            'detail' : "Brrt will flip his lucky coin for you and you can even try to guess which side it'll land on!\n{}\nOptional arguments:\n**(guess)**\n".format(char),
+            },
+        'd' : {
+            'concise' : "**(die sides, roll count)**\n{}\n".format(char),
+            'detail' : "Brrt will roll dice for you!\n{}\nOptional arguments (die sides required for roll count):\n**(die sides, roll count)**\n".format(char),
+            }
         }
 
 role_dict = {
-        'role' : "Let Brrt help you find a role!".format(char),
-        'fresh_meat' : "Required level: 0\n{}\n".format(char),
-        'newb' : "Required level: 1\n{}\n".format(char),
-        'underling' : "Required level: 2\n{}\n".format(char),
-        'novice' : "Required level: 4\n{}\n".format(char),
-        'regular' : "Required level: 8\n{}\n".format(char),
-        'gamer' : "Required level: 12\n{}\n".format(char),
-        'game_lord' : "Required level: 16\n{}\n".format(char),
-        'game_addict' : "Required level: 24\n{}\n".format(char),
-        'advanced_user' : "Required level: 32\n{}\n".format(char),
-        'power_user' : "Required level: 48\n{}\n".format(char),
-        'advanced_power_user' : "Required level: 64\n{}\n".format(char),
-        'junior_veteran' : "Required level: 80\n{}\n".format(char),
-        'veteran' : "Required level: 96\n{}\n".format(char),
-        'veteran_senior' : "Required level: 128\n{}\n".format(char),
-        'veteran_commander' : "Required level: 160\n{}\n".format(char),
-        'veteran_lord' : "Required level: 192\n{}\n".format(char),
-        'enlightened_one' : "Required level: 256\n{}\n".format(char),
-        'game_buddha' : "Required level: 512\n{}\n".format(char),
+        'role' : {
+            'concise' : "Let Brrt help you find a role!".format(char),
+            'detail' : "Let Brrt help you find a role!".format(char),
+            },
+        'fresh_meat' : {
+            'concise' : "Required level: 0\n{}\n".format(char),
+            'detail' : "Required level: 0\n{}\n".format(char),
+            },
+        'newb' : {
+            'concise' : "Required level: 1\n{}\n".format(char),
+            'detail' : "Required level: 1\n{}\n".format(char),
+            },
+        'underling' : {
+            'concise' : "Required level: 2\n{}\n".format(char),
+            'detail' : "Required level: 2\n{}\n".format(char),
+            },
+        'novice' : {
+            'concise' : "Required level: 4\n{}\n".format(char),
+            'detail' : "Required level: 4\n{}\n".format(char),
+            },
+        'regular' : {
+            'concise' : "Required level: 8\n{}\n".format(char),
+            'detail' : "Required level: 8\n{}\n".format(char),
+            },
+        'gamer' : {
+            'concise' : "Required level: 12\n{}\n".format(char),
+            'detail' : "Required level: 12\n{}\n".format(char),
+            },
+        'game_lord' : {
+            'concise' : "Required level: 16\n{}\n".format(char),
+            'detail' : "Required level: 16\n{}\n".format(char),
+            },
+        'game_addict' : {
+            'concise' : "Required level: 24\n{}\n".format(char),
+            'detail' : "Required level: 24\n{}\n".format(char),
+            },
+        'advanced_user' : {
+            'concise' : "Required level: 32\n{}\n".format(char),
+            'detail' : "Required level: 32\n{}\n".format(char),
+            },
+        'power_user' : {
+            'concise' : "Required level: 48\n{}\n".format(char),
+            'detail' : "Required level: 48\n{}\n".format(char),
+            },
+        'advanced_power_user' : {
+            'concise' : "Required level: 64\n{}\n".format(char),
+            'detail' : "Required level: 64\n{}\n".format(char),
+            },
+        'junior_veteran' : {
+            'concise' : "Required level: 80\n{}\n".format(char),
+            'detail' : "Required level: 80\n{}\n".format(char),
+            },
+        'veteran' : {
+            'concise' : "Required level: 96\n{}\n".format(char),
+            'detail' : "Required level: 96\n{}\n".format(char),
+            },
+        'veteran_senior' : {
+            'concise' : "Required level: 128\n{}\n".format(char),
+            'detail' : "Required level: 128\n{}\n".format(char),
+            },
+        'veteran_commander' : {
+            'concise' : "Required level: 160\n{}\n".format(char),
+            'detail' : "Required level: 160\n{}\n".format(char),
+            },
+        'veteran_lord' : {
+            'concise' : "Required level: 192\n{}\n".format(char),
+            'detail' : "Required level: 192\n{}\n".format(char),
+            },
+        'enlightened_one' : {
+            'concise' : "Required level: 256\n{}\n".format(char),
+            'detail' : "Required level: 256\n{}\n".format(char),
+            },
+        'game_buddha' : {
+            'concise' : "Required level: 512\n{}\n".format(char),
+            'detail' : "Required level: 512\n{}\n".format(char),
+            },
         }
 
 sets_dict = {
-        'settings' : "Let Brrt help you look at some of Brrt's features!\n{}\n".format(char),
-        'documentation' : "\nCommands:\n**(api, docs, source (including their respective commands))**\n{}\n".format(char),
-        'moderation' : "This looks for certain words or phrases in all messages.\n{}\n".format(char),
-        'scoring' : "This keeps track of scores to promote interaction with Brrt.\nCommands:\n**(give, stats, role, balance-karma)**\n{}\n".format(char),
-        'welcome' : "This will greet members that join in a set channel.\n{}\n".format(char),
-        'random' : "This is pretty random.\nCommands:\n**(flip, d)**\n{}\n".format(char),
-        'social' : "This is for fun among members.\nCommands:\n**(broadcast, embed, echo, banter, praise)**\n{}\n".format(char),
-        'voting' : "This is for member voting.\nCommands:\n**()**\n{}\n".format(char),
+        'settings' : {
+            'concise' : "Let Brrt help you look at some of Brrt's features!\n{}\n".format(char),
+            'detail' : "Let Brrt help you look at some of Brrt's features!\n{}\n".format(char),
+            },
+        'documentation' : {
+            'concise' : "**(api, docs, source (including their respective commands))**\n{}\n".format(char),
+            'detail' : "\nCommands:\n**(api, docs, source (including their respective commands))**\n{}\n".format(char),
+            },
+        'moderation' : {
+            'concise' : "Per message.\n{}\n".format(char),
+            'detail' : "This looks for certain words or phrases in all messages.\n{}\n".format(char),
+            },
+        'scoring' : {
+            'concise' : "**(give, stats, role, balance-karma)**\n{}\n".format(char),
+            'detail' : "This keeps track of scores to promote interaction with Brrt.\nCommands:\n**(give, stats, role, balance-karma)**\n{}\n".format(char),
+            },
+        'welcome' : {
+            'concise' : "Member greetings.\n{}\n".format(char),
+            'detail' : "This will greet members that join in a set channel.\n{}\n".format(char),
+            },
+        'random' : {
+            'concise' : "**(flip, d)**\n{}\n".format(char),
+            'detail' : "This is pretty random.\nCommands:\n**(flip, d)**\n{}\n".format(char),
+            },
+        'social' : {
+            'concise' : "**(broadcast, embed, echo, banter, praise)**\n{}\n".format(char),
+            'detail' : "This is for fun among members.\nCommands:\n**(broadcast, embed, echo, banter, praise)**\n{}\n".format(char),
+            },
+        'voting' : {
+            'concise' : "**(vote)**\n{}\n".format(char),
+            'detail' : "This is for member voting.\nCommands:\n**()**\n{}\n".format(char),
+            },
         }
