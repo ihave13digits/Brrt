@@ -95,10 +95,14 @@ help_dict = {
             'concise' : "**(documentation, moderation, scoring, welcome, random, social, voting)**\n{}\n".format(char),
             'detail' : "Enable a feature!\n{}\nList arguments:\n**(documentation, moderation, scoring, welcome, random, social, voting)**\n".format(char),
             },
+        'shutdown' : {
+            'concise' : "Shuts Brrt down and saves member data.\n{}\n".format(char),
+            'detail' : "Shuts Brrt down and saves member data.\n{}\n".format(char),
+            },
         # Privacy
         'keep-data' : {
             'concise' : "**(yes, no, status)**\n{}\n".format(char),
-            'detail' : "Allow or disallow Brrt saving data.\n{}\nRequired arguments:\n**(yes, no, status)**\n".format(char),
+            'detail' : "Allow or disallow Brrt saving data.  Brrt encrypts this data, so only Brrt can use it.\n{}\nRequired arguments:\n**(yes, no, status)**\n".format(char),
             },
         # Social
         'broadcast' : {
