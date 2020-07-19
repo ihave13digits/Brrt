@@ -163,10 +163,78 @@ role_dict = {
             'concise' : "Let Brrt help you find a role!".format(char),
             'detail' : "Let Brrt help you find a role!".format(char),
             },
-        'sample' : {
+        'fresh_meat' : {
             'concise' : "Required level: 0\n{}\n".format(char),
             'detail' : "Required level: 0\n{}\n".format(char),
-            }
+            },
+        'newb' : {
+            'concise' : "Required level: 1\n{}\n".format(char),
+            'detail' : "Required level: 1\n{}\n".format(char),
+            },
+        'underling' : {
+            'concise' : "Required level: 2\n{}\n".format(char),
+            'detail' : "Required level: 2\n{}\n".format(char),
+            },
+        'novice' : {
+            'concise' : "Required level: 4\n{}\n".format(char),
+            'detail' : "Required level: 4\n{}\n".format(char),
+            },
+        'regular' : {
+            'concise' : "Required level: 8\n{}\n".format(char),
+            'detail' : "Required level: 8\n{}\n".format(char),
+            },
+        'gamer' : {
+            'concise' : "Required level: 12\n{}\n".format(char),
+            'detail' : "Required level: 12\n{}\n".format(char),
+            },
+        'game_lord' : {
+            'concise' : "Required level: 16\n{}\n".format(char),
+            'detail' : "Required level: 16\n{}\n".format(char),
+            },
+        'game_addict' : {
+            'concise' : "Required level: 24\n{}\n".format(char),
+            'detail' : "Required level: 24\n{}\n".format(char),
+            },
+        'advanced_user' : {
+            'concise' : "Required level: 32\n{}\n".format(char),
+            'detail' : "Required level: 32\n{}\n".format(char),
+            },
+        'power_user' : {
+            'concise' : "Required level: 48\n{}\n".format(char),
+            'detail' : "Required level: 48\n{}\n".format(char),
+            },
+        'advanced_power_user' : {
+            'concise' : "Required level: 64\n{}\n".format(char),
+            'detail' : "Required level: 64\n{}\n".format(char),
+            },
+        'junior_veteran' : {
+            'concise' : "Required level: 80\n{}\n".format(char),
+            'detail' : "Required level: 80\n{}\n".format(char),
+            },
+        'veteran' : {
+            'concise' : "Required level: 96\n{}\n".format(char),
+            'detail' : "Required level: 96\n{}\n".format(char),
+            },
+        'veteran_senior' : {
+            'concise' : "Required level: 128\n{}\n".format(char),
+            'detail' : "Required level: 128\n{}\n".format(char),
+            },
+        'veteran_commander' : {
+            'concise' : "Required level: 160\n{}\n".format(char),
+            'detail' : "Required level: 160\n{}\n".format(char),
+            },
+        'veteran_lord' : {
+            'concise' : "Required level: 192\n{}\n".format(char),
+            'detail' : "Required level: 192\n{}\n".format(char),
+            },
+        'enlightened_one' : {
+            'concise' : "Required level: 256\n{}\n".format(char),
+            'detail' : "Required level: 256\n{}\n".format(char),
+            },
+        'game_buddha' : {
+            'concise' : "Required level: 512\n{}\n".format(char),
+            'detail' : "Required level: 512\n{}\n".format(char),
+            },
         }
 
 sets_dict = {
