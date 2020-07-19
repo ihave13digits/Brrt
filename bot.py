@@ -88,10 +88,10 @@ def helper(a, mode, owner):
     mandatory = ['help', 'documentation', 'moderation', 'scoring', 'welcome', 'random', 'social', 'voting', 'roles']
     owner_only = ['settings', 'disable', 'enable', 'shutdown']
     docs_only = ['api', 'docs', 'source', 'discord', 'godot', 'unity', 'unreal']
-    playing_only = ['give', 'stats', 'role' 'balance-karma']
-    random_only = ['flip', 'd']
     social_only = ['broadcast', 'embed', 'echo', 'banter', 'praise']
+    playing_only = ['keep-data', 'give', 'stats', 'role', 'balance-karma']
     voting_only = ['vote']
+    random_only = ['flip', 'd']
     roles_only = ['role',
             'fresh_meat', 'newb', 'underlind', 'novice', 'regular',
             'gamer', 'game_lord', 'game_addict', 'advanced_user', 'power_user',
@@ -117,10 +117,10 @@ def helper(a, mode, owner):
             for x in target:
                 if ( x in mandatory or
                         (bot_data['enabled']['documentation'] and x in docs_only) or
-                        (bot_data['enabled']['scoring'] and x in playing_only) or
-                        (bot_data['enabled']['random'] and x in random_only) or
                         (bot_data['enabled']['social'] and x in social_only) or
+                        (bot_data['enabled']['scoring'] and x in playing_only) or
                         (bot_data['enabled']['voting'] and x in voting_only) or
+                        (bot_data['enabled']['random'] and x in random_only) or
                         (bot_data['enabled']['roles'] and x in roles_only) or
                         x not in owner_only):
                     embed.add_field(name=x, value=target[x]['concise'], inline=False)
@@ -128,10 +128,10 @@ def helper(a, mode, owner):
             for x in target:
                 if ( x in mandatory or
                         (bot_data['enabled']['documentation'] and x in docs_only) or
-                        (bot_data['enabled']['scoring'] and x in playing_only) or
-                        (bot_data['enabled']['random'] and x in random_only) or
                         (bot_data['enabled']['social'] and x in social_only) or
+                        (bot_data['enabled']['scoring'] and x in playing_only) or
                         (bot_data['enabled']['voting'] and x in voting_only) or
+                        (bot_data['enabled']['random'] and x in random_only) or
                         (bot_data['enabled']['roles'] and x in roles_only) or
                         x in owner_only):
                     embed.add_field(name=x, value=target[x]['concise'], inline=False)
