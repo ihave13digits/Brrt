@@ -287,20 +287,25 @@ async def on_message(message):
                     response = random.choice(illegal.words[word]['warning']).format(data['author'].mention)
                     await ctx.send(response)
                     
-                    if illegal.words[word]['offense'] > -2:
+                    if illegal.words[word]['offense'] == -10:
+                        r, g, b = 0, 0, 255
+                    if illegal.words[word]['offense'] == -1:
                         r, g, b = 0, 255, 255
-                    if illegal.words[word]['offense'] > -1:
+                    if illegal.words[word]['offense'] == 0:
                         r, g, b = 0, 255, 0
-                    if illegal.words[word]['offense'] > 0:
+                    if illegal.words[word]['offense'] == 1:
                         r, g, b = 255, 255, 0
-                    if illegal.words[word]['offense'] > 1:
+                    if illegal.words[word]['offense'] == 10:
                         r, g, b, = 255, 0, 0
                         await message.delete()
         else:
             r, g, b = 255, 255, 255
         if not excluded(str(message.author.id)):
             user_word(str(data['author'].id), offense)
-            user_point(str(data['author'].id), offense)
+            if offense <= 0:
+                user_point(str(data['author'].id), abs(offense))
+            else:
+                user_point(str(data['author'].id), -offense)
             level_text(ctx, 1)
 
         stats = ""
