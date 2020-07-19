@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import json, random
+import random
 from discord.ext import commands
 from discord.channel import DMChannel
 from discord import Member, Embed, Color, utils, errors
@@ -179,15 +179,11 @@ def handle_users(mems):
             ))
     print("Brrt Points:        {}".format(bot_data['points']))
 
-
-
 def excluded(i):
     if bot_data['enabled']['scoring']:
         return bot_data['playing'].get(i, True)
     else:
         return False
-
-
 
 def has_points(i, val):
     try:
@@ -207,8 +203,6 @@ def user_point(i, val):
         if val >= 0:
             bot_data['member_data']['points'][i] = val
 
-
-
 def user_word(i, val):
     global bot_data
     try:
@@ -218,8 +212,6 @@ def user_word(i, val):
             bot_data['member_data']['positive'][i] += abs(val)
     except:
         pass
-
-
 
 def user_xp(i, val):
     global bot_data
@@ -236,10 +228,36 @@ def user_xp(i, val):
         bot_data['member_data']['exp'][i] = val
     return leveled_up
 
+def level_text(ctx, exp):
+    if not excluded(str(ctx.author.id)):
+        level_up = user_xp(str(ctx.author.id), exp)
+        if level_up:
+            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+            ctx.send(level_text)
+
+def user_stats(mmbr):
+    _points = '{}'.format(bot_data['member_data']['points'][str(mmbr)])
+    _karma = '{}'.format(bot_data['member_data']['positive'][str(mmbr)] - bot_data['member_data']['negative'][str(mmbr)])
+    _level = '{}'.format(bot_data['member_data']['level'][str(mmbr)])
+    _lup = bot_data['member_data']['lup'][str(mmbr)]
+    _exp = bot_data['member_data']['exp'][str(mmbr)]
+    embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
+    embed.set_footer(text="Brrt ||")
+    embed.set_thumbnail(url=brrt_image.image['brrt'])
+    embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
+    embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
+    embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
+    embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
+    embed.add_field(name="Next Level:", value="**{}**".format(_lup - _exp), inline=False)
+    embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
+    return embed
+
 
 
 #
-### Start Async  ###
+###
+#### --- Start Async ---
+###
 #
 
 
@@ -260,37 +278,30 @@ async def on_message(message):
     if bot_data['enabled']['moderation']:
         offense = 0
         r, g, b = 0, 255, 0
-        # Check if not self
         if message.author == bot.user:
             return
-        # Check for plain message
-        if not data['content'].startswith("!"):
-            # Check for offenses
+        if not data['content'].startswith(PREFIX):
             for word in illegal.words:
                 if word in data['content'].lower():
                     offense = illegal.words[word]['offense']
-                    # Scold user
                     response = random.choice(illegal.words[word]['warning']).format(data['author'].mention)
                     await ctx.send(response)
-                    # Check severity of offense
-                    if illegal.words[word]['offense'] < 0:
+                    
+                    if illegal.words[word]['offense'] > -2:
                         r, g, b = 0, 255, 255
-                    elif illegal.words[word]['offense'] == 0:
-                        pass
-                    elif illegal.words[word]['offense'] == 1:
+                    if illegal.words[word]['offense'] > -1:
+                        r, g, b = 0, 255, 0
+                    if illegal.words[word]['offense'] > 0:
                         r, g, b = 255, 255, 0
-                    elif illegal.words[word]['offense'] == 10:
+                    if illegal.words[word]['offense'] > 1:
                         r, g, b, = 255, 0, 0
                         await message.delete()
         else:
             r, g, b = 255, 255, 255
         if not excluded(str(message.author.id)):
-            level_up = user_xp(str(message.author.id), 1)
             user_word(str(data['author'].id), offense)
             user_point(str(data['author'].id), offense)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(data['author'].id)])
-                await ctx.send(level_text)
+            level_text(ctx, 1)
 
         stats = ""
         if not excluded(str(message.author.id)):
@@ -307,27 +318,17 @@ async def on_message(message):
         text = "\x1b[{};2;{};{};{}m".format(38, r, g, b) + message.content + '\x1b[0m'
         print("{}: {}".format(message.author.id, text))
 
-        try:
-            color_tag = Color.from_rgb(r, g, b)
-            private_message = Embed(title=message.author.name, color=color_tag)
-            private_message.add_field(name=message.channel.name, value=message.content, inline=False)
-            for srvr in bot.guilds:
-                if srvr == message.author.guild:
-                    for chnl in srvr.channels:
-                        for valid in bot_data['secret']:
-                            if chnl.name == valid:
-                                private_channel = bot.get_channel(chnl.id)
-                                await private_channel.send(embed=private_message)
-        except:
-            pass
+        color_tag = Color.from_rgb(r, g, b)
+        private_message = Embed(title=message.author.name, color=color_tag)
+        private_message.add_field(name=message.channel.name, value=message.content, inline=False)
+        for chnl in message.author.guild.channels:
+            if chnl.name in bot_data['secret']:
+                private_channel = bot.get_channel(chnl.id)
+                await private_channel.send(embed=private_message)
     else:
-        if not excluded(str(message.author.id)):
-            level_up = user_xp(str(message.author.id), 1)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(data['author'].id)])
-                await ctx.send(level_text)
+        level_text(ctx, 1)
 
-    if type(ctx.message.channel) is DMChannel:
+    if type(message.channel) is DMChannel:
         try:
             if message.content[0] == PREFIX:
                 if message.author.name not in bot_data['owners']:
@@ -375,9 +376,6 @@ async def on_member_join(member):
 
 @bot.command(name='shutdown')
 async def shutdown(ctx):
-    '''
-    End Session
-    '''
     can_do = False
     response = "You're not my owner!  Only an owner can use that command!"
     if ctx.author.name in bot_data['owners']:
@@ -404,9 +402,6 @@ async def shutdown(ctx):
 
 @bot.command(name='settings')
 async def settings(ctx, *a):
-    '''
-    Settings Menu
-    '''
     if ctx.author.name in bot_data['owners']:
         if a:
             if a[0] == 'status':
@@ -423,9 +418,6 @@ async def settings(ctx, *a):
 
 @bot.command(name='enable')
 async def enable(ctx, *a):
-    '''
-    Enable Feature/s
-    '''
     global bot_data
     can_do = False
     response = "You're not my owner!  Only an owner can use that command!"
@@ -442,9 +434,6 @@ async def enable(ctx, *a):
 
 @bot.command(name='disable')
 async def disable(ctx, *a):
-    '''
-    Disbale Feature/s
-    '''
     global bot_data
     can_do = False
     response = "You're not my owner!  Only an owner can use that command!"
@@ -463,9 +452,6 @@ async def disable(ctx, *a):
 
 @bot.command(name="keep-data")
 async def data_collection(ctx, a):
-    '''
-    Allow/Disallow data collection
-    '''
     global bot_data
     if bot_data['enabled']['scoring']:
         if a == "yes":
@@ -482,7 +468,12 @@ async def data_collection(ctx, a):
                 response = "You already gave Brrt permission!"
         if a == "no":
             if not excluded(str(ctx.author.id)):
+                bot_data['member_data']['negative'].pop(str(ctx.author.id))
+                bot_data['member_data']['positive'].pop(str(ctx.author.id))
                 bot_data['member_data']['points'].pop(str(ctx.author.id))
+                bot_data['member_data']['level'].pop(str(ctx.author.id))
+                bot_data['member_data']['lup'].pop(str(ctx.author.id))
+                bot_data['member_data']['exp'].pop(str(ctx.author.id))
                 bot_data['playing'].pop(str(ctx.author.id))
             response = "More points for Brrt!"
         if a == 'status':
@@ -499,9 +490,6 @@ async def data_collection(ctx, a):
 bot.remove_command('help')
 @bot.command(name='help')
 async def helpBrrt(ctx, *a):
-    '''
-    Override !help
-    '''
     if ctx.author.name in bot_data['owners']:
         owner = True
     else:
@@ -515,9 +503,6 @@ async def helpBrrt(ctx, *a):
 
 @bot.command(name='api')
 async def doc_api(ctx, *a):
-    '''
-    Fetch APIs
-    '''
     if ctx.author.name in bot_data['owners']:
         owner = True
     else:
@@ -530,11 +515,7 @@ async def doc_api(ctx, *a):
             target = str(a[0])
             response = Misc.api(target)
             await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='docs')
 async def helpBrrt(ctx, *a):
@@ -545,17 +526,10 @@ async def helpBrrt(ctx, *a):
     if bot_data['enabled']['documentation']:
         response=helper(a, 'docs', owner)
         await ctx.send(embed=response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='source')
 async def doc_source(ctx, *a):
-    '''
-    Fetch the git link to src
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.source('')
@@ -563,17 +537,10 @@ async def doc_source(ctx, *a):
             target = str(a[0])
             response = Misc.source(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='c')
 async def doc_c(ctx, *a):
-    '''
-    C docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.c('')
@@ -581,17 +548,10 @@ async def doc_c(ctx, *a):
             target = str(a[0])
             response = Misc.c(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='c#')
 async def doc_c_sharp(ctx, *a):
-    '''
-    C# docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.c_sharp('')
@@ -599,17 +559,10 @@ async def doc_c_sharp(ctx, *a):
             target = str(a[0])
             response = Misc.c_sharp(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='c++')
 async def doc_c_pp(ctx, *a):
-    '''
-    C++ docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.c_pp('')
@@ -617,17 +570,10 @@ async def doc_c_pp(ctx, *a):
             target = str(a[0])
             response = Misc.c_pp(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='java')
 async def doc_java(ctx, *a):
-    '''
-    Java docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.java('')
@@ -635,17 +581,10 @@ async def doc_java(ctx, *a):
             target = str(a[0])
             response = Misc.java(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='javascript')
 async def doc_javascript(ctx, *a):
-    '''
-    Javascript docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.javascript('')
@@ -653,17 +592,10 @@ async def doc_javascript(ctx, *a):
             target = str(a[0])
             response = Misc.javascript(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='lua')
 async def doc_lua(ctx, *a):
-    '''
-    Lua docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.lua('')
@@ -671,17 +603,10 @@ async def doc_lua(ctx, *a):
             target = str(a[0])
             response = Misc.lua(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='perl')
 async def doc_perl(ctx, *a):
-    '''
-    Perl docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.perl('')
@@ -689,17 +614,10 @@ async def doc_perl(ctx, *a):
             target = str(a[0])
             response = Misc.perl(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='python')
 async def doc_python(ctx, *a):
-    '''
-    Python Docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.python('')
@@ -707,17 +625,10 @@ async def doc_python(ctx, *a):
             target = str(a[0])
             response = Misc.python(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='ruby')
 async def doc_ruby(ctx, *a):
-    '''
-    Ruby docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.ruby('')
@@ -725,17 +636,10 @@ async def doc_ruby(ctx, *a):
             target = str(a[0])
             response = Misc.ruby(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='rust')
 async def doc_rust(ctx, *a):
-    '''
-    Rust docs
-    '''
     if bot_data['enabled']['documentation']:
         if not a:
             response = Misc.rust('')
@@ -743,11 +647,7 @@ async def doc_rust(ctx, *a):
             target = str(a[0])
             response = Misc.rust(target)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 
 
@@ -755,9 +655,6 @@ async def doc_rust(ctx, *a):
 
 @bot.command(name='broadcast')
 async def broadcast(ctx, channel, *a):
-    '''
-    Broadcast a message
-    '''
     if bot_data['enabled']['social']:
         if not(type(ctx.message.channel) is DMChannel):
             response = "{} says: ".format(ctx.author.name)
@@ -776,17 +673,10 @@ async def broadcast(ctx, channel, *a):
                 if not response:
                     response = ""
                 await target.send(response)
-                if not excluded(str(ctx.author.id)):
-                    level_up = user_xp(str(ctx.author.id), 10)
-                    if level_up:
-                        level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                        await ctx.send(level_text)
+                level_text(ctx, 10)
 
 @bot.command(name='echo')
 async def echo(ctx, *a):
-    '''
-    Echo a message
-    '''
     if bot_data['enabled']['social']:
         response = ""
         for word in a:
@@ -795,17 +685,10 @@ async def echo(ctx, *a):
         if not response:
             response = "Don't try to trick Brrt!"
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 5)
 
 @bot.command(name='embed')
 async def embeded(ctx, des, *a):
-    '''
-    Embed message
-    '''
     if bot_data['enabled']['social']:
         acceptable = ['.gif', '.jpg', '.jpeg', '.png']
         has_img = False
@@ -831,17 +714,10 @@ async def embeded(ctx, des, *a):
         if not (type(ctx.message.channel) is DMChannel):
             await ctx.message.delete()
         await ctx.send(embed=embed)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 10)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 10)
 
 @bot.command(name='banter')
 async def banter(ctx, *a):
-    '''
-    Banter command, accepts (arg)
-    '''
     if bot_data['enabled']['social']:
         if not excluded(str(ctx.author.id)) and has_points(str(ctx.author.id), 1):
             response = ""
@@ -850,24 +726,16 @@ async def banter(ctx, *a):
             else:
                 if a[0] != '@everyone' and a[0] != '@here':
                     response = random.choice(banter.focus).format(a[0])
-                
             if not response:
                 response = "Don't try to trick Brrt!"
-            if not excluded(str(ctx.author.id)):
-                level_up = user_xp(str(ctx.author.id), 1)
-                if level_up:
-                    level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                    await ctx.send(level_text)
             user_point(str(ctx.author.id), -1)
         else:
             response = "Sorry, Brrt only do banter if you have points!"
         await ctx.send(response)
+        level_text(ctx, 10)
 
 @bot.command(name='praise')
 async def praise(ctx, *a):
-    '''
-    Praise People or Brrt
-    '''
     if bot_data['enabled']['social']:
         if not a:
             response = random.choice(compliment.shucks)
@@ -883,17 +751,10 @@ async def praise(ctx, *a):
                 bot_data['points'] += 1
             response = random.choice(compliment.praise).format(a[0])
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 10)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        level_text(ctx, 10)
 
 @bot.command(name='give')
 async def give_points(ctx, mmbr, val):
-    '''
-    Give a member points
-    '''
     if bot_data['enabled']['scoring']:
         target = None
         try:
@@ -909,10 +770,6 @@ async def give_points(ctx, mmbr, val):
                         elif mem == bot.user.mention and not excluded(str(ctx.author.id)):
                             bot_data['points'] += int(val)
                             user_point(str(ctx.author.id), -int(val))
-                            level_up = user_xp(str(ctx.author.id), int(val))
-                            if level_up:
-                                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                                await ctx.send(level_text)
                             response = "{} gave {} {} points!".format(ctx.author.name, mem.name, val)
                     
                         else:
@@ -930,6 +787,7 @@ async def give_points(ctx, mmbr, val):
         except:
             response = "Are you trying to trick Brrt?"
         await ctx.send(response)
+        level_text(ctx, 10)
 
 @bot.command(name='balance-karma')
 async def balance_karma(ctx, *a):
@@ -959,31 +817,15 @@ async def balance_karma(ctx, *a):
             bot_data['member_data']['positive'][str(target.id)] -= 1
 
         await ctx.send(response)
+        level_text(ctx, 10)
 
 @bot.command(name='stats')
 async def stats(ctx, *a):
-    '''
-    Get User Stats
-    '''
     if bot_data['enabled']['scoring']:
         user_mentn = False
         if not a:
             if not excluded(str(ctx.author.id)):
-                _points = '{}'.format(bot_data['member_data']['points'][str(ctx.author.id)])
-                _karma = '{}'.format(bot_data['member_data']['positive'][str(ctx.author.id)] - bot_data['member_data']['negative'][str(ctx.author.id)])
-                _level = '{}'.format(bot_data['member_data']['level'][str(ctx.author.id)])
-                _lup = bot_data['member_data']['lup'][str(ctx.author.id)]
-                _exp = bot_data['member_data']['exp'][str(ctx.author.id)]
-
-                embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
-                embed.set_footer(text="Brrt ||")
-                embed.set_thumbnail(url=brrt_image.image['brrt'])
-                embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
-                embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
-                embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
-                embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
-                embed.add_field(name="Next Level:", value="**{}**".format(_lup - _exp), inline=False)
-                embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
+                embed = user_stats(ctx.author.id)
                 await ctx.send(embed=embed)
             if excluded(str(ctx.author.id)):
                 response = "Brrt isn't storing your data!"
@@ -1014,21 +856,7 @@ async def stats(ctx, *a):
                             backup = m
                 if mem != None:
                     try:
-                        _points = '{}'.format(bot_data['member_data']['points'][str(mem.id)])
-                        _karma = '{}'.format(bot_data['member_data']['positive'][str(mem.id)] - bot_data['member_data']['negative'][str(mem.id)])
-                        _level = '{}'.format(bot_data['member_data']['level'][str(mem.id)])
-                        _lup = bot_data['member_data']['lup'][str(mem.id)]
-                        _exp = bot_data['member_data']['exp'][str(mem.id)]
-
-                        embed = Embed(title="Brrt Show Stats!",description="Stats",color=0xFFFFFF)
-                        embed.set_footer(text="Brrt ||")
-                        embed.set_thumbnail(url=brrt_image.image['brrt'])
-                        embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
-                        embed.add_field(name="Points:", value="**{}**".format(_points), inline=False)
-                        embed.add_field(name="Karma:", value="**{}**".format(_karma), inline=False)
-                        embed.add_field(name="Level:", value="**{}**".format(_level), inline=False)
-                        embed.add_field(name="Next Level:", value="**{}**".format(_lup - _exp), inline=False)
-                        embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
+                        embed = user_stats(mem.id)
                         await ctx.send(embed=embed)
                     except:
                         response = "Brrt isn't storing {}'s data!".format(backup.name)
@@ -1043,9 +871,6 @@ async def stats(ctx, *a):
 
 @bot.command(name='role')
 async def role(ctx, *a):
-    '''
-    Set Role
-    '''
     if bot_data['enabled']['roles']:
         text = "Brrt doesn't know about that role! Try `!role` and Brrt will help."
         if not excluded(str(ctx.author.id)):
@@ -1082,9 +907,6 @@ async def role(ctx, *a):
 
 @bot.command(name='flip')
 async def flip(ctx, *a):
-    '''
-    Flip a coin
-    '''
     if bot_data['enabled']['random']:
         response = Misc.flip()
         gets_point = False
@@ -1111,62 +933,16 @@ async def flip(ctx, *a):
                 text = "That's a shame, it landed on:"
         embed.add_field(name="{}".format(text), value="**{}**".format(response), inline=False)
         await ctx.send(embed=embed)
-        if not excluded(str(ctx.author.id)):
-            if gets_point:
-                user_point(str(ctx.author.id), 1)
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        if not excluded(str(ctx.author.id)) and gets_point:
+            user_point(str(ctx.author.id), 1)
+        level_text(ctx, 5)
 
 @bot.command(name='d')
 async def roll_die(ctx, *a):
-    '''
-    Roll an X sided die where X is a number <= 1000
-    '''
     if bot_data['enabled']['random']:
-        response = ""
-        lmt = 1
-        if not a:
-            value = 6
-        else:
-            # get value
-            try:
-                value = int(a[0])
-            except:
-                value = 6
-            value = abs(value)
-            # check if workable
-            if value > 1000:
-                value = 1000
-                response += "Brrt only roll up to 1,000.\n\n"
-            if value <= 2:
-                value = 2
-            # get limit
-            if len(a) > 1:
-                try:
-                    lmt = int(a[1])
-                except:
-                    lmt = 1
-            # check if workable
-            if lmt > 20 or lmt < 1:
-                lmt = abs(lmt)
-                die_choice = ['dies', 'dices']
-                word = random.choice(die_choice)
-                response += "Brrt only roll 1 to 20 {} at a time.\n\n".format(word)
-            if lmt > 20:
-                lmt = 20
-            elif lmt < 1:
-                lmt = 1
-        for rolls in range(lmt):
-            response += str(Misc.roll(value))+"\n"
+        response = Misc.roll_dice(a)
         await ctx.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 5)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
-
+        level_text(ctx, 5)
 
 
 bot.run(TOKEN)

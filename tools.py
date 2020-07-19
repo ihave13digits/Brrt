@@ -215,6 +215,15 @@ class Misc:
 
 
     @staticmethod
+    def style_text(text, frmt):
+        #frmt = ['**', '*', '~~', '__', '||']
+        for f in frmt:
+            "{}{}{}".format(f, text, f)
+        return text
+
+
+
+    @staticmethod
     def rand_hex():
         value = randint(0, 16777215)
         return value
@@ -227,6 +236,45 @@ class Misc:
         else:
             value = 'Heads'
         return value
+
+    @staticmethod
+    def roll_dice(a):
+        response = ""
+        lmt = 1
+        if not a:
+            value = 6
+        else:
+            # get value
+            try:
+                value = int(a[0])
+            except:
+                value = 6
+            value = abs(value)
+            # check if workable
+            if value > 1000:
+                value = 1000
+                response += "Brrt only roll up to 1,000.\n\n"
+            if value <= 2:
+                value = 2
+            # get limit
+            if len(a) > 1:
+                try:
+                    lmt = int(a[1])
+                except:
+                    lmt = 1
+            # check if workable
+            if lmt > 20 or lmt < 1:
+                lmt = abs(lmt)
+                die_choice = ['dies', 'dices']
+                word = choice(die_choice)
+                response += "Brrt only roll 1 to 20 {} at a time.\n\n".format(word)
+            if lmt > 20:
+                lmt = 20
+            elif lmt < 1:
+                lmt = 1
+        for rolls in range(lmt):
+            response += str(Misc.roll(value))+"\n"
+        return response
 
     @staticmethod
     def roll(sides):
