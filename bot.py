@@ -320,11 +320,14 @@ async def on_message(message):
 
         color_tag = Color.from_rgb(r, g, b)
         private_message = Embed(title=message.author.name, color=color_tag)
-        private_message.add_field(name=message.channel.name, value=message.content, inline=False)
-        for chnl in message.author.guild.channels:
-            if chnl.name in bot_data['secret']:
-                private_channel = bot.get_channel(chnl.id)
-                await private_channel.send(embed=private_message)
+        try:
+            private_message.add_field(name=message.channel.name, value=message.content, inline=False)
+            for chnl in message.author.guild.channels:
+                if chnl.name in bot_data['secret']:
+                    private_channel = bot.get_channel(chnl.id)
+                    await private_channel.send(embed=private_message)
+        except:
+            pass
     else:
         level_text(ctx, 1)
 
