@@ -45,7 +45,20 @@ print("Brrt needs to get ready!\n")
 
 ### Helper Functions ###
 
-def helper(a, mode):
+def helper(a, mode, owner):
+    mandatory = ['help', 'documentation', 'moderation', 'scoring', 'welcome', 'random', 'social', 'voting', 'roles']
+    owner_only = ['settings', 'disable', 'enable', 'shutdown']
+    docs_only = ['api', 'docs', 'source', 'discord', 'godot', 'unity', 'unreal']
+    playing_only = ['give', 'stats', 'role' 'balance-karma']
+    random_only = ['flip', 'd']
+    social_only = ['broadcast', 'embed', 'echo', 'banter', 'praise']
+    voting_only = ['vote']
+    roles_only = ['role',
+            'fresh_meat', 'newb', 'underlind', 'novice', 'regular',
+            'gamer', 'game_lord', 'game_addict', 'advanced_user', 'power_user',
+            'advanced_power_user', 'junior_veteran', 'veteran', 'veteran_senior', 'veteran_commander',
+            'veteran_lord', 'enlightened_one', 'game_buddha']
+
     color_choice = Misc.rand_hex()
     embed=Embed(title="Brrt {}".format(mode).upper(), url="https://github.com/ihave13digits/Brrt/blob/master/README.md", color=color_choice)
     if mode == "api":
@@ -61,8 +74,29 @@ def helper(a, mode):
     try:
         embed.add_field(name=a[0], value=target[a[0]]['detail'], inline=False)
     except:
-        for x in target:
-            embed.add_field(name=x, value=target[x]['concise'], inline=False)
+        if not owner:
+            for x in target:
+                if ( x in mandatory or
+                        (bot_data['enabled']['documentation'] and x in docs_only) or
+                        (bot_data['enabled']['scoring'] and x in playing_only) or
+                        (bot_data['enabled']['random'] and x in random_only) or
+                        (bot_data['enabled']['social'] and x in social_only) or
+                        (bot_data['enabled']['voting'] and x in voting_only) or
+                        (bot_data['enabled']['roles'] and x in roles_only) or
+                        x not in owner_only):
+                    embed.add_field(name=x, value=target[x]['concise'], inline=False)
+        else:
+            for x in target:
+                if ( x in mandatory or
+                        (bot_data['enabled']['documentation'] and x in docs_only) or
+                        (bot_data['enabled']['scoring'] and x in playing_only) or
+                        (bot_data['enabled']['random'] and x in random_only) or
+                        (bot_data['enabled']['social'] and x in social_only) or
+                        (bot_data['enabled']['voting'] and x in voting_only) or
+                        (bot_data['enabled']['roles'] and x in roles_only) or
+                        x in owner_only):
+                    embed.add_field(name=x, value=target[x]['concise'], inline=False)
+
     
     embed.set_footer(text="Brrt ||")
     return embed
@@ -339,12 +373,19 @@ async def shutdown(ctx):
 ### Settings ###
 
 @bot.command(name='settings')
-async def helpBrrt(ctx, *a):
+async def settings(ctx, *a):
     '''
-    Override !help
+    Settings Menu
     '''
     if ctx.author.name in bot_data['owners']:
-        response=helper(a, 'settings')
+        if a:
+            if a[0] == 'status':
+                color_choice = Misc.rand_hex()
+                response = embed=Embed(title="Brrt Settings".upper(), url="https://github.com/ihave13digits/Brrt/blob/master/README.md", color=color_choice)
+                for ftr in bot_data['enabled']:
+                    response.add_field(name=ftr, value=bot_data['enabled'][ftr], inline=False)
+        else:
+            response=helper(a, 'settings', True)
         await ctx.send(embed=response)
     else:
         response = "You're not my owner!  Only an owner can use that command!"
@@ -431,7 +472,11 @@ async def helpBrrt(ctx, *a):
     '''
     Override !help
     '''
-    response=helper(a, 'help')
+    if ctx.author.name in bot_data['owners']:
+        owner = True
+    else:
+        owner = False
+    response=helper(a, 'help', owner)
     await ctx.send(embed=response)
 
 
@@ -443,9 +488,13 @@ async def doc_api(ctx, *a):
     '''
     Fetch APIs
     '''
+    if ctx.author.name in bot_data['owners']:
+        owner = True
+    else:
+        owner = False
     if bot_data['enabled']['documentation']:
         if not a:
-            response = helper(a, 'api')
+            response = helper(a, 'api', owner)
             await ctx.send(embed=response)
         else:
             target = str(a[0])
@@ -459,8 +508,12 @@ async def doc_api(ctx, *a):
 
 @bot.command(name='docs')
 async def helpBrrt(ctx, *a):
+    if ctx.author.name in bot_data['owners']:
+        owner = True
+    else:
+        owner = False
     if bot_data['enabled']['documentation']:
-        response=helper(a, 'docs')
+        response=helper(a, 'docs', owner)
         await ctx.send(embed=response)
         if not excluded(str(ctx.author.id)):
             level_up = user_xp(str(ctx.author.id), 5)
@@ -688,14 +741,15 @@ async def broadcast(ctx, channel, *a):
                     if chnl.mention == channel:
                         target = bot.get_channel(chnl.id)
                 
-        if not response:
-            response = ""
-        await target.send(response)
-        if not excluded(str(ctx.author.id)):
-            level_up = user_xp(str(ctx.author.id), 10)
-            if level_up:
-                level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                await ctx.send(level_text)
+        if target != None:
+            if not response:
+                response = ""
+            await target.send(response)
+            if not excluded(str(ctx.author.id)):
+                level_up = user_xp(str(ctx.author.id), 10)
+                if level_up:
+                    level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+                    await ctx.send(level_text)
 
 @bot.command(name='echo')
 async def echo(ctx, *a):
@@ -812,25 +866,26 @@ async def give_points(ctx, mmbr, val):
         target = None
         if has_points(str(ctx.author.id), int(val)):
             for mem in bot.get_all_members():
-                if mem.mentioned_in(ctx.message) and mmbr != ctx.author.mention:
-                    if not excluded(str(mem.id)):
+                if not excluded(str(mem.id)):
+                    if mem.mentioned_in(ctx.message) and mmbr != ctx.author.mention:
                         if not excluded(str(ctx.author.id)):
                             if mmbr != '@everyone' and mmbr != '@here':
                                 target = mem
                         else:
                             response = "You haven't given Brrt permission to give you points!"
+                    elif mem == bot.user.mention and not excluded(str(ctx.author.id)):
+                        bot_data['points'] += int(val)
+                        user_point(str(ctx.author.id), -int(val))
+                        level_up = user_xp(str(ctx.author.id), int(val))
+                        if level_up:
+                            level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
+                            await ctx.send(level_text)
+                        response = "{} gave {} {} points!".format(ctx.author.name, mem.name, val)
+                    
                     else:
-                        response = "{} hasn't give Brrt permission to give them points!".format(mem.name)
-                elif mem == bot.user.mention and not excluded(str(ctx.author.id)):
-                    bot_data['points'] += int(val)
-                    user_point(str(ctx.author.id), -int(val))
-                    level_up = user_xp(str(ctx.author.id), int(val))
-                    if level_up:
-                        level_text = "{} is now level {}!".format(ctx.author.mention, bot_data['member_data']['level'][str(ctx.author.id)])
-                        await ctx.send(level_text)
-                    response = "{} gave {} {} points!".format(ctx.author.name, mem.name, val)
+                        response = "Are you trying to trick Brrt?"
                 else:
-                    response = "Are you trying to trick Brrt?"
+                    response = "You haven't given Brrt permission to give you points!"
             if target != None:
                 user_point(str(target.id), int(val))
                 user_point(str(ctx.author.id), -int(val))
@@ -950,7 +1005,11 @@ async def role(ctx, *a):
         if not excluded(str(ctx.author.id)):
             sel = None
             if not a:
-                embed=helper(a, 'role')
+                if ctx.author.name in bot_data['owners']:
+                    owner = True
+                else:
+                    owner = False
+                embed=helper(a, 'role', owner)
                 await ctx.send(embed=embed)
             else:
                 try:
