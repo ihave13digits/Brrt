@@ -1,5 +1,5 @@
 valid = {
-        'new_user' : {
+        'fresh_meat' : {
             'level' : 0,
-            },
+            }
         }

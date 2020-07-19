@@ -1,7 +1,7 @@
 {
-    "TOKEN":"YourTokenHere",
+    "TOKEN":"1",
     "PREFIX":"!",
-    "OWNERS":["YourUserName"],
-    "INTROS":["DesiredIntroductionsChannelName"],
-    "SECRET":["ModerationChannel(Private)"]
+    "OWNERS":["username"],
+    "INTROS":["intro_channel"],
+    "SECRET":["secret_channel"]
 }
