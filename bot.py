@@ -686,86 +686,99 @@ async def broadcast(ctx, channel, *a):
 @bot.command(name='echo')
 async def echo(ctx, *a):
     if bot_data['enabled']['social']:
-        response = ""
-        for word in a:
-            if word != '@everyone' and word != '@here':
-                response += word + " "
-        if not response:
-            response = "Don't try to trick Brrt!"
+        try:
+            response = ""
+            for word in a:
+                if word != '@everyone' and word != '@here':
+                    response += word + " "
+            if not response:
+                response = "Don't try to trick Brrt!"
+            level_text(ctx, 5)
+        except:
+            response = "Halp!  Brrt needs an adult!"
         await ctx.send(response)
-        level_text(ctx, 5)
 
 @bot.command(name='embed')
 async def embeded(ctx, des, *a):
     if bot_data['enabled']['social']:
-        acceptable = ['.gif', '.jpg', '.jpeg', '.png']
-        has_img = False
-        index = -1
-        response = ""
-        embed = Embed(title="Brrt Have Message!",description=des,color=0xFFFFFF)
-        for i, word in enumerate(a):
-            for img in acceptable:
-                if img in word and i > 0:
-                    embed.set_image(url=word)
-                    has_img = True
-                    index = i
-        for i, word in enumerate(a):
-            if i != index:
-                if word != '@everyone' and word != '@here':
-                    response += word+' '
-        embed.set_footer(text="Brrt ||")
-        if not response:
-            response = "Brrt got swindled!"
-        embed.set_thumbnail(url=brrt_image.image['brrt'])
-        embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
-        embed.add_field(name="{} says:".format(ctx.author.name), value="**{}**".format(response), inline=False)
-        if not (type(ctx.message.channel) is DMChannel):
-            await ctx.message.delete()
-        await ctx.send(embed=embed)
-        level_text(ctx, 10)
+        try:
+            acceptable = ['.gif', '.jpg', '.jpeg', '.png']
+            has_img = False
+            index = -1
+            response = ""
+            embed = Embed(title="Brrt Have Message!",description=des,color=0xFFFFFF)
+            for i, word in enumerate(a):
+                for img in acceptable:
+                    if img in word and i > 0:
+                        embed.set_image(url=word)
+                        has_img = True
+                        index = i
+            for i, word in enumerate(a):
+                if i != index:
+                    if word != '@everyone' and word != '@here':
+                        response += word+' '
+            embed.set_footer(text="Brrt ||")
+            if not response:
+                response = "Brrt got swindled!"
+            embed.set_thumbnail(url=brrt_image.image['brrt'])
+            embed.set_author(name="Brrt", icon_url=brrt_image.image['brrt_mail'])
+            embed.add_field(name="{} says:".format(ctx.author.name), value="**{}**".format(response), inline=False)
+            if not (type(ctx.message.channel) is DMChannel):
+                await ctx.message.delete()
+            await ctx.send(embed=embed)
+            level_text(ctx, 10)
+        except:
+            response = "Halp!  Brrt needs an adult!"
+            await ctx.send(response)
 
 @bot.command(name='banter')
-async def banter(ctx, *a):
+async def brrtBanter(ctx, *a):
     if bot_data['enabled']['social']:
         if not excluded(str(ctx.author.id)) and has_points(str(ctx.author.id), 1):
             response = ""
             if not a:
                 response = random.choice(banter.loose)
             else:
-                if a[0] != '@everyone' and a[0] != '@here':
-                    response = random.choice(banter.focus).format(a[0])
+                if not(type(ctx.message.channel) is DMChannel):
+                    if a[0] != '@everyone' and a[0] != '@here':
+                        response = random.choice(banter.focus).format(a[0])
+                else:
+                    response = "Halp!  Brrt needs an adult!"
             if not response:
                 response = "Don't try to trick Brrt!"
             user_point(str(ctx.author.id), -1)
         else:
             response = "Sorry, Brrt only do banter if you have points!"
-        await ctx.send(response)
         level_text(ctx, 10)
+    await ctx.send(response)
 
 @bot.command(name='praise')
-async def praise(ctx, *a):
+async def brrtPraise(ctx, *a):
     if bot_data['enabled']['social']:
         if not a:
             response = random.choice(compliment.shucks)
             bot_data['points'] += 1
         else:
             if a[0] != ctx.author.mention and a[0] != "@everyone" and a[0] != "@here":
-                for mem in bot.get_all_members():
-                    if mem.mentioned_in(ctx.message) and not excluded(str(mem.id)):
-                        user_point(str(mem.id), 1)
-                if not excluded(str(ctx.author.id)):
-                    user_point(str(ctx.author.id), 1)
-            if a[0] == bot.user.mention and a[0] != "@everyone" and a[0] != "@here":
+                if not(type(ctx.message.channel) is DMChannel):
+                    for mem in bot.get_all_members():
+                        if mem.mentioned_in(ctx.message) and not excluded(str(mem.id)):
+                            user_point(str(mem.id), 1)
+                    if not excluded(str(ctx.author.id)):
+                        user_point(str(ctx.author.id), 1)
+                    response = random.choice(compliment.praise).format(a[0])
+                else:
+                    response = "Halp!  Brrt needs an adult!"
+            elif a[0] == bot.user.mention:
                 bot_data['points'] += 1
-            response = random.choice(compliment.praise).format(a[0])
-        await ctx.send(response)
         level_text(ctx, 10)
+        await ctx.send(response)
 
 @bot.command(name='give')
 async def give_points(ctx, mmbr, val):
     if bot_data['enabled']['scoring']:
         target = None
-        try:
+        if not(type(ctx.message.channel) is DMChannel):
             if has_points(str(ctx.author.id), int(val)):
                 for mem in bot.get_all_members():
                     if not excluded(str(mem.id)):
@@ -792,7 +805,7 @@ async def give_points(ctx, mmbr, val):
                     response = "Are you trying to trick Brrt?"
             else:
                 response = "You don't have enough points!"
-        except:
+        else:
             response = "Are you trying to trick Brrt?"
         await ctx.send(response)
         level_text(ctx, 10)
@@ -854,23 +867,26 @@ async def stats(ctx, *a):
                 response = "You have {} experience!".format(
                         bot_data['member_data']['exp'][str(ctx.author.id)])
             else:
-                mem = None
-                backup = None
-                for m in bot.get_all_members():
-                    if m.mentioned_in(ctx.message):
-                        if not excluded(str(m.id)):
-                            mem = m
-                        else:
-                            backup = m
-                if mem != None:
-                    try:
-                        embed = user_stats(mem.id)
-                        await ctx.send(embed=embed)
-                    except:
-                        response = "Brrt isn't storing {}'s data!".format(backup.name)
+                if not(type(ctx.message.channel) is DMChannel):
+                    mem = None
+                    backup = None
+                    for m in bot.get_all_members():
+                        if m.mentioned_in(ctx.message):
+                            if not excluded(str(m.id)):
+                                mem = m
+                            else:
+                                backup = m
+                    if mem != None:
+                        try:
+                            embed = user_stats(mem.id)
+                            await ctx.send(embed=embed)
+                        except:
+                            response = "Brrt isn't storing {}'s data!".format(backup.name)
+                    else:
+                        response = "Brrt needs a user mention for this command!"
                 else:
-                    response = "Brrt needs a user mention for this command!"
-        try:
+                    response = "Halp!  Brrt needs an adult!"
+        try:    
             await ctx.send(response)
         except:
             pass
@@ -880,34 +896,37 @@ async def stats(ctx, *a):
 @bot.command(name='role')
 async def role(ctx, *a):
     if bot_data['enabled']['roles']:
-        text = "Brrt doesn't know about that role! Try `!role` and Brrt will help."
-        if not excluded(str(ctx.author.id)):
-            sel = None
-            if not a:
-                if ctx.author.name in bot_data['owners']:
-                    owner = True
+        if not(type(ctx.message.channel) is DMChannel):
+            text = "Brrt doesn't know about that role! Try `!role` and Brrt will help."
+            if not excluded(str(ctx.author.id)):
+                sel = None
+                if not a:
+                    if ctx.author.name in bot_data['owners']:
+                        owner = True
+                    else:
+                        owner = False
+                    embed=helper(a, 'role', owner)
+                    await ctx.send(embed=embed)
                 else:
-                    owner = False
-                embed=helper(a, 'role', owner)
-                await ctx.send(embed=embed)
-            else:
-                try:
-                    for i, role in enumerate(ctx.guild.roles):
-                        if ctx.guild.roles[i].name == a[0]:
-                            if bot_data['member_data']['level'][str(ctx.author.id)] >= brrt_roles.valid[a[0]]['level']:
-                                sel = role
-                                text = "You've added the role {}!".format(role.name)
-                                break
-                            else:
-                                text = "You need to be a higher level to get that role!"
+                    try:
+                        for i, role in enumerate(ctx.guild.roles):
+                            if ctx.guild.roles[i].name == a[0]:
+                                if bot_data['member_data']['level'][str(ctx.author.id)] >= brrt_roles.valid[a[0]]['level']:
+                                    sel = role
+                                    text = "You've added the role {}!".format(role.name)
+                                    break
+                                else:
+                                    text = "You need to be a higher level to get that role!"
 
-                    if sel != None:
-                        await ctx.author.add_roles(sel)
-                    response = "{}".format(text)
-                    await ctx.send(response)
-                except errors.Forbidden:
-                    warning = "Brrt doesn't have permission to give that role!"
-                    await ctx.send(warning)
+                        if sel != None:
+                            await ctx.author.add_roles(sel)
+                        response = "{}".format(text)
+                        await ctx.send(response)
+                    except errors.Forbidden:
+                        response = "Brrt doesn't have permission to give that role!"
+        else:
+            response = "Halp!  Brrt needs an adult!"
+        await ctx.send(warning)
 
 
 
