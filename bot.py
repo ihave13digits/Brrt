@@ -87,7 +87,8 @@ load_data()
 def helper(a, mode, owner):
     mandatory = ['help', 'documentation', 'moderation', 'scoring', 'welcome', 'random', 'social', 'voting', 'roles']
     owner_only = ['settings', 'disable', 'enable', 'shutdown']
-    docs_only = ['api', 'docs', 'source', 'discord', 'godot', 'unity', 'unreal']
+    docs_only = ['api', 'docs', 'source', 'discord', 'godot', 'unity', 'unreal'
+            'c', 'c#', 'c++', 'java', 'javascript', 'lua', 'perl', 'python', 'ruby', 'rust']
     social_only = ['broadcast', 'embed', 'echo', 'banter', 'praise']
     playing_only = ['keep-data', 'give', 'stats', 'role', 'balance-karma']
     voting_only = ['vote']
@@ -392,15 +393,6 @@ async def shutdown(ctx):
     await ctx.send(response)
     if can_do:
         save_data()
-        
-        #D = Data()
-        #mems = []
-        #for mem in bot.get_all_members():
-        #    mems.append(str(mem.id))
-        #print("Saving data...")
-        #handle_users(mems)
-        #D.save(bot_data, bot_data['dir'])
-        
         print("Shutting down...")
         await bot.close()
 
@@ -539,121 +531,77 @@ async def helpBrrt(ctx, *a):
 @bot.command(name='source')
 async def doc_source(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.source('')
-        else:
-            target = str(a[0])
-            response = Misc.source(target)
+        response = Misc.get_docs('source', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='c')
 async def doc_c(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.c('')
-        else:
-            target = str(a[0])
-            response = Misc.c(target)
+        response = Misc.get_docs('c', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='c#')
 async def doc_c_sharp(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.c_sharp('')
-        else:
-            target = str(a[0])
-            response = Misc.c_sharp(target)
+        response = Misc.get_docs('c_sharp', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='c++')
 async def doc_c_pp(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.c_pp('')
-        else:
-            target = str(a[0])
-            response = Misc.c_pp(target)
+        response = Misc.get_docs('c_pp', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='java')
 async def doc_java(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.java('')
-        else:
-            target = str(a[0])
-            response = Misc.java(target)
+        response = Misc.get_docs('java', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='javascript')
 async def doc_javascript(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.javascript('')
-        else:
-            target = str(a[0])
-            response = Misc.javascript(target)
+        response = Misc.get_docs('javascript', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='lua')
 async def doc_lua(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.lua('')
-        else:
-            target = str(a[0])
-            response = Misc.lua(target)
+        response = Misc.get_docs('lua', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='perl')
 async def doc_perl(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.perl('')
-        else:
-            target = str(a[0])
-            response = Misc.perl(target)
+        response = Misc.get_docs('perl', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='python')
 async def doc_python(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.python('')
-        else:
-            target = str(a[0])
-            response = Misc.python(target)
+        response = Misc.get_docs('python', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='ruby')
 async def doc_ruby(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.ruby('')
-        else:
-            target = str(a[0])
-            response = Misc.ruby(target)
+        response = Misc.get_docs('ruby', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
 @bot.command(name='rust')
 async def doc_rust(ctx, *a):
     if bot_data['enabled']['documentation']:
-        if not a:
-            response = Misc.rust('')
-        else:
-            target = str(a[0])
-            response = Misc.rust(target)
+        response = Misc.get_docs('rust', *a)
         await ctx.send(response)
         level_text(ctx, 5)
 
@@ -890,6 +838,13 @@ async def stats(ctx, *a):
             await ctx.send(response)
         except:
             pass
+
+
+
+@bot.command(name='vote')
+async def vote(ctx, a):
+    if bot_data['enabled']['viting']:
+        pass
 
 
 
