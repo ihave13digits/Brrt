@@ -10,6 +10,8 @@ from res import illegal, compliment, banter, help_com, welcome, brrt_roles, brrt
 
 ### Globals ###
 
+voting_data = {}
+
 bot_data = {
         'dir' : 'save.data',
         'owners' : [],
@@ -182,13 +184,13 @@ def handle_users(mems):
 
 def excluded(i):
     if bot_data['enabled']['scoring']:
-        return bot_data['playing'].get(i, True)
+        return bot_data['playing'].get(str(i), True)
     else:
         return False
 
 def has_points(i, val):
     try:
-        if bot_data['member_data']['points'][i] - val >= 0:
+        if bot_data['member_data']['points'][str(i)] - val >= 0:
             return True
         else:
             return False
@@ -198,35 +200,36 @@ def has_points(i, val):
 def user_point(i, val):
     global bot_data
     try:
-        if bot_data['member_data']['points'][i] + val >= 0:
-            bot_data['member_data']['points'][i] += val
+        if bot_data['member_data']['points'][str(i)] + val >= 0:
+            bot_data['member_data']['points'][str(i)] += val
     except:
         if val >= 0:
-            bot_data['member_data']['points'][i] = val
+            bot_data['member_data']['points'][str(i)] = val
 
 def user_word(i, val):
     global bot_data
     try:
         if val > 0:
-            bot_data['member_data']['negative'][i] += val
+            bot_data['member_data']['negative'][str(i)] += val
         if val <= 0:
-            bot_data['member_data']['positive'][i] += abs(val)
+            bot_data['member_data']['positive'][str(i)] += abs(val)
     except:
         pass
 
 def user_xp(i, val):
     global bot_data
     leveled_up = False
+    ID = str(i)
     try:
-        bot_data['member_data']['exp'][i] += val
-        if bot_data['member_data']['exp'][i] >= bot_data['member_data']['lup'][i]:
-            bot_data['member_data']['exp'][i] -= bot_data['member_data']['lup'][i]
-            bot_data['member_data']['level'][i] += 1
-            bot_data['member_data']['points'][i] += int(bot_data['member_data']['lup'][i] * 0.1)
-            bot_data['member_data']['lup'][i] = int(bot_data['member_data']['lup'][i] * 1.25)
+        bot_data['member_data']['exp'][ID] += val
+        if bot_data['member_data']['exp'][ID] >= bot_data['member_data']['lup'][ID]:
+            bot_data['member_data']['exp'][ID] -= bot_data['member_data']['lup'][ID]
+            bot_data['member_data']['level'][ID] += 1
+            bot_data['member_data']['points'][ID] += int(bot_data['member_data']['lup'][ID] * 0.1)
+            bot_data['member_data']['lup'][ID] = int(bot_data['member_data']['lup'][ID] * 1.25)
             leveled_up = True
     except:
-        bot_data['member_data']['exp'][i] = val
+        bot_data['member_data']['exp'][ID] = val
     return leveled_up
 
 def level_text(ctx, exp):
@@ -301,24 +304,25 @@ async def on_message(message):
                         await message.delete()
         else:
             r, g, b = 255, 255, 255
-        if not excluded(str(message.author.id)):
-            user_word(str(data['author'].id), offense)
+        if not excluded(message.author.id):
+            user_word(data['author'].id, offense)
             if offense <= 0:
-                user_point(str(data['author'].id), abs(offense))
+                user_point(data['author'].id, abs(offense))
             else:
-                user_point(str(data['author'].id), -offense)
+                user_point(data['author'].id, -offense)
             level_text(ctx, 1)
 
         stats = ""
-        if not excluded(str(message.author.id)):
+        if not excluded(message.author.id):
+            ID = str(message.author.id)
             stats = "{}: {:04} {:04} {:08}   |   {:04} {:016} {:016}".format(
-                str(message.author.id),
-                bot_data['member_data']['negative'][str(message.author.id)],
-                bot_data['member_data']['positive'][str(message.author.id)],
-                bot_data['member_data']['points'][str(message.author.id)],
-                bot_data['member_data']['level'][str(message.author.id)],
-                bot_data['member_data']['lup'][str(message.author.id)],
-                bot_data['member_data']['exp'][str(message.author.id)]
+                ID,
+                bot_data['member_data']['negative'][ID],
+                bot_data['member_data']['positive'][ID],
+                bot_data['member_data']['points'][ID],
+                bot_data['member_data']['level'][ID],
+                bot_data['member_data']['lup'][ID],
+                bot_data['member_data']['exp'][ID]
                 )
             print(stats)
         text = "\x1b[{};2;{};{};{}m".format(38, r, g, b) + message.content + '\x1b[0m'
@@ -350,8 +354,6 @@ async def on_message(message):
                         pass
         except:
             pass
-            #response = "Brrt confused!"
-            #await ctx.send(response)
     else:
         await bot.process_commands(message)
 
@@ -454,30 +456,31 @@ async def disable(ctx, *a):
 async def data_collection(ctx, a):
     global bot_data
     if bot_data['enabled']['scoring']:
+        ID = str(ctx.author.id)
         if a == "yes":
-            if excluded(str(ctx.author.id)):
-                bot_data['member_data']['negative'][str(ctx.author.id)] = 0
-                bot_data['member_data']['positive'][str(ctx.author.id)] = 0
-                bot_data['member_data']['points'][str(ctx.author.id)] = 0
-                bot_data['member_data']['level'][str(ctx.author.id)] = 0
-                bot_data['member_data']['lup'][str(ctx.author.id)] = 100
-                bot_data['member_data']['exp'][str(ctx.author.id)] = 0
-                bot_data['playing'][str(ctx.author.id)] = False
+            if excluded(ctx.author.id):
+                bot_data['member_data']['negative'][ID] = 0
+                bot_data['member_data']['positive'][ID] = 0
+                bot_data['member_data']['points'][ID] = 0
+                bot_data['member_data']['level'][ID] = 0
+                bot_data['member_data']['lup'][ID] = 100
+                bot_data['member_data']['exp'][ID] = 0
+                bot_data['playing'][ID] = False
                 response = "Brrt will start giving you points!"
             else:
                 response = "You already gave Brrt permission!"
         if a == "no":
-            if not excluded(str(ctx.author.id)):
-                bot_data['member_data']['negative'].pop(str(ctx.author.id))
-                bot_data['member_data']['positive'].pop(str(ctx.author.id))
-                bot_data['member_data']['points'].pop(str(ctx.author.id))
-                bot_data['member_data']['level'].pop(str(ctx.author.id))
-                bot_data['member_data']['lup'].pop(str(ctx.author.id))
-                bot_data['member_data']['exp'].pop(str(ctx.author.id))
-                bot_data['playing'].pop(str(ctx.author.id))
+            if not excluded(ctx.author.id):
+                bot_data['member_data']['negative'].pop(ID)
+                bot_data['member_data']['positive'].pop(ID)
+                bot_data['member_data']['points'].pop(ID)
+                bot_data['member_data']['level'].pop(ID)
+                bot_data['member_data']['lup'].pop(ID)
+                bot_data['member_data']['exp'].pop(ID)
+                bot_data['playing'].pop(ID)
             response = "More points for Brrt!"
         if a == 'status':
-            if not excluded(str(ctx.author.id)):
+            if not excluded(ctx.author.id):
                 response = "Brrt has permission to give you points and save data!"
             else:
                 response = "Brrt can't save your data."
@@ -682,7 +685,7 @@ async def embeded(ctx, des, *a):
 @bot.command(name='banter')
 async def brrtBanter(ctx, *a):
     if bot_data['enabled']['social']:
-        if not excluded(str(ctx.author.id)) and has_points(str(ctx.author.id), 1):
+        if not excluded(ctx.author.id) and has_points(ctx.author.id, 1):
             response = ""
             if not a:
                 response = random.choice(banter.loose)
@@ -694,7 +697,7 @@ async def brrtBanter(ctx, *a):
                     response = "Halp!  Brrt needs an adult!"
             if not response:
                 response = "Don't try to trick Brrt!"
-            user_point(str(ctx.author.id), -1)
+            user_point(ctx.author.id, -1)
         else:
             response = "Sorry, Brrt only do banter if you have points!"
         level_text(ctx, 10)
@@ -710,10 +713,10 @@ async def brrtPraise(ctx, *a):
             if a[0] != ctx.author.mention and a[0] != "@everyone" and a[0] != "@here":
                 if not(type(ctx.message.channel) is DMChannel):
                     for mem in bot.get_all_members():
-                        if mem.mentioned_in(ctx.message) and not excluded(str(mem.id)):
-                            user_point(str(mem.id), 1)
-                    if not excluded(str(ctx.author.id)):
-                        user_point(str(ctx.author.id), 1)
+                        if mem.mentioned_in(ctx.message) and not excluded(mem.id):
+                            user_point(mem.id, 1)
+                    if not excluded(ctx.author.id):
+                        user_point(ctx.author.id, 1)
                     response = random.choice(compliment.praise).format(a[0])
                 else:
                     response = "Halp!  Brrt needs an adult!"
@@ -727,18 +730,18 @@ async def give_points(ctx, mmbr, val):
     if bot_data['enabled']['scoring']:
         target = None
         if not(type(ctx.message.channel) is DMChannel):
-            if has_points(str(ctx.author.id), int(val)):
+            if has_points(ctx.author.id, int(val)):
                 for mem in bot.get_all_members():
-                    if not excluded(str(mem.id)):
+                    if not excluded(mem.id):
                         if mem.mentioned_in(ctx.message) and mmbr != ctx.author.mention:
-                            if not excluded(str(ctx.author.id)):
+                            if not excluded(ctx.author.id):
                                 if mmbr != '@everyone' and mmbr != '@here':
                                     target = mem
                             else:
                                 response = "You haven't given Brrt permission to give you points!"
-                        elif mem == bot.user.mention and not excluded(str(ctx.author.id)):
+                        elif mem == bot.user.mention and not excluded(ctx.author.id):
                             bot_data['points'] += int(val)
-                            user_point(str(ctx.author.id), -int(val))
+                            user_point(ctx.author.id, -int(val))
                             response = "{} gave {} {} points!".format(ctx.author.name, mem.name, val)
                     
                         else:
@@ -746,8 +749,8 @@ async def give_points(ctx, mmbr, val):
                     else:
                         response = "You haven't given Brrt permission to give you points!"
                 if target != None:
-                    user_point(str(target.id), int(val))
-                    user_point(str(ctx.author.id), -int(val))
+                    user_point(target.id, int(val))
+                    user_point(ctx.author.id, -int(val))
                     response = "{} gave {} {} points!".format(ctx.author.name, target.name, val)
                 else:
                     response = "Are you trying to trick Brrt?"
@@ -772,7 +775,7 @@ async def balance_karma(ctx, *a):
             else:
                 for mem in bot.get_all_members():
                     if mem.mentioned_in(ctx.message):
-                        if not excluded(str(mem.id)):
+                        if not excluded(mem.id):
                             target = mem
                             response = "Brrt balanced {}'s karma!".format(target.name)
     
@@ -781,9 +784,10 @@ async def balance_karma(ctx, *a):
                 target = ctx.author
                 response = "Brrt balanced your karma, {}!".format(target.name)
         
-        while bot_data['member_data']['negative'][str(target.id)] > 0 and bot_data['member_data']['positive'][str(target.id)] > 0:
-            bot_data['member_data']['negative'][str(target.id)] -= 1
-            bot_data['member_data']['positive'][str(target.id)] -= 1
+        ID = str(target.id)
+        while bot_data['member_data']['negative'][ID] > 0 and bot_data['member_data']['positive'][ID] > 0:
+            bot_data['member_data']['negative'][ID] -= 1
+            bot_data['member_data']['positive'][ID] -= 1
 
         await ctx.send(response)
         level_text(ctx, 10)
@@ -793,34 +797,35 @@ async def stats(ctx, *a):
     if bot_data['enabled']['scoring']:
         user_mentn = False
         if not a:
-            if not excluded(str(ctx.author.id)):
+            if not excluded(ctx.author.id):
                 embed = user_stats(ctx.author.id)
                 await ctx.send(embed=embed)
-            if excluded(str(ctx.author.id)):
+            if excluded(ctx.author.id):
                 response = "Brrt isn't storing your data!"
         else:
+            ID = str(ctx.author.id)
             if a[0] == 'points':
                 response = "You have {} Brrt points!".format(
-                        bot_data['member_data']['points'][str(ctx.author.id)])
+                        bot_data['member_data']['points'][ID])
             elif a[0] == 'karma':
                 response = "Your karma is {}!".format(
-                        bot_data['member_data']['positive'][str(ctx.author.id)] - bot_data['member_data']['negative'][str(ctx.author.id)])
+                        bot_data['member_data']['positive'][ID] - bot_data['member_data']['negative'][ID])
             elif a[0] == 'level':
                 response = "You're level {}!".format(
-                        bot_data['member_data']['level'][str(ctx.author.id)])
+                        bot_data['member_data']['level'][ID])
             elif a[0] == 'next':
                 response = "You have {} experience to earn until your next level!".format(
-                        bot_data['member_data']['lup'][str(ctx.author.id)]-bot_data['member_data']['exp'][str(ctx.author.id)])
+                        bot_data['member_data']['lup'][ID]-bot_data['member_data']['exp'][ID])
             elif a[0] == 'exp':
                 response = "You have {} experience!".format(
-                        bot_data['member_data']['exp'][str(ctx.author.id)])
+                        bot_data['member_data']['exp'][ID])
             else:
                 if not(type(ctx.message.channel) is DMChannel):
                     mem = None
                     backup = None
                     for m in bot.get_all_members():
                         if m.mentioned_in(ctx.message):
-                            if not excluded(str(m.id)):
+                            if not excluded(m.id):
                                 mem = m
                             else:
                                 backup = m
@@ -853,7 +858,7 @@ async def role(ctx, *a):
     if bot_data['enabled']['roles']:
         if not(type(ctx.message.channel) is DMChannel):
             text = "Brrt doesn't know about that role! Try `!role` and Brrt will help."
-            if not excluded(str(ctx.author.id)):
+            if not excluded(ctx.author.id):
                 sel = None
                 if not a:
                     if ctx.author.name in bot_data['owners']:
@@ -881,7 +886,7 @@ async def role(ctx, *a):
                         response = "Brrt doesn't have permission to give that role!"
         else:
             response = "Halp!  Brrt needs an adult!"
-        await ctx.send(warning)
+        await ctx.send(response)
 
 
 
@@ -915,8 +920,8 @@ async def flip(ctx, *a):
                 text = "That's a shame, it landed on:"
         embed.add_field(name="{}".format(text), value="**{}**".format(response), inline=False)
         await ctx.send(embed=embed)
-        if not excluded(str(ctx.author.id)) and gets_point:
-            user_point(str(ctx.author.id), 1)
+        if not excluded(ctx.author.id) and gets_point:
+            user_point(ctx.author.id, 1)
         level_text(ctx, 5)
 
 @bot.command(name='d')
