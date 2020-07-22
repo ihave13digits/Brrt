@@ -259,6 +259,9 @@ def user_stats(mmbr):
     embed.add_field(name="Experience:", value="**{}**".format(_exp), inline=False)
     return embed
 
+def get_name(mmbr):
+    return bot_data['member_data']['name'].get(str(mmbr), "")
+
 
 
 #
@@ -731,9 +734,14 @@ async def brrtPraise(ctx, *a):
         await ctx.send(response)
 
 @bot.command(name='name')
-async def set_name(ctx, name):
+async def set_name(ctx, *a):
     if bot_data['enabled']['social']:
         if not excluded(ctx.author.id):
+            name = ""
+            for i, wrd in enumerate(a):
+                name += wrd
+                if i < len(a)-1:
+                    name += " "
             if len(name) > 32:
                 response = "That's too much for Brrt to remember!"
             else:
@@ -760,7 +768,13 @@ async def give_points(ctx, mmbr, val):
                         elif mem == bot.user.mention and not excluded(ctx.author.id):
                             bot_data['points'] += int(val)
                             user_point(ctx.author.id, -int(val))
-                            response = "{} gave {} {} points!".format(ctx.author.name, mem.name, val)
+                            give = get_name(ctx.author.id)
+                            if not give:
+                                give = ctx.author.name
+                            take = get_name(mem.id)
+                            if not take:
+                                take = mem.name
+                            response = "{} gave {} {} points!".format(give, take, val)
                     
                         else:
                             response = "Are you trying to trick Brrt?"
@@ -769,7 +783,13 @@ async def give_points(ctx, mmbr, val):
                 if target != None:
                     user_point(target.id, int(val))
                     user_point(ctx.author.id, -int(val))
-                    response = "{} gave {} {} points!".format(ctx.author.name, target.name, val)
+                    give = get_name(ctx.author.id)
+                    if not give:
+                        give = ctx.author.name
+                    take = get_name(target.id)
+                    if not take:
+                        take = target.name
+                    response = "{} gave {} {} points!".format(give, take, val)
                 else:
                     response = "Are you trying to trick Brrt?"
             else:
@@ -788,19 +808,28 @@ async def balance_karma(ctx, *a):
             target = None
             if not a:
                 target = ctx.author
-                response = "Brrt balanced your karma, {}!".format(target.name)
+                name = get_name(ctx.author.id)
+                if not name:
+                    name = ctx.author.name
+                response = "Brrt balanced your karma, {}!".format(name)
 
             else:
                 for mem in bot.get_all_members():
                     if mem.mentioned_in(ctx.message):
                         if not excluded(mem.id):
                             target = mem
-                            response = "Brrt balanced {}'s karma!".format(target.name)
+                            name = get_name(mem.id)
+                            if not name:
+                                name = mem.name
+                            response = "Brrt balanced {}'s karma!".format(name)
     
         else:
             if not a:
                 target = ctx.author
-                response = "Brrt balanced your karma, {}!".format(target.name)
+                name = ctx.author.id
+                if not name:
+                    name = ctx.author.name
+                response = "Brrt balanced your karma, {}!".format(name)
         
         ID = str(target.id)
         while bot_data['member_data']['negative'][ID] > 0 and bot_data['member_data']['positive'][ID] > 0:
@@ -866,7 +895,7 @@ async def stats(ctx, *a):
 
 @bot.command(name='vote')
 async def vote(ctx, a):
-    if bot_data['enabled']['viting']:
+    if bot_data['enabled']['voting']:
         pass
 
 

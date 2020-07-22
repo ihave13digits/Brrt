@@ -36,6 +36,7 @@ class Data:
             'secret' : [],
             'introductions' : [],
             'member_data' : {
+                'name' : {},
                 'negative' : {},
                 'positive' : {},
                 'rewards' : {},
