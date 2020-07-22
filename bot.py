@@ -17,10 +17,14 @@ bot_data = {
         'secret' : [],
         'introductions' : [],
         'member_data' : {
+            # Social Data
+            'name' : {},
+            # Score Data
             'negative' : {},
             'positive' : {},
             'rewards' : {},
             'points' : {},
+            # Level Data
             'level' : {},
             'lup' : {},
             'exp' : {}
@@ -90,7 +94,7 @@ def helper(a, mode, owner):
     owner_only = ['settings', 'disable', 'enable', 'shutdown']
     docs_only = ['api', 'docs', 'source', 'discord', 'godot', 'unity', 'unreal'
             'c', 'c#', 'c++', 'java', 'javascript', 'lua', 'perl', 'python', 'ruby', 'rust']
-    social_only = ['broadcast', 'embed', 'echo', 'banter', 'praise']
+    social_only = ['broadcast', 'embed', 'echo', 'banter', 'praise', 'name']
     playing_only = ['keep-data', 'give', 'stats', 'role', 'balance-karma']
     voting_only = ['vote']
     random_only = ['flip', 'd']
@@ -458,6 +462,7 @@ async def data_collection(ctx, a):
         ID = str(ctx.author.id)
         if a == "yes":
             if excluded(ctx.author.id):
+                bot_data['member_data']['name'][ID] = ""
                 bot_data['member_data']['negative'][ID] = 0
                 bot_data['member_data']['positive'][ID] = 0
                 bot_data['member_data']['points'][ID] = 0
@@ -470,6 +475,7 @@ async def data_collection(ctx, a):
                 response = "You already gave Brrt permission!"
         if a == "no":
             if not excluded(ctx.author.id):
+                bot_data['member_data']['name'].pop(ID)
                 bot_data['member_data']['negative'].pop(ID)
                 bot_data['member_data']['positive'].pop(ID)
                 bot_data['member_data']['points'].pop(ID)
@@ -722,6 +728,19 @@ async def brrtPraise(ctx, *a):
             elif a[0] == bot.user.mention:
                 bot_data['points'] += 1
         level_text(ctx, 10)
+        await ctx.send(response)
+
+@bot.command(name='name')
+async def set_name(ctx, name):
+    if bot_data['enabled']['social']:
+        if not excluded(ctx.author.id):
+            if len(name) > 32:
+                response = "That's too much for Brrt to remember!"
+            else:
+                bot_data['member_data']['name'][str(ctx.author.id)] = name
+                response = "Okay!  Brrt will call {} {} now!".format(name, name)
+        else:
+            response = "Brrt only remembers names if you give him permission!"
         await ctx.send(response)
 
 @bot.command(name='give')
