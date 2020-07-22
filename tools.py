@@ -164,11 +164,25 @@ class Misc:
     @staticmethod
     def style_text(text, frmt):
         #frmt = ['**', '*', '~~', '__', '||']
+        txt = text
         for f in frmt:
-            "{}{}{}".format(f, text, f)
-        return text
+            txt = "{}{}{}".format(f, txt, f)
+        return txt
 
 
+
+    @staticmethod
+    def rcg(a):
+        return choice(a)
+
+    @staticmethod
+    def rng():
+        if a[0] < a[1]:
+            return randint(a[0], a[1])
+        elif a[0] == a[1]:
+            return a[0]
+        else:
+            return randint(a[1], a[0])
 
     @staticmethod
     def rand_hex():

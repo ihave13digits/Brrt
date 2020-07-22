@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-import random
 from discord.ext import commands
 from discord.channel import DMChannel
 from discord import Member, Embed, Color, utils, errors
@@ -288,7 +287,7 @@ async def on_message(message):
             for word in illegal.words:
                 if word in data['content'].lower():
                     offense = illegal.words[word]['offense']
-                    response = random.choice(illegal.words[word]['warning']).format(data['author'].mention)
+                    response = Misc.rcg(illegal.words[word]['warning']).format(data['author'].mention)
                     await ctx.send(response)
                     
                     if illegal.words[word]['offense'] == -10:
@@ -370,13 +369,13 @@ async def on_member_join(member):
                     for valid in bot_data['introductions']:
                         if chnl.name == valid:
                             channel = bot.get_channel(chnl.id)
-                            wt = random.choice(welcome.welcome_types)
+                            wt = Misc.rcg(welcome.welcome_types)
                             if wt == "ms":
-                                response = random.choice(welcome.messages[wt]).format(member.mention, srvr.name)
+                                response = Misc.rcg(welcome.messages[wt]).format(member.mention, srvr.name)
                             if wt == "sm":
-                                response = random.choice(welcome.messages[wt]).format(srvr.name, member.mention)
+                                response = Misc.rcg(welcome.messages[wt]).format(srvr.name, member.mention)
                             if wt == "m":
-                                response = random.choice(welcome.messages[wt]).format(member.mention)
+                                response = Misc.rcg(welcome.messages[wt]).format(member.mention)
                             await channel.send(response)
         text = "\x1b[{};2;{};{};{}m".format(38, 255, 0, 255) + response + '\x1b[0m'
         print("{}: {}".format(member.id, text))
@@ -688,11 +687,11 @@ async def brrtBanter(ctx, *a):
         if not excluded(ctx.author.id) and has_points(ctx.author.id, 1):
             response = ""
             if not a:
-                response = random.choice(banter.loose)
+                response = Misc.rcg(banter.loose)
             else:
                 if not(type(ctx.message.channel) is DMChannel):
                     if a[0] != '@everyone' and a[0] != '@here':
-                        response = random.choice(banter.focus).format(a[0])
+                        response = Misc.rcg(banter.focus).format(a[0])
                 else:
                     response = "Halp!  Brrt needs an adult!"
             if not response:
@@ -707,7 +706,7 @@ async def brrtBanter(ctx, *a):
 async def brrtPraise(ctx, *a):
     if bot_data['enabled']['social']:
         if not a:
-            response = random.choice(compliment.shucks)
+            response = Misc.rcg(compliment.shucks)
             bot_data['points'] += 1
         else:
             if a[0] != ctx.author.mention and a[0] != "@everyone" and a[0] != "@here":
@@ -717,7 +716,7 @@ async def brrtPraise(ctx, *a):
                             user_point(mem.id, 1)
                     if not excluded(ctx.author.id):
                         user_point(ctx.author.id, 1)
-                    response = random.choice(compliment.praise).format(a[0])
+                    response = Misc.rcg(compliment.praise).format(a[0])
                 else:
                     response = "Halp!  Brrt needs an adult!"
             elif a[0] == bot.user.mention:
