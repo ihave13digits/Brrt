@@ -736,19 +736,18 @@ async def brrtPraise(ctx, *a):
 @bot.command(name='name')
 async def set_name(ctx, *a):
     if bot_data['enabled']['social']:
-        if not excluded(ctx.author.id):
-            name = ""
-            for i, wrd in enumerate(a):
-                name += wrd
-                if i < len(a)-1:
-                    name += " "
-            if len(name) > 32:
-                response = "That's too much for Brrt to remember!"
-            else:
+        name = ""
+        for i, wrd in enumerate(a):
+            name += wrd
+            if i < len(a)-1:
+                name += " "
+        if len(name) <= 32:
+            if not excluded(ctx.author.id):
                 bot_data['member_data']['name'][str(ctx.author.id)] = name
-                response = "Okay!  Brrt will call {} {} now!".format(name, name)
+            response = "Okay!  Brrt will call {} {} now!".format(name, name)
+            await ctx.author.edit(nick=name)
         else:
-            response = "Brrt only remembers names if you give him permission!"
+            response = "That's too much for Brrt to remember!"
         await ctx.send(response)
 
 @bot.command(name='give')
