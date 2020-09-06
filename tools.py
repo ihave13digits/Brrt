@@ -152,6 +152,38 @@ class Vote:
 
 class Misc:
 
+    def get_audio(artist, song):
+        from os import listdir
+
+        dir_root = path.dirname(__file__)
+        dir_song = path.join(dir_root, 'song')
+
+        chdir(dir_song)
+
+        songs = listdir()
+        output = ""
+        for song in songs:
+            if artist and song in name:
+                output = song
+
+        chdir(dir_root)
+
+        return output
+
+    @staticmethod
+    def scrape_audio(link):
+        from os import system, chdir
+
+        dir_root = path.dirname(__file__)
+        dir_song = path.join(dir_root, 'song')
+
+        chdir(dir_song)
+
+        dwnld = 'youtube-dl --extract-audio --audio-format mp3 --output "%(title)s.%(ext)s" "{}"'.format(link)
+        system(dwnld)
+
+        chdir(dir_root)
+
     @staticmethod
     def get_docs(d, *a):
         if not a:
