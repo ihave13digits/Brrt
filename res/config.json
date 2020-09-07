@@ -1,7 +1,8 @@
 {
-    "TOKEN":"1",
+    "TOKEN":"",
     "PREFIX":"!",
-    "OWNERS":["username"],
-    "INTROS":["intro_channel"],
-    "SECRET":["secret_channel"]
+    "OWNERS":[""],
+    "INTROS":[""],
+    "SECRET":[""],
+    "MUSIC":[""]
 }

@@ -101,7 +101,8 @@ class Data:
         OWNERS = data['OWNERS']
         INTROS = data['INTROS']
         SECRET = data['SECRET']
-        return TOKEN, PREFIX, OWNERS, INTROS, SECRET
+        MUSIC = data['MUSIC']
+        return TOKEN, PREFIX, OWNERS, INTROS, SECRET, MUSIC
 
 
 

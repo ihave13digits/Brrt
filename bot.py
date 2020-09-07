@@ -15,6 +15,7 @@ bot_data = {
         'dir' : 'save.data',
         'owners' : [],
         'secret' : [],
+        'music' : [],
         'introductions' : [],
         'member_data' : {
             # Social Data
@@ -43,7 +44,7 @@ bot_data = {
         'points' : 0,
         }
 
-TOKEN, PREFIX, bot_data['owners'], bot_data['introductions'], bot_data['secret'] = Data.pre_start_up()
+TOKEN, PREFIX, bot_data['owners'], bot_data['introductions'], bot_data['secret'], bot_data['music'] = Data.pre_start_up()
 bot = commands.Bot(command_prefix=PREFIX)
 
 
@@ -620,32 +621,10 @@ async def doc_rust(ctx, *a):
 
 ### Misc. ###
 
-@bot.command(name="play")
-async def play(ctx, artist, song):
-    if bot_data['enabled']['social']:
-        for srvr in bot.guilds:
-            if srvr == ctx.author.guild:
-                for chnl in srvr.channels:
-                    if chnl.name in bot_data['music']:
-                        _voice = bot.get_channel(chnl.id)
-
-        if !_voice:
-            return
-        chnl = await bot.join_voice_channel(_voice)
-
-        player = chnl.create_ffmpeg_player(path.join('song'), Misc.get_song(artist, title), after = lambda: print("done"))
-        player.start()
-        while not player.is_done:
-            await asyncio.sleep(1)
-        player.stop()
-        await chnl.disconnect()
-
 @bot.command(name='rip')
 async def rip(ctx, link):
-    if bot_data['enabled']['social']:
-        #if not(type(ctx.message.channel) is DMChannel):
-        if ctx.author.name in bot_data['owners']:
-            Misc.scrape_audio(link)
+    if ctx.author.name in bot_data['owners']:
+        Misc.scrape_audio(link)
 
 @bot.command(name='broadcast')
 async def broadcast(ctx, channel, *a):
