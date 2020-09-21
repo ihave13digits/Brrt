@@ -105,6 +105,10 @@ help_dict = {
             'detail' : "Allow or disallow Brrt saving data.  Brrt encrypts this data, so only Brrt can use it.\n{}\nRequired arguments:\n**(yes, no, status)**\n".format(char),
             },
         # Social
+        'rip' : {
+            'concise' : "**(youtube link)**\n{}\n".format(char),
+            'detail' : "Brrt will steal audio from YouTube for you!\n{}\nRequired arguments:\n**(youtube link)**".format(char),
+            },
         'broadcast' : {
             'concise' : "**(channel mention, message)**\n{}\n".format(char),
             'detail' : "Brrt will broadcast a message!\n{}\nRequired arguments:\n**(channel mention, message)**\n".format(char),

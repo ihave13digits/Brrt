@@ -5,6 +5,7 @@ Brrt is a Discord bot written in Python 3
 
 ## Features
 
+- [ ] Audio
 - [ ] Voting
 - [X] Rewards
 - [X] Commands
@@ -41,6 +42,10 @@ Brrt is a Discord bot written in Python 3
     keep-data yes
     keep-data no
     keep-data status
+
+###### Rip
+
+    rip (YouTube_link)
 
 ###### Broadcast
 

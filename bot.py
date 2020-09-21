@@ -95,7 +95,7 @@ def helper(a, mode, owner):
     owner_only = ['settings', 'disable', 'enable', 'shutdown']
     docs_only = ['api', 'docs', 'source', 'discord', 'godot', 'unity', 'unreal'
             'c', 'c#', 'c++', 'java', 'javascript', 'lua', 'perl', 'python', 'ruby', 'rust']
-    social_only = ['broadcast', 'embed', 'echo', 'banter', 'praise', 'name']
+    social_only = ['rip', 'broadcast', 'embed', 'echo', 'banter', 'praise', 'name']
     playing_only = ['keep-data', 'give', 'stats', 'role', 'balance-karma']
     voting_only = ['vote']
     random_only = ['flip', 'd']
